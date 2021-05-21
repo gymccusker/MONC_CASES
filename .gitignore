@@ -1,0 +1,42 @@
+.fcm-make/
+build/
+extract/
+fcm-make-as-parsed.cfg
+fcm-make-on-success.cfg
+fcm-make.log
+preprocess/
+monc_stdout/
+
+submonc.sge.[oe]*
+submonc_restart.sge.[oe]*
+.*.sw*
+*.nc
+*.autogen
+__pycache__/
+.pytest_cache/
+
+## exclude conversion matlab files included for reference
+radiosonde_LEM*
+
+## ignore core.d* output files
+core.d*
+
+## ignore tar files
+*.tar
+
+## ignore DATA/ folder
+ASCOS/DATA/*
+
+## ignore figures
+ASCOS/FIGS/*
+*.png
+*.svg
+
+## ignore output
+ASCOS/output/*
+
+## ignore working data
+*.npy
+
+## ignore casim directory
+casim/*
