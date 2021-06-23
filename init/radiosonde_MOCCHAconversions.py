@@ -246,7 +246,7 @@ def sondeQINIT2(data):
     print (dlwcdz.shape)
 
     ## define cloud layer
-    freetrop_index = np.where(data['monc']['z'] > 400.0)
+    freetrop_index = np.where(data['monc']['z'] >= 1000.0)
     dheight[int(freetrop_index[0][0]):] = 0.0   ## ignore points in the free troposphere
     blcloud_index = np.where(data['monc']['z'] < 200.0)
     dheight[blcloud_index] = 0.0   ## ignore points in the free troposphere
