@@ -57,7 +57,7 @@ def quicklooksSonde(data):
     plt.xlabel('Temperature [K]')
     plt.ylim([0,yylim])
     plt.grid('on')
-    plt.xlim([259,270])
+    plt.xlim([259,275])
 
     plt.subplot(132)
     plt.plot(data['sonde']['sphum'][:], data['sonde']['Z'], label = 'sphum')
@@ -142,13 +142,13 @@ def sondeTHINIT_QINIT1(data):
 
     ### build qinit1 array
     print (np.squeeze(data['sonde']['Z'][4:]).shape)
-    print (data['sonde']['sphum'][4:,1].shape)
+    print (data['sonde']['sphum'][4:].shape)
 
-    interp_qinit1 = interp1d(np.squeeze(data['sonde']['Z'][:]),data['sonde']['sphum'][:,1])
+    interp_qinit1 = interp1d(np.squeeze(data['sonde']['Z'][:]),data['sonde']['sphum'][:])
     nml_qinit1 = interp_qinit1(nml_Z[1:])
 
     ### build thref array
-    interp_thref = interp1d(np.squeeze(data['sonde']['Z'][:]),data['sonde']['pottemp'][:,1] + 273.16)
+    interp_thref = interp1d(np.squeeze(data['sonde']['Z'][:]),data['sonde']['pottemp'][:] + 273.16)
     nml_thref = interp_thref(nml_Z[1:])
 
     ### manually append last value to 2400m (since last Z in ASCOS1 is 2395m and above interpolation range)
@@ -165,43 +165,43 @@ def sondeTHINIT_QINIT1(data):
 
 
     ####    --------------- FIGURE
-    #
-    # SMALL_SIZE = 12
-    # MED_SIZE = 14
-    # LARGE_SIZE = 16
-    #
-    # plt.rc('font',size=MED_SIZE)
-    # plt.rc('axes',titlesize=MED_SIZE)
-    # plt.rc('axes',labelsize=MED_SIZE)
-    # plt.rc('xtick',labelsize=MED_SIZE)
-    # plt.rc('ytick',labelsize=MED_SIZE)
-    # plt.figure(figsize=(8,5))
-    # plt.rc('legend',fontsize=MED_SIZE)
-    # plt.subplots_adjust(top = 0.9, bottom = 0.12, right = 0.95, left = 0.1,
-    #         hspace = 0.22, wspace = 0.4)
-    #
-    # yylim = 2.5e3
-    #
-    # plt.subplot(121)
-    # # plt.plot(data['ascos1']['thinit'], data['ascos1']['z'], label = 'ASCOS1')
-    # plt.plot(data['sonde']['pottemp'][:,1] + 273.16, data['sonde']['Z'], label = 'SONDE')
-    # plt.plot(nml_thref, nml_Z[1:], 'k.', label = 'monc-namelist')
-    # plt.ylabel('Z [m]')
-    # plt.xlabel('$\Theta$ [K]')
-    # plt.ylim([0,yylim])
+
+    SMALL_SIZE = 12
+    MED_SIZE = 14
+    LARGE_SIZE = 16
+
+    plt.rc('font',size=MED_SIZE)
+    plt.rc('axes',titlesize=MED_SIZE)
+    plt.rc('axes',labelsize=MED_SIZE)
+    plt.rc('xtick',labelsize=MED_SIZE)
+    plt.rc('ytick',labelsize=MED_SIZE)
+    plt.figure(figsize=(8,5))
+    plt.rc('legend',fontsize=MED_SIZE)
+    plt.subplots_adjust(top = 0.9, bottom = 0.12, right = 0.95, left = 0.1,
+            hspace = 0.22, wspace = 0.4)
+
+    yylim = 2.5e3
+
+    plt.subplot(121)
+    # plt.plot(data['ascos1']['thinit'], data['ascos1']['z'], label = 'ASCOS1')
+    plt.plot(data['sonde']['pottemp'][:] + 273.16, data['sonde']['Z'], label = 'SONDE')
+    plt.plot(nml_thref, nml_Z[1:], 'k.', label = 'monc-namelist')
+    plt.ylabel('Z [m]')
+    plt.xlabel('$\Theta$ [K]')
+    plt.ylim([0,yylim])
     # plt.xlim([265,295])
-    #
-    # plt.subplot(122)
-    # # plt.plot(data['ascos1']['qinit1'][data['ascos1']['qinit1'] > 0], data['ascos1']['z'][data['ascos1']['qinit1'] > 0], label = 'ASCOS1')
-    # plt.plot(data['sonde']['sphum'][:,1], data['sonde']['Z'], label = 'SONDE')
-    # plt.plot(nml_qinit1, nml_Z[1:], 'k.', label = 'monc-namelist')
-    # plt.xlabel('q [kg/kg]')
-    # plt.grid('on')
-    # plt.ylim([0,yylim])
-    # plt.legend()
-    #
+
+    plt.subplot(122)
+    # plt.plot(data['ascos1']['qinit1'][data['ascos1']['qinit1'] > 0], data['ascos1']['z'][data['ascos1']['qinit1'] > 0], label = 'ASCOS1')
+    plt.plot(data['sonde']['sphum'][:], data['sonde']['Z'], label = 'SONDE')
+    plt.plot(nml_qinit1, nml_Z[1:], 'k.', label = 'monc-namelist')
+    plt.xlabel('q [kg/kg]')
+    plt.grid('on')
+    plt.ylim([0,yylim])
+    plt.legend()
+
     # plt.savefig('../MOCCHA/FIGS/Quicklooks_LEM-ASCOS1-MONCnmlist_thinit-qinit1_20180913.png')
-    # plt.show()
+    plt.show()
 
     return data
 
@@ -218,7 +218,7 @@ def sondeQINIT2(data):
     print (data['monc']['z'][1:])
 
     data['monc']['pressure'] = np.zeros(np.size(data['monc']['z']))
-    interp_pres = interp1d(np.squeeze(data['sonde']['Z']),np.squeeze(data['sonde']['pressure'][:,1])*1e2)
+    interp_pres = interp1d(np.squeeze(data['sonde']['Z']),np.squeeze(data['sonde']['pressure'][:])*1e2)
     data['monc']['pressure'][1:] = interp_pres(data['monc']['z'][1:])
     data['monc']['pressure'][0] = 100910. ## reference surface pressure from mcf
 
@@ -234,9 +234,9 @@ def sondeQINIT2(data):
     ### calculate qinit2
     ### interpolate free troposphere temperatures from radiosonde onto monc namelist gridding
     data['monc']['temperature'] = np.zeros(np.size(data['monc']['z']))
-    interp_temp = interp1d(np.squeeze(data['sonde']['Z']), np.squeeze(data['sonde']['temperature'][:,1]) + 273.16)
+    interp_temp = interp1d(np.squeeze(data['sonde']['Z']), np.squeeze(data['sonde']['temperature'][:]) + 273.16)
     data['monc']['temperature'][1:] = interp_temp(data['monc']['z'][1:])
-    data['monc']['temperature'][0] = data['sonde']['temperature'][0,1] + 273.15
+    data['monc']['temperature'][0] = data['sonde']['temperature'][0] + 273.15
 
     ### calculate adiabatic lwc rate of change
     dlwcdz, dqldz, dqdp = adiabatic_lwc(data['monc']['temperature'], data['monc']['pressure'])
@@ -269,74 +269,74 @@ def sondeQINIT2(data):
     tempvar = data['monc']['qinit1']
     data['monc']['qinit1'] = np.zeros(np.size(data['monc']['z']))
     data['monc']['qinit1'][1:] = tempvar / 1e3
-    data['monc']['qinit1'][0] = data['sonde']['sphum'][0,1] / 1e3
+    data['monc']['qinit1'][0] = data['sonde']['sphum'][0] / 1e3
 
     ### combine q01 and q02 into one input field
     data['monc']['qinit'] = np.append(data['monc']['qinit1'], data['monc']['qinit2'])
 
     ####    --------------- FIGURE
 
-    # SMALL_SIZE = 12
-    # MED_SIZE = 14
-    # LARGE_SIZE = 16
-    #
-    # plt.rc('font',size=MED_SIZE)
-    # plt.rc('axes',titlesize=MED_SIZE)
-    # plt.rc('axes',labelsize=MED_SIZE)
-    # plt.rc('xtick',labelsize=MED_SIZE)
-    # plt.rc('ytick',labelsize=MED_SIZE)
-    # plt.figure(figsize=(13,5))
-    # plt.rc('legend',fontsize=MED_SIZE)
-    # plt.subplots_adjust(top = 0.9, bottom = 0.12, right = 0.95, left = 0.1,
-    #         hspace = 0.22, wspace = 0.4)
-    #
-    # yylim = 2.4e3
-    #
-    # plt.subplot(151)
-    # # ax = plt.gca()
-    # # ax.fill_between(data)
-    # plt.plot(data['sonde']['pottemp'][:,1] + 273.16, data['sonde']['Z'], color = 'darkorange', label = 'SONDE')
-    # plt.plot(data['monc']['thref'], data['monc']['z'][:], 'k.', label = 'monc-namelist')
-    # plt.ylabel('Z [m]')
-    # plt.xlabel('$\Theta$ [K]')
-    # plt.grid('on')
-    # plt.ylim([0,yylim])
+    SMALL_SIZE = 12
+    MED_SIZE = 14
+    LARGE_SIZE = 16
+
+    plt.rc('font',size=MED_SIZE)
+    plt.rc('axes',titlesize=MED_SIZE)
+    plt.rc('axes',labelsize=MED_SIZE)
+    plt.rc('xtick',labelsize=MED_SIZE)
+    plt.rc('ytick',labelsize=MED_SIZE)
+    plt.figure(figsize=(13,5))
+    plt.rc('legend',fontsize=MED_SIZE)
+    plt.subplots_adjust(top = 0.9, bottom = 0.12, right = 0.95, left = 0.1,
+            hspace = 0.22, wspace = 0.4)
+
+    yylim = 2.4e3
+
+    plt.subplot(151)
+    # ax = plt.gca()
+    # ax.fill_between(data)
+    plt.plot(data['sonde']['pottemp'][:] + 273.16, data['sonde']['Z'], color = 'darkorange', label = 'SONDE')
+    plt.plot(data['monc']['thref'], data['monc']['z'][:], 'k.', label = 'monc-namelist')
+    plt.ylabel('Z [m]')
+    plt.xlabel('$\Theta$ [K]')
+    plt.grid('on')
+    plt.ylim([0,yylim])
     # plt.xlim([265,295])
-    #
-    # plt.subplot(152)
-    # plt.plot(data['sonde']['sphum'][:,1], data['sonde']['Z'], color = 'darkorange', label = 'SONDE')
-    # plt.plot(data['monc']['qinit1'], data['monc']['z'], 'k.', label = 'monc-namelist')
-    # plt.xlabel('qinit1 [g/kg]')
-    # plt.grid('on')
-    # plt.ylim([0,yylim])
+
+    plt.subplot(152)
+    plt.plot(data['sonde']['sphum'][:]/1e3, data['sonde']['Z'], color = 'darkorange', label = 'SONDE')
+    plt.plot(data['monc']['qinit1'], data['monc']['z'], 'k.', label = 'monc-namelist')
+    plt.xlabel('qinit1 [g/kg]')
+    plt.grid('on')
+    plt.ylim([0,yylim])
     # plt.xlim([0.5, 3.])
-    # plt.legend(bbox_to_anchor=(0.25, 1.01, 1., .102), loc=3, ncol=3)
-    #
-    # plt.subplot(153)
-    # plt.plot(data['sonde']['pressure'][:,1]*1e2, data['sonde']['Z'], color = 'darkorange', label = 'SONDE')
-    # plt.plot(data['monc']['pressure'], data['monc']['z'], 'k.', label = 'monc-namelist')
-    # plt.xlabel('pressure [Pa]')
-    # plt.grid('on')
-    # plt.ylim([0,yylim])
+    plt.legend(bbox_to_anchor=(0.25, 1.01, 1., .102), loc=3, ncol=3)
+
+    plt.subplot(153)
+    plt.plot(data['sonde']['pressure'][:]*1e2, data['sonde']['Z'], color = 'darkorange', label = 'SONDE')
+    plt.plot(data['monc']['pressure'], data['monc']['z'], 'k.', label = 'monc-namelist')
+    plt.xlabel('pressure [Pa]')
+    plt.grid('on')
+    plt.ylim([0,yylim])
     # plt.xlim([7e4, 10.5e4])
-    #
-    # plt.subplot(154)
-    # plt.plot(data['sonde']['temperature'][:,1] + 273.16, data['sonde']['Z'], color = 'darkorange', label = 'SONDE')
-    # plt.plot(data['monc']['temperature'], data['monc']['z'], 'k.', label = 'monc-namelist')
-    # plt.xlabel('temperature [K]')
-    # plt.grid('on')
-    # plt.ylim([0,yylim])
+
+    plt.subplot(154)
+    plt.plot(data['sonde']['temperature'][:] + 273.16, data['sonde']['Z'], color = 'darkorange', label = 'SONDE')
+    plt.plot(data['monc']['temperature'], data['monc']['z'], 'k.', label = 'monc-namelist')
+    plt.xlabel('temperature [K]')
+    plt.grid('on')
+    plt.ylim([0,yylim])
     # plt.xlim([260,270])
-    #
-    # plt.subplot(155)
-    # plt.plot(data['monc']['qinit2']*1e3, data['monc']['z'], 'k.', label = 'monc-namelist')
-    # plt.xlabel('qinit2 [g/kg]')
-    # plt.grid('on')
-    # plt.ylim([0,yylim])
-    # # plt.xlim([265,275])
-    #
+
+    plt.subplot(155)
+    plt.plot(data['monc']['qinit2']*1e3, data['monc']['z'], 'k.', label = 'monc-namelist')
+    plt.xlabel('qinit2 [g/kg]')
+    plt.grid('on')
+    plt.ylim([0,yylim])
+    # plt.xlim([265,275])
+
     # plt.savefig('../MOCCHA/FIGS/Quicklooks_thref-qinit1-pres-temp-qinit2_MONCnmlist_20180913.png')
-    # plt.show()
+    plt.show()
 
     return data
 
@@ -352,15 +352,15 @@ def sondeWINDS(data):
 
     ### build v array
     nml_v = np.zeros(np.size(data['monc']['z']))
-    interp_v = interp1d(np.squeeze(data['sonde']['Z'][:]),data['sonde']['v'][:,1])
+    interp_v = interp1d(np.squeeze(data['sonde']['Z'][:]),data['sonde']['v'][:])
     nml_v[1:] = interp_v(data['monc']['z'][1:])
-    nml_v[0] = data['sonde']['v'][0,1]
+    nml_v[0] = data['sonde']['v'][0]
 
     ### build u array
     nml_u = np.zeros(np.size(data['monc']['z']))
-    interp_u = interp1d(np.squeeze(data['sonde']['Z'][:]),data['sonde']['u'][:,1])
+    interp_u = interp1d(np.squeeze(data['sonde']['Z'][:]),data['sonde']['u'][:])
     nml_u[1:] = interp_u(data['monc']['z'][1:])
-    nml_u[0] = data['sonde']['u'][0,1]
+    nml_u[0] = data['sonde']['u'][0]
 
     ### save to dictionary so data can be easily passed to next function
     data['monc']['u'] = nml_u
@@ -390,25 +390,25 @@ def sondeWINDS(data):
     #
     # plt.subplot(121)
     # # plt.plot(data['ascos1']['thinit'], data['ascos1']['z'], label = 'ASCOS1')
-    # plt.plot(data['sonde']['u'][:,1], data['sonde']['Z'], label = 'SONDE')
+    # plt.plot(data['sonde']['u'][:], data['sonde']['Z'], label = 'SONDE')
     # plt.plot(data['monc']['u'], data['monc']['z'][:], 'k.', label = 'monc-namelist')
     # plt.ylabel('Z [m]')
     # plt.xlabel('u [m/s]')
     # plt.grid('on')
     # plt.ylim([0,yylim])
-    # plt.xlim([-20,-5])
+    # # plt.xlim([-20,10])
     #
     # plt.subplot(122)
     # # plt.plot(data['ascos1']['qinit1'][data['ascos1']['qinit1'] > 0], data['ascos1']['z'][data['ascos1']['qinit1'] > 0], label = 'ASCOS1')
-    # plt.plot(data['sonde']['v'][:,1], data['sonde']['Z'], label = 'SONDE')
+    # plt.plot(data['sonde']['v'][:], data['sonde']['Z'], label = 'SONDE')
     # plt.plot(data['monc']['v'], data['monc']['z'][:], 'k.', label = 'monc-namelist')
     # plt.xlabel('v [m/s]')
     # plt.grid('on')
     # plt.ylim([0,yylim])
     # plt.legend()
-    # plt.xlim([-10,10])
+    # # plt.xlim([-20,20])
     #
-    # plt.savefig('../MOCCHA/FIGS/Quicklooks_winds_20180913.png')
+    # # plt.savefig('../MOCCHA/FIGS/Quicklooks_winds_20180913.png')
     # plt.show()
 
     return data
@@ -533,20 +533,20 @@ def main():
     ## -------------------------------------------------------------
     ## Quicklook plots of chosen sonde
     ## -------------------------------------------------------------
-    figure = quicklooksSonde(data)
+    # figure = quicklooksSonde(data)
 
     ## -------------------------------------------------------------
     ## Read in data from LEM namelists
     ##-------------------------------------------------------------
     # data = sondeTHREF(data)
-    # data = sondeTHINIT_QINIT1(data)
-    # data = sondeQINIT2(data)
-    # data = sondeWINDS(data)
+    data = sondeTHINIT_QINIT1(data)
+    data = sondeQINIT2(data)
+    data = sondeWINDS(data)
 
     ## -------------------------------------------------------------
     ## Print out data in monc namelist format
     ## -------------------------------------------------------------
-    # data = moncInput(data)
+    data = moncInput(data)
 
     ## -------------------------------------------------------------
     ## save out working data for testing
