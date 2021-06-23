@@ -497,17 +497,23 @@ def main():
     print (sondes.keys())
 
     ## -------------------------------------------------------------
-    ## Load radiosonde from 20180913 0000UTC
+    ## Choose sonde for initialisation:
     ## -------------------------------------------------------------
-    index256 = np.where(np.round(sondes['doy'][:,:]) == 256.)
-    print (sondes['doy'][:,index256[1]])
-    data = {}
-    data['sonde'] = {}
-    # sondenumber = 'X080827_12_EDT'
-    for k in sondes.keys():
-        if k == 'Z': continue
-        data['sonde'][k] = sondes[k][:,index256[1]]
-    data['sonde']['Z'] = sondes['Z']
+    sonde_option = '20180913T0000'
+
+    if sonde_option == '20180913T0000':
+        ## -------------------------------------------------------------
+        ## Load radiosonde from 20180913 0000UTC
+        ## -------------------------------------------------------------
+        index256 = np.where(np.round(sondes['doy'][:,:]) == 256.)
+        print (sondes['doy'][:,index256[1]])
+        data = {}
+        data['sonde'] = {}
+        # sondenumber = 'X080827_12_EDT'
+        for k in sondes.keys():
+            if k == 'Z': continue
+            data['sonde'][k] = sondes[k][:,index256[1]]
+        data['sonde']['Z'] = sondes['Z']
 
     print (data['sonde'].keys())
     print (data['sonde']['doy'][:])
