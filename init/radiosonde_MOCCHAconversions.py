@@ -166,42 +166,42 @@ def sondeTHINIT_QINIT1(data):
 
     ####    --------------- FIGURE
 
-    SMALL_SIZE = 12
-    MED_SIZE = 14
-    LARGE_SIZE = 16
-
-    plt.rc('font',size=MED_SIZE)
-    plt.rc('axes',titlesize=MED_SIZE)
-    plt.rc('axes',labelsize=MED_SIZE)
-    plt.rc('xtick',labelsize=MED_SIZE)
-    plt.rc('ytick',labelsize=MED_SIZE)
-    plt.figure(figsize=(8,5))
-    plt.rc('legend',fontsize=MED_SIZE)
-    plt.subplots_adjust(top = 0.9, bottom = 0.12, right = 0.95, left = 0.1,
-            hspace = 0.22, wspace = 0.4)
-
-    yylim = 2.5e3
-
-    plt.subplot(121)
-    # plt.plot(data['ascos1']['thinit'], data['ascos1']['z'], label = 'ASCOS1')
-    plt.plot(data['sonde']['pottemp'][:] + 273.16, data['sonde']['Z'], label = 'SONDE')
-    plt.plot(nml_thref, nml_Z[1:], 'k.', label = 'monc-namelist')
-    plt.ylabel('Z [m]')
-    plt.xlabel('$\Theta$ [K]')
-    plt.ylim([0,yylim])
-    # plt.xlim([265,295])
-
-    plt.subplot(122)
-    # plt.plot(data['ascos1']['qinit1'][data['ascos1']['qinit1'] > 0], data['ascos1']['z'][data['ascos1']['qinit1'] > 0], label = 'ASCOS1')
-    plt.plot(data['sonde']['sphum'][:], data['sonde']['Z'], label = 'SONDE')
-    plt.plot(nml_qinit1, nml_Z[1:], 'k.', label = 'monc-namelist')
-    plt.xlabel('q [kg/kg]')
-    plt.grid('on')
-    plt.ylim([0,yylim])
-    plt.legend()
-
-    # plt.savefig('../MOCCHA/FIGS/Quicklooks_LEM-ASCOS1-MONCnmlist_thinit-qinit1_20180913.png')
-    plt.show()
+    # SMALL_SIZE = 12
+    # MED_SIZE = 14
+    # LARGE_SIZE = 16
+    #
+    # plt.rc('font',size=MED_SIZE)
+    # plt.rc('axes',titlesize=MED_SIZE)
+    # plt.rc('axes',labelsize=MED_SIZE)
+    # plt.rc('xtick',labelsize=MED_SIZE)
+    # plt.rc('ytick',labelsize=MED_SIZE)
+    # plt.figure(figsize=(8,5))
+    # plt.rc('legend',fontsize=MED_SIZE)
+    # plt.subplots_adjust(top = 0.9, bottom = 0.12, right = 0.95, left = 0.1,
+    #         hspace = 0.22, wspace = 0.4)
+    #
+    # yylim = 2.5e3
+    #
+    # plt.subplot(121)
+    # # plt.plot(data['ascos1']['thinit'], data['ascos1']['z'], label = 'ASCOS1')
+    # plt.plot(data['sonde']['pottemp'][:] + 273.16, data['sonde']['Z'], label = 'SONDE')
+    # plt.plot(nml_thref, nml_Z[1:], 'k.', label = 'monc-namelist')
+    # plt.ylabel('Z [m]')
+    # plt.xlabel('$\Theta$ [K]')
+    # plt.ylim([0,yylim])
+    # # plt.xlim([265,295])
+    #
+    # plt.subplot(122)
+    # # plt.plot(data['ascos1']['qinit1'][data['ascos1']['qinit1'] > 0], data['ascos1']['z'][data['ascos1']['qinit1'] > 0], label = 'ASCOS1')
+    # plt.plot(data['sonde']['sphum'][:], data['sonde']['Z'], label = 'SONDE')
+    # plt.plot(nml_qinit1, nml_Z[1:], 'k.', label = 'monc-namelist')
+    # plt.xlabel('q [kg/kg]')
+    # plt.grid('on')
+    # plt.ylim([0,yylim])
+    # plt.legend()
+    #
+    # # plt.savefig('../MOCCHA/FIGS/Quicklooks_LEM-ASCOS1-MONCnmlist_thinit-qinit1_20180913.png')
+    # plt.show()
 
     return data
 
@@ -276,67 +276,67 @@ def sondeQINIT2(data):
 
     ####    --------------- FIGURE
 
-    SMALL_SIZE = 12
-    MED_SIZE = 14
-    LARGE_SIZE = 16
-
-    plt.rc('font',size=MED_SIZE)
-    plt.rc('axes',titlesize=MED_SIZE)
-    plt.rc('axes',labelsize=MED_SIZE)
-    plt.rc('xtick',labelsize=MED_SIZE)
-    plt.rc('ytick',labelsize=MED_SIZE)
-    plt.figure(figsize=(13,5))
-    plt.rc('legend',fontsize=MED_SIZE)
-    plt.subplots_adjust(top = 0.9, bottom = 0.12, right = 0.95, left = 0.1,
-            hspace = 0.22, wspace = 0.4)
-
-    yylim = 2.4e3
-
-    plt.subplot(151)
-    # ax = plt.gca()
-    # ax.fill_between(data)
-    plt.plot(data['sonde']['pottemp'][:] + 273.16, data['sonde']['Z'], color = 'darkorange', label = 'SONDE')
-    plt.plot(data['monc']['thref'], data['monc']['z'][:], 'k.', label = 'monc-namelist')
-    plt.ylabel('Z [m]')
-    plt.xlabel('$\Theta$ [K]')
-    plt.grid('on')
-    plt.ylim([0,yylim])
+    # SMALL_SIZE = 12
+    # MED_SIZE = 14
+    # LARGE_SIZE = 16
+    #
+    # plt.rc('font',size=MED_SIZE)
+    # plt.rc('axes',titlesize=MED_SIZE)
+    # plt.rc('axes',labelsize=MED_SIZE)
+    # plt.rc('xtick',labelsize=MED_SIZE)
+    # plt.rc('ytick',labelsize=MED_SIZE)
+    # plt.figure(figsize=(13,5))
+    # plt.rc('legend',fontsize=MED_SIZE)
+    # plt.subplots_adjust(top = 0.9, bottom = 0.12, right = 0.95, left = 0.1,
+    #         hspace = 0.22, wspace = 0.4)
+    #
+    # yylim = 2.4e3
+    #
+    # plt.subplot(151)
+    # # ax = plt.gca()
+    # # ax.fill_between(data)
+    # plt.plot(data['sonde']['pottemp'][:] + 273.16, data['sonde']['Z'], color = 'darkorange', label = 'SONDE')
+    # plt.plot(data['monc']['thref'], data['monc']['z'][:], 'k.', label = 'monc-namelist')
+    # plt.ylabel('Z [m]')
+    # plt.xlabel('$\Theta$ [K]')
+    # plt.grid('on')
+    # plt.ylim([0,yylim])
     # plt.xlim([265,295])
-
-    plt.subplot(152)
-    plt.plot(data['sonde']['sphum'][:]/1e3, data['sonde']['Z'], color = 'darkorange', label = 'SONDE')
-    plt.plot(data['monc']['qinit1'], data['monc']['z'], 'k.', label = 'monc-namelist')
-    plt.xlabel('qinit1 [g/kg]')
-    plt.grid('on')
-    plt.ylim([0,yylim])
-    # plt.xlim([0.5, 3.])
-    plt.legend(bbox_to_anchor=(0.25, 1.01, 1., .102), loc=3, ncol=3)
-
-    plt.subplot(153)
-    plt.plot(data['sonde']['pressure'][:]*1e2, data['sonde']['Z'], color = 'darkorange', label = 'SONDE')
-    plt.plot(data['monc']['pressure'], data['monc']['z'], 'k.', label = 'monc-namelist')
-    plt.xlabel('pressure [Pa]')
-    plt.grid('on')
-    plt.ylim([0,yylim])
-    # plt.xlim([7e4, 10.5e4])
-
-    plt.subplot(154)
-    plt.plot(data['sonde']['temperature'][:] + 273.16, data['sonde']['Z'], color = 'darkorange', label = 'SONDE')
-    plt.plot(data['monc']['temperature'], data['monc']['z'], 'k.', label = 'monc-namelist')
-    plt.xlabel('temperature [K]')
-    plt.grid('on')
-    plt.ylim([0,yylim])
-    # plt.xlim([260,270])
-
-    plt.subplot(155)
-    plt.plot(data['monc']['qinit2']*1e3, data['monc']['z'], 'k.', label = 'monc-namelist')
-    plt.xlabel('qinit2 [g/kg]')
-    plt.grid('on')
-    plt.ylim([0,yylim])
+    #
+    # plt.subplot(152)
+    # plt.plot(data['sonde']['sphum'][:]/1e3, data['sonde']['Z'], color = 'darkorange', label = 'SONDE')
+    # plt.plot(data['monc']['qinit1'], data['monc']['z'], 'k.', label = 'monc-namelist')
+    # plt.xlabel('qinit1 [g/kg]')
+    # plt.grid('on')
+    # plt.ylim([0,yylim])
+    # plt.xlim([0.2/1e3, 5./1e3])
+    # plt.legend(bbox_to_anchor=(0.25, 1.01, 1., .102), loc=3, ncol=3)
+    #
+    # plt.subplot(153)
+    # plt.plot(data['sonde']['pressure'][:]*1e2, data['sonde']['Z'], color = 'darkorange', label = 'SONDE')
+    # plt.plot(data['monc']['pressure'], data['monc']['z'], 'k.', label = 'monc-namelist')
+    # plt.xlabel('pressure [Pa]')
+    # plt.grid('on')
+    # plt.ylim([0,yylim])
+    # # plt.xlim([7e4, 10.5e4])
+    #
+    # plt.subplot(154)
+    # plt.plot(data['sonde']['temperature'][:] + 273.16, data['sonde']['Z'], color = 'darkorange', label = 'SONDE')
+    # plt.plot(data['monc']['temperature'], data['monc']['z'], 'k.', label = 'monc-namelist')
+    # plt.xlabel('temperature [K]')
+    # plt.grid('on')
+    # plt.ylim([0,yylim])
     # plt.xlim([265,275])
-
-    # plt.savefig('../MOCCHA/FIGS/Quicklooks_thref-qinit1-pres-temp-qinit2_MONCnmlist_20180913.png')
-    plt.show()
+    #
+    # plt.subplot(155)
+    # plt.plot(data['monc']['qinit2']*1e3, data['monc']['z'], 'k.', label = 'monc-namelist')
+    # plt.xlabel('qinit2 [g/kg]')
+    # plt.grid('on')
+    # plt.ylim([0,yylim])
+    # # plt.xlim([265,275])
+    #
+    # plt.savefig('../MOCCHA/FIGS/Quicklooks_thref-qinit1-pres-temp-qinit2_MONCnmlist_20180912T1800Z.png')
+    # plt.show()
 
     return data
 
