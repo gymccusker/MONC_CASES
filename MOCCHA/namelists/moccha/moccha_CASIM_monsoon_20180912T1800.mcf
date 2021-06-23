@@ -125,8 +125,8 @@ z0th=0.00005
 fcoriol=0.0001453
 geostrophic_wind_rate_of_change_in_x=0.0
 geostrophic_wind_rate_of_change_in_y=0.0
-surface_geostrophic_wind_x=-7.8
-surface_geostrophic_wind_y=-14.2
+surface_geostrophic_wind_x=-11.6
+surface_geostrophic_wind_y=0.8
 
 # Damping configuration
 dmptim=0.001
