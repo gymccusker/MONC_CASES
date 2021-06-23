@@ -32,7 +32,7 @@ socrates_couple_enabled=.true.
 
 # Control configuration
 display_synopsis_frequency=100
-termination_time=50410.
+termination_time=72010.
 dtm=0.2
 
 # IO server configuration
@@ -46,7 +46,7 @@ sampling_frequency=2
 3d_sampling_frequency=20
 mm=600.0
 mm1=60.0
-diag_write_freq=50400.
+diag_write_freq=72000.
 
 # Checkpoint configuration
 checkpoint_frequency=0
