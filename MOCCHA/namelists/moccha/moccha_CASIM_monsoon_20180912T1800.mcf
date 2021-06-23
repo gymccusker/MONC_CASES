@@ -176,8 +176,8 @@ l_no_solar     = .false.  # no solar, only longwave
 latitude       = 88.46    # latitude for the location of radiation calc
 longitude      = 40.86  # longitude for the location of radiation calc
 rad_start_year = 2018.0  # simulation year for earth sun distance
-rad_start_day  = 256.0   # day number from January 1st
-rad_start_time = 0.0    # Start time for the radiation
+rad_start_day  = 255.0   # day number from January 1st
+rad_start_time = 18.0    # Start time for the radiation
 rad_interval   = 30      # If time_basis=.true.: time [ s ] between radiation calls
                          # If time_basis=.false.: timesteps [ ts ] between radiation calls
                          # If .le. zero, radiation called every timestep, otherwise (gt than 0)
