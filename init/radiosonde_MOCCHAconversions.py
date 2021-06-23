@@ -49,10 +49,10 @@ def quicklooksSonde(data):
 
     yylim = 2.5e3
 
-    index = 1
+    # index = 1
 
     plt.subplot(131)
-    plt.plot(data['sonde']['temperature'][:,index] + 273.15, data['sonde']['Z'])
+    plt.plot(data['sonde']['temperature'][:] + 273.15, data['sonde']['Z'])
     plt.ylabel('Z [m]')
     plt.xlabel('Temperature [K]')
     plt.ylim([0,yylim])
@@ -60,16 +60,16 @@ def quicklooksSonde(data):
     plt.xlim([259,270])
 
     plt.subplot(132)
-    plt.plot(data['sonde']['sphum'][:,index], data['sonde']['Z'], label = 'sphum')
-    plt.plot(data['sonde']['mr'][:,index], data['sonde']['Z'], label = 'mr')
+    plt.plot(data['sonde']['sphum'][:], data['sonde']['Z'], label = 'sphum')
+    plt.plot(data['sonde']['mr'][:], data['sonde']['Z'], label = 'mr')
     plt.xlabel('[g/kg]')
     plt.grid('on')
     plt.legend()
     plt.ylim([0,yylim])
-    plt.title('MOCCHA SONDE DOY = ' + str(data['sonde']['doy'][:,index]))
+    plt.title('MOCCHA SONDE DOY = ' + str(data['sonde']['doy'][:]))
 
     plt.subplot(133)
-    plt.plot(data['sonde']['RH'][:,index], data['sonde']['Z'])
+    plt.plot(data['sonde']['RH'][:], data['sonde']['Z'])
     plt.xlabel('Rel. Hum. [%]')
     plt.grid('on')
     plt.ylim([0,yylim])
@@ -499,20 +499,32 @@ def main():
     ## -------------------------------------------------------------
     ## Choose sonde for initialisation:
     ## -------------------------------------------------------------
-    sonde_option = '20180913T0000'
+    sonde_option = '20180912T1800' #'20180913T0000'#
 
-    if sonde_option == '20180913T0000':
+    if sonde_option == '20180912T1800':
+        ## -------------------------------------------------------------
+        ## Load radiosonde from 20180912 1800UTC
+        ## -------------------------------------------------------------
+        index256 = np.where(np.round(sondes['doy'][:,:]) == 256.)
+        print (sondes['doy'][:,index256[1][0]])
+        data = {}
+        data['sonde'] = {}
+        for k in sondes.keys():
+            if k == 'Z': continue
+            data['sonde'][k] = sondes[k][:,index256[1][0]]
+        data['sonde']['Z'] = sondes['Z']
+
+    elif sonde_option == '20180913T0000':
         ## -------------------------------------------------------------
         ## Load radiosonde from 20180913 0000UTC
         ## -------------------------------------------------------------
         index256 = np.where(np.round(sondes['doy'][:,:]) == 256.)
-        print (sondes['doy'][:,index256[1]])
+        print (sondes['doy'][:,index256[1][1]])
         data = {}
         data['sonde'] = {}
-        # sondenumber = 'X080827_12_EDT'
         for k in sondes.keys():
             if k == 'Z': continue
-            data['sonde'][k] = sondes[k][:,index256[1]]
+            data['sonde'][k] = sondes[k][:,index256[1][1]]
         data['sonde']['Z'] = sondes['Z']
 
     print (data['sonde'].keys())
