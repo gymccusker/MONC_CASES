@@ -1,5 +1,4 @@
-
-bal configuration
+# Global configuration
 global_configuration=global_config
 
 # Override global component defaults
@@ -213,4 +212,3 @@ iopt_act=0
 iopt_inuc=0
 process_level=0
 l_override_checks = .true.
-
