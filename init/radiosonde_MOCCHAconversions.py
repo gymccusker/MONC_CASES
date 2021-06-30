@@ -205,6 +205,79 @@ def sondeTHINIT_QINIT1(data):
 
     return data
 
+def sondeWINDS(data):
+
+
+    '''
+    Calculate initialisation wind (u/v) profiles
+    '''
+
+    # print (data['sonde']['v'][:,1])
+    # print (data['sonde']['u'][:,1])
+
+    ### build v array
+    nml_v = np.zeros(np.size(data['monc']['z']))
+    interp_v = interp1d(np.squeeze(data['sonde']['Z'][:]),data['sonde']['v'][:])
+    nml_v[1:] = interp_v(data['monc']['z'][1:])
+    nml_v[0] = data['sonde']['v'][0]
+
+    ### build u array
+    nml_u = np.zeros(np.size(data['monc']['z']))
+    interp_u = interp1d(np.squeeze(data['sonde']['Z'][:]),data['sonde']['u'][:])
+    nml_u[1:] = interp_u(data['monc']['z'][1:])
+    nml_u[0] = data['sonde']['u'][0]
+
+    ### save to dictionary so data can be easily passed to next function
+    data['monc']['u'] = nml_u
+    data['monc']['v'] = nml_v
+
+    ### mean winds for geostrophic input
+    print(np.nanmean(data['monc']['u']))
+    print(np.nanmean(data['monc']['v']))
+
+    ####    --------------- FIGURE
+
+    SMALL_SIZE = 12
+    MED_SIZE = 14
+    LARGE_SIZE = 16
+
+    plt.rc('font',size=MED_SIZE)
+    plt.rc('axes',titlesize=MED_SIZE)
+    plt.rc('axes',labelsize=MED_SIZE)
+    plt.rc('xtick',labelsize=MED_SIZE)
+    plt.rc('ytick',labelsize=MED_SIZE)
+    plt.figure(figsize=(8,5))
+    plt.rc('legend',fontsize=MED_SIZE)
+    plt.subplots_adjust(top = 0.9, bottom = 0.12, right = 0.95, left = 0.1,
+            hspace = 0.22, wspace = 0.4)
+
+    yylim = 2.5e3
+
+    plt.subplot(121)
+    # plt.plot(data['ascos1']['thinit'], data['ascos1']['z'], label = 'ASCOS1')
+    plt.plot(data['sonde']['u'][:], data['sonde']['Z'], label = 'SONDE')
+    plt.plot(data['monc']['u'], data['monc']['z'][:], 'k.', label = 'monc-namelist')
+    plt.ylabel('Z [m]')
+    plt.xlabel('u [m/s]')
+    plt.grid('on')
+    plt.ylim([0,yylim])
+    plt.xlim([-20,10])
+
+    plt.subplot(122)
+    # plt.plot(data['ascos1']['qinit1'][data['ascos1']['qinit1'] > 0], data['ascos1']['z'][data['ascos1']['qinit1'] > 0], label = 'ASCOS1')
+    plt.plot(data['sonde']['v'][:], data['sonde']['Z'], label = 'SONDE')
+    plt.plot(data['monc']['v'], data['monc']['z'][:], 'k.', label = 'monc-namelist')
+    plt.xlabel('v [m/s]')
+    plt.grid('on')
+    plt.ylim([0,yylim])
+    plt.legend()
+    plt.xlim([-20,20])
+
+    # plt.savefig('../MOCCHA/FIGS/Quicklooks_winds_20180912T1800Z.png')
+    plt.show()
+
+    return data
+
 def sondeQINIT2(data):
 
     '''
@@ -340,77 +413,50 @@ def sondeQINIT2(data):
 
     return data
 
-def sondeWINDS(data):
-
+def aerosolACCUM(data):
 
     '''
-    Calculate initialisation wind (u/v) profiles
+    Design accummulation mode aerosol inputs:
+        names_init_pl_q=accum_sol_mass, accum_sol_number
     '''
 
-    # print (data['sonde']['v'][:,1])
-    # print (data['sonde']['u'][:,1])
+    print ('Designing soluble accummulation mode input:')
 
-    ### build v array
-    nml_v = np.zeros(np.size(data['monc']['z']))
-    interp_v = interp1d(np.squeeze(data['sonde']['Z'][:]),data['sonde']['v'][:])
-    nml_v[1:] = interp_v(data['monc']['z'][1:])
-    nml_v[0] = data['sonde']['v'][0]
+    arrlen = np.size(data['monc']['z'])
+    print(arrlen)
 
-    ### build u array
-    nml_u = np.zeros(np.size(data['monc']['z']))
-    interp_u = interp1d(np.squeeze(data['sonde']['Z'][:]),data['sonde']['u'][:])
-    nml_u[1:] = interp_u(data['monc']['z'][1:])
-    nml_u[0] = data['sonde']['u'][0]
+    ### For UM_CASIM-100, the following were set:
+    ###         accum_sol_mass_var=70*1.50e-9
+    ###         accum_sol_num_var=70*1.00e8
 
-    ### save to dictionary so data can be easily passed to next function
-    data['monc']['u'] = nml_u
-    data['monc']['v'] = nml_v
+    data['monc']['q_accum_sol_mass'] = np.zeros(arrlen)
+    data['monc']['q_accum_sol_mass'][:] = 1.50e-9
+    print (data['monc']['q_accum_sol_mass'])
 
-    ### mean winds for geostrophic input
-    print(np.nanmean(data['monc']['u']))
-    print(np.nanmean(data['monc']['v']))
+    data['monc']['q_accum_sol_number'] = np.zeros(arrlen)
+    data['monc']['q_accum_sol_number'][:] = 1.00e8
+    print (data['monc']['q_accum_sol_number'])
+
+    ### combine to existing q field input
+    data['monc']['q_accum_sol'] = np.append(data['monc']['q_accum_sol_mass'], data['monc']['q_accum_sol_number'])
+    data['monc']['qinit'] = np.append(data['monc']['qinit'], data['monc']['q_accum_sol'])
 
     ####    --------------- FIGURE
 
-    SMALL_SIZE = 12
-    MED_SIZE = 14
-    LARGE_SIZE = 16
-
-    plt.rc('font',size=MED_SIZE)
-    plt.rc('axes',titlesize=MED_SIZE)
-    plt.rc('axes',labelsize=MED_SIZE)
-    plt.rc('xtick',labelsize=MED_SIZE)
-    plt.rc('ytick',labelsize=MED_SIZE)
-    plt.figure(figsize=(8,5))
-    plt.rc('legend',fontsize=MED_SIZE)
-    plt.subplots_adjust(top = 0.9, bottom = 0.12, right = 0.95, left = 0.1,
-            hspace = 0.22, wspace = 0.4)
-
-    yylim = 2.5e3
-
-    plt.subplot(121)
-    # plt.plot(data['ascos1']['thinit'], data['ascos1']['z'], label = 'ASCOS1')
-    plt.plot(data['sonde']['u'][:], data['sonde']['Z'], label = 'SONDE')
-    plt.plot(data['monc']['u'], data['monc']['z'][:], 'k.', label = 'monc-namelist')
-    plt.ylabel('Z [m]')
-    plt.xlabel('u [m/s]')
-    plt.grid('on')
-    plt.ylim([0,yylim])
-    # plt.xlim([-20,10])
-
-    plt.subplot(122)
-    # plt.plot(data['ascos1']['qinit1'][data['ascos1']['qinit1'] > 0], data['ascos1']['z'][data['ascos1']['qinit1'] > 0], label = 'ASCOS1')
-    plt.plot(data['sonde']['v'][:], data['sonde']['Z'], label = 'SONDE')
-    plt.plot(data['monc']['v'], data['monc']['z'][:], 'k.', label = 'monc-namelist')
-    plt.xlabel('v [m/s]')
-    plt.grid('on')
-    plt.ylim([0,yylim])
-    plt.legend()
-    # plt.xlim([-20,20])
-
-    plt.savefig('../MOCCHA/FIGS/Quicklooks_winds_20180912T1800Z.png')
-    plt.show()
-
+    # SMALL_SIZE = 12
+    # MED_SIZE = 14
+    # LARGE_SIZE = 16
+    #
+    # plt.rc('font',size=MED_SIZE)
+    # plt.rc('axes',titlesize=MED_SIZE)
+    # plt.rc('axes',labelsize=MED_SIZE)
+    # plt.rc('xtick',labelsize=MED_SIZE)
+    # plt.rc('ytick',labelsize=MED_SIZE)
+    # plt.figure(figsize=(13,5))
+    # plt.rc('legend',fontsize=MED_SIZE)
+    # plt.subplots_adjust(top = 0.9, bottom = 0.12, right = 0.95, left = 0.1,
+    #         hspace = 0.22, wspace = 0.4)
+    #
     return data
 
 def moncInput(data):
@@ -462,7 +508,7 @@ def moncInput(data):
                     # z_init_pl_q = 0.0,50.0,100.0,150.0,200.0,250.0,300.0,350.0,400.0,450.0,500.0,550.0,600.0,650.0,700.0,750.0,800.0,850.0,900.0,950.0,1000.0,1100.0,1200.0,1300.0,1400.0,1500.0,1600.0,1700.0,1800.0,1900.0,2000.0,2100.0,2200.0,2300.0,2400.0,2500.0
 
         print ('f_init_pl_q = ')
-        for line in data['monc']['qinit']: sys.stdout.write('' + str(np.round(line,5)).strip() + ',')
+        for line in data['monc']['qinit']: sys.stdout.write('' + str(np.round(line,10)).strip() + ',')
         print ('')
 
                     # f_init_pl_q = 0.00244,0.00227,0.00228,0.0023,0.00221,0.00214,0.00213,0.00215,0.00215,0.00212,0.00213,0.00211,0.00207,0.00203,0.00202,0.00199,0.00201,0.00201,0.00201,0.00204,0.00202,0.00198,0.00206,0.00206,0.00202,0.00201,0.00243,0.00197,0.00184,0.00184,0.00142,0.00107,0.00068,0.00062,0.00054,0.00042,0.0,0.0,0.0,0.0,6e-05,6e-05,6e-05,6e-05,6e-05,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,
@@ -499,7 +545,7 @@ def main():
     ## -------------------------------------------------------------
     ## Choose sonde for initialisation:
     ## -------------------------------------------------------------
-    sonde_option = '20180912T1800' #'20180913T0000'#
+    sonde_option = '20180913T0000'#'20180912T1800' #
 
     if sonde_option == '20180912T1800':
         ## -------------------------------------------------------------
@@ -540,8 +586,11 @@ def main():
     ##-------------------------------------------------------------
     # data = sondeTHREF(data)
     data = sondeTHINIT_QINIT1(data)
-    data = sondeQINIT2(data)
     data = sondeWINDS(data)
+
+    ### design qfield inputs
+    data = sondeQINIT2(data)
+    data = aerosolACCUM(data)
 
     ## -------------------------------------------------------------
     ## Print out data in monc namelist format
