@@ -208,7 +208,7 @@ option=22222
 l_warm=.false.
 
 aerosol_option=0
-iopt_act=0
+iopt_act=3
 iopt_inuc=0
 process_level=0
 l_override_checks = .true.
