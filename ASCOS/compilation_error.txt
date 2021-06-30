@@ -1,0 +1,108 @@
+gyoung@xcslc0:~/monc/r8166_SH_dN_imm_0> fcm make -j4 -f fcm-make/monc-cray-cray.cfg -f fcm-make/casim_socrates_branch.cfg --new 
+[init] make                # 2021-06-29T09:31:36Z
+[info] FCM 2021.05.0 (/common/fcm/fcm-2021.05.0)
+[init] make config-parse   # 2021-06-29T09:31:36Z
+[info] config-file=/home/d05/gyoung/monc/r8166_SH_dN_imm_0/fcm-make/monc-cray-cray.cfg
+[info] config-file= - /home/d05/gyoung/monc/r8166_SH_dN_imm_0/fcm-make/comp-cray-2107.cfg
+[info] config-file= - /home/d05/gyoung/monc/r8166_SH_dN_imm_0/fcm-make/env-cray.cfg
+[info] config-file= - /home/d05/gyoung/monc/r8166_SH_dN_imm_0/fcm-make/monc-build.cfg
+[info] config-file=/home/d05/gyoung/monc/r8166_SH_dN_imm_0/fcm-make/casim_socrates_branch.cfg
+[done] make config-parse   # 0.2s
+[init] make dest-init      # 2021-06-29T09:31:36Z
+[info] dest=gyoung@xcslc0:/home/d05/gyoung/monc/r8166_SH_dN_imm_0
+[info] mode=new
+[done] make dest-init      # 0.7s
+[init] make extract        # 2021-06-29T09:31:37Z
+[info] location casim: 0: https://code.metoffice.gov.uk/svn/monc/casim/branches/dev/gillianyoung/r8131_SH_dN_imm_0@8810 (8810)
+[info] location  monc: 0: /home/d05/gyoung/monc/r8166_SH_dN_imm_0
+[info] location socrates: 0: https://code.metoffice.gov.uk/svn/socrates/main/trunk@855 (855)
+[info]   dest:  631 [A added]
+[info] source:  631 [U from base]
+[done] make extract        # 5.8s
+[init] make preprocess     # 2021-06-29T09:31:43Z
+[info] sources: total=631, analysed=389, elapsed-time=0.6s, total-time=0.6s
+[info] target-tree-analysis: elapsed-time=0.1s
+[info] install   targets: modified=8, unchanged=0, failed=0, total-time=0.0s
+[info] process   targets: modified=380, unchanged=0, failed=0, total-time=4.1s
+[info] TOTAL     targets: modified=388, unchanged=0, failed=0, elapsed-time=1.6s
+[done] make preprocess     # 2.5s
+[init] make build          # 2021-06-29T09:31:45Z
+[info] sources: total=631, analysed=631, elapsed-time=2.0s, total-time=6.1s
+[info] target-tree-analysis: elapsed-time=0.7s
+[FAIL] ftn -oo/casim_mod.o -c -I./include -I/opt/cray/netcdf-hdf5parallel/4.4.1/CRAY/8.3/include -O3 -e m -J. /home/d05/gyoung/monc/r8166_SH_dN_imm_0/preprocess/src/monc/components/casim/src/casim.F90 # rc=1
+[FAIL] 
+[FAIL] module casim_mod
+[FAIL]        ^         
+[FAIL] ftn-855 crayftn: ERROR CASIM_MOD, File = ../../../../../../../home/d05/gyoung/monc/r8166_SH_dN_imm_0/preprocess/src/monc/components/casim/src/casim.F90, Line = 4, Column = 8 
+[FAIL]   The compiler has detected errors in module "CASIM_MOD".  No module information file will be created for this module.
+[FAIL] 
+[FAIL]      , l_gamma_online & ! when true use standard vn0.3.3 sed, when false use precalced gamma
+[FAIL]        ^                                                                                     
+[FAIL] ftn-732 crayftn: ERROR CASIM_MOD, File = ../../../../../../../home/d05/gyoung/monc/r8166_SH_dN_imm_0/preprocess/src/monc/components/casim/src/casim.F90, Line = 81, Column = 8 
+[FAIL]   "L_GAMMA_ONLINE" is not in module "MPHYS_SWITCHES".
+[FAIL] 
+[FAIL]      , l_subseds_maxv & ! Use a CFL criteria based on max terminal velocity
+[FAIL]        ^                                                                    
+[FAIL] ftn-732 crayftn: ERROR CASIM_MOD, File = ../../../../../../../home/d05/gyoung/monc/r8166_SH_dN_imm_0/preprocess/src/monc/components/casim/src/casim.F90, Line = 82, Column = 8 
+[FAIL]   "L_SUBSEDS_MAXV" is not in module "MPHYS_SWITCHES".
+[FAIL] 
+[FAIL]      , l_sed_eulexp & ! switch for eulexp sed based on UM. Default is false
+[FAIL]        ^                                                                    
+[FAIL] ftn-732 crayftn: ERROR CASIM_MOD, File = ../../../../../../../home/d05/gyoung/monc/r8166_SH_dN_imm_0/preprocess/src/monc/components/casim/src/casim.F90, Line = 84, Column = 8 
+[FAIL]   "L_SED_EULEXP" is not in module "MPHYS_SWITCHES".
+[FAIL] 
+[FAIL]      , cfl_vt_max & ! cfl limit for sedimentation (default = 1.0)
+[FAIL]        ^                                                          
+[FAIL] ftn-732 crayftn: ERROR CASIM_MOD, File = ../../../../../../../home/d05/gyoung/monc/r8166_SH_dN_imm_0/preprocess/src/monc/components/casim/src/casim.F90, Line = 86, Column = 8 
+[FAIL]   "CFL_VT_MAX" is not in module "MPHYS_SWITCHES".
+[FAIL] 
+[FAIL]      , l_kfsm
+[FAIL]        ^      
+[FAIL] ftn-732 crayftn: ERROR CASIM_MOD, File = ../../../../../../../home/d05/gyoung/monc/r8166_SH_dN_imm_0/preprocess/src/monc/components/casim/src/casim.F90, Line = 87, Column = 8 
+[FAIL]   "L_KFSM" is not in module "MPHYS_SWITCHES".
+[FAIL] 
+[FAIL]        dActiveSolNumber,                           &
+[FAIL]        ^                                             
+[FAIL] ftn-436 crayftn: ERROR TIMESTEP_CALLBACK, File = ../../../../../../../home/d05/gyoung/monc/r8166_SH_dN_imm_0/preprocess/src/monc/components/casim/src/casim.F90, Line = 745, Column = 8 
+[FAIL]   Illegal association of an array-valued actual argument with a scalar dummy argument "IS_IN".
+[FAIL]        ^                                             
+[FAIL] ftn-1108 crayftn: ERROR TIMESTEP_CALLBACK, File = ../../../../../../../home/d05/gyoung/monc/r8166_SH_dN_imm_0/preprocess/src/monc/components/casim/src/casim.F90, Line = 745, Column = 8 
+[FAIL]   The type of the actual argument, "DOUBLE PRECISION", does not match "INTEGER", the type of the dummy argument.
+[FAIL] 
+[FAIL]        dActiveInsolNumber,                         &
+[FAIL]        ^                                             
+[FAIL] ftn-436 crayftn: ERROR TIMESTEP_CALLBACK, File = ../../../../../../../home/d05/gyoung/monc/r8166_SH_dN_imm_0/preprocess/src/monc/components/casim/src/casim.F90, Line = 746, Column = 8 
+[FAIL]   Illegal association of an array-valued actual argument with a scalar dummy argument "IE_IN".
+[FAIL]        ^                                             
+[FAIL] ftn-1108 crayftn: ERROR TIMESTEP_CALLBACK, File = ../../../../../../../home/d05/gyoung/monc/r8166_SH_dN_imm_0/preprocess/src/monc/components/casim/src/casim.F90, Line = 746, Column = 8 
+[FAIL]   The type of the actual argument, "DOUBLE PRECISION", does not match "INTEGER", the type of the dummy argument.
+[FAIL] 
+[FAIL]        kls, kle,                                   &
+[FAIL]        ^                                             
+[FAIL] ftn-1108 crayftn: ERROR TIMESTEP_CALLBACK, File = ../../../../../../../home/d05/gyoung/monc/r8166_SH_dN_imm_0/preprocess/src/monc/components/casim/src/casim.F90, Line = 749, Column = 8 
+[FAIL]   The type of the actual argument, "INTEGER", does not match "LOGICAL", the type of the dummy argument.
+[FAIL]             ^                                        
+[FAIL] ftn-331 crayftn: ERROR TIMESTEP_CALLBACK, File = ../../../../../../../home/d05/gyoung/monc/r8166_SH_dN_imm_0/preprocess/src/monc/components/casim/src/casim.F90, Line = 749, Column = 13 
+[FAIL]   There is no corresponding dummy argument for actual argument number 90.
+[FAIL] 
+[FAIL]        l_tendency=.TRUE.                           &
+[FAIL]                   ^                                  
+[FAIL] ftn-330 crayftn: ERROR TIMESTEP_CALLBACK, File = ../../../../../../../home/d05/gyoung/monc/r8166_SH_dN_imm_0/preprocess/src/monc/components/casim/src/casim.F90, Line = 750, Column = 19 
+[FAIL]   More than one actual argument has been specified for a dummy argument.
+[FAIL] 
+[FAIL] Cray Fortran : Version 8.4.3 (20151214195532_4e8d659f452eb6e57717e0ba2d5b834d1abe6894)
+[FAIL] Cray Fortran : Tue Jun 29, 2021  09:34:14
+[FAIL] Cray Fortran : Compile time:  0.0640 seconds
+[FAIL] Cray Fortran : 1024 source lines
+[FAIL] Cray Fortran : 13 errors, 0 warnings, 0 other messages, 0 ansi
+[FAIL] Cray Fortran : "explain ftn-message number" gives more information about each message.
+[FAIL] compile    0.1 ! casim_mod.o          <- monc/components/casim/src/casim.F90
+[info] compile   targets: modified=353, unchanged=0, failed=1, total-time=502.1s
+[info] compile+  targets: modified=227, unchanged=0, failed=0, total-time=1.4s
+[info] install   targets: modified=1, unchanged=0, failed=0, total-time=0.0s
+[info] TOTAL     targets: modified=581, unchanged=0, failed=2, elapsed-time=147.5s
+[FAIL] ! CASIM_MOD.mod       : depends on failed target: casim_mod.o
+[FAIL] ! casim_mod.o         : update task failed
+[FAIL] make build          # 149.8s
+[FAIL] make                # 158.9s
+
