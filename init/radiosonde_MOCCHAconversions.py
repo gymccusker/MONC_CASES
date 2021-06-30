@@ -24,7 +24,7 @@ import sys
 sys.path.insert(1, '../py_functions/')
 from time_functions import calcTime_Mat2DOY, calcTime_Date2DOY
 from readMAT import readMatlabStruct, readMatlabData
-from physFuncts import calcThetaE, calcThetaVL, adiabatic_lwc, calcTemperature
+from physFuncts import calcThetaE, calcThetaVL, adiabatic_lwc, calcTemperature, calcAirDensity
 from pyFixes import py3_FixNPLoad
 
 def quicklooksSonde(data):
@@ -349,67 +349,67 @@ def sondeQINIT2(data):
 
     ####    --------------- FIGURE
 
-    # SMALL_SIZE = 12
-    # MED_SIZE = 14
-    # LARGE_SIZE = 16
-    #
-    # plt.rc('font',size=MED_SIZE)
-    # plt.rc('axes',titlesize=MED_SIZE)
-    # plt.rc('axes',labelsize=MED_SIZE)
-    # plt.rc('xtick',labelsize=MED_SIZE)
-    # plt.rc('ytick',labelsize=MED_SIZE)
-    # plt.figure(figsize=(13,5))
-    # plt.rc('legend',fontsize=MED_SIZE)
-    # plt.subplots_adjust(top = 0.9, bottom = 0.12, right = 0.95, left = 0.1,
-    #         hspace = 0.22, wspace = 0.4)
-    #
-    # yylim = 2.4e3
-    #
-    # plt.subplot(151)
-    # # ax = plt.gca()
-    # # ax.fill_between(data)
-    # plt.plot(data['sonde']['pottemp'][:] + 273.16, data['sonde']['Z'], color = 'darkorange', label = 'SONDE')
-    # plt.plot(data['monc']['thref'], data['monc']['z'][:], 'k.', label = 'monc-namelist')
-    # plt.ylabel('Z [m]')
-    # plt.xlabel('$\Theta$ [K]')
-    # plt.grid('on')
-    # plt.ylim([0,yylim])
-    # plt.xlim([265,295])
-    #
-    # plt.subplot(152)
-    # plt.plot(data['sonde']['sphum'][:]/1e3, data['sonde']['Z'], color = 'darkorange', label = 'SONDE')
-    # plt.plot(data['monc']['qinit1'], data['monc']['z'], 'k.', label = 'monc-namelist')
-    # plt.xlabel('qinit1 [g/kg]')
-    # plt.grid('on')
-    # plt.ylim([0,yylim])
-    # plt.xlim([0.2/1e3, 5./1e3])
-    # plt.legend(bbox_to_anchor=(0.25, 1.01, 1., .102), loc=3, ncol=3)
-    #
-    # plt.subplot(153)
-    # plt.plot(data['sonde']['pressure'][:]*1e2, data['sonde']['Z'], color = 'darkorange', label = 'SONDE')
-    # plt.plot(data['monc']['pressure'], data['monc']['z'], 'k.', label = 'monc-namelist')
-    # plt.xlabel('pressure [Pa]')
-    # plt.grid('on')
-    # plt.ylim([0,yylim])
-    # # plt.xlim([7e4, 10.5e4])
-    #
-    # plt.subplot(154)
-    # plt.plot(data['sonde']['temperature'][:] + 273.16, data['sonde']['Z'], color = 'darkorange', label = 'SONDE')
-    # plt.plot(data['monc']['temperature'], data['monc']['z'], 'k.', label = 'monc-namelist')
-    # plt.xlabel('temperature [K]')
-    # plt.grid('on')
-    # plt.ylim([0,yylim])
+    SMALL_SIZE = 12
+    MED_SIZE = 14
+    LARGE_SIZE = 16
+
+    plt.rc('font',size=MED_SIZE)
+    plt.rc('axes',titlesize=MED_SIZE)
+    plt.rc('axes',labelsize=MED_SIZE)
+    plt.rc('xtick',labelsize=MED_SIZE)
+    plt.rc('ytick',labelsize=MED_SIZE)
+    plt.figure(figsize=(13,5))
+    plt.rc('legend',fontsize=MED_SIZE)
+    plt.subplots_adjust(top = 0.9, bottom = 0.12, right = 0.95, left = 0.1,
+            hspace = 0.22, wspace = 0.4)
+
+    yylim = 2.4e3
+
+    plt.subplot(151)
+    # ax = plt.gca()
+    # ax.fill_between(data)
+    plt.plot(data['sonde']['pottemp'][:] + 273.16, data['sonde']['Z'], color = 'darkorange', label = 'SONDE')
+    plt.plot(data['monc']['thref'], data['monc']['z'][:], 'k.', label = 'monc-namelist')
+    plt.ylabel('Z [m]')
+    plt.xlabel('$\Theta$ [K]')
+    plt.grid('on')
+    plt.ylim([0,yylim])
+    plt.xlim([265,295])
+
+    plt.subplot(152)
+    plt.plot(data['sonde']['sphum'][:]/1e3, data['sonde']['Z'], color = 'darkorange', label = 'SONDE')
+    plt.plot(data['monc']['qinit1'], data['monc']['z'], 'k.', label = 'monc-namelist')
+    plt.xlabel('qinit1 [g/kg]')
+    plt.grid('on')
+    plt.ylim([0,yylim])
+    plt.xlim([0.2/1e3, 5./1e3])
+    plt.legend(bbox_to_anchor=(0.25, 1.01, 1., .102), loc=3, ncol=3)
+
+    plt.subplot(153)
+    plt.plot(data['sonde']['pressure'][:]*1e2, data['sonde']['Z'], color = 'darkorange', label = 'SONDE')
+    plt.plot(data['monc']['pressure'], data['monc']['z'], 'k.', label = 'monc-namelist')
+    plt.xlabel('pressure [Pa]')
+    plt.grid('on')
+    plt.ylim([0,yylim])
+    # plt.xlim([7e4, 10.5e4])
+
+    plt.subplot(154)
+    plt.plot(data['sonde']['temperature'][:] + 273.16, data['sonde']['Z'], color = 'darkorange', label = 'SONDE')
+    plt.plot(data['monc']['temperature'], data['monc']['z'], 'k.', label = 'monc-namelist')
+    plt.xlabel('temperature [K]')
+    plt.grid('on')
+    plt.ylim([0,yylim])
+    plt.xlim([265,275])
+
+    plt.subplot(155)
+    plt.plot(data['monc']['qinit2']*1e3, data['monc']['z'], 'k.', label = 'monc-namelist')
+    plt.xlabel('qinit2 [g/kg]')
+    plt.grid('on')
+    plt.ylim([0,yylim])
     # plt.xlim([265,275])
-    #
-    # plt.subplot(155)
-    # plt.plot(data['monc']['qinit2']*1e3, data['monc']['z'], 'k.', label = 'monc-namelist')
-    # plt.xlabel('qinit2 [g/kg]')
-    # plt.grid('on')
-    # plt.ylim([0,yylim])
-    # # plt.xlim([265,275])
-    #
+
     # plt.savefig('../MOCCHA/FIGS/Quicklooks_thref-qinit1-pres-temp-qinit2_MONCnmlist_20180912T1800Z.png')
-    # plt.show()
+    plt.show()
 
     return data
 
@@ -425,39 +425,136 @@ def aerosolACCUM(data):
     arrlen = np.size(data['monc']['z'])
     print(arrlen)
 
-    ### For UM_CASIM-100, the following were set:
-    ###         accum_sol_mass_var=70*1.50e-9
-    ###         accum_sol_num_var=70*1.00e8
+    case = 'CASIM-UKCA-AeroProf' # 'CASIM-100'
+    if case == 'CASIM-100':
 
-    data['monc']['q_accum_sol_mass'] = np.zeros(arrlen)
-    data['monc']['q_accum_sol_mass'][:] = 1.50e-9
-    print (data['monc']['q_accum_sol_mass'])
+        ### For UM_CASIM-100, the following were set:
+        ###         accum_sol_mass_var=70*1.50e-9
+        ###         accum_sol_num_var=70*1.00e8
 
-    data['monc']['q_accum_sol_number'] = np.zeros(arrlen)
-    data['monc']['q_accum_sol_number'][:] = 1.00e8
-    print (data['monc']['q_accum_sol_number'])
+        data['monc']['q_accum_sol_mass'] = np.zeros(arrlen)
+        data['monc']['q_accum_sol_mass'][:] = 1.50e-9
+        print (data['monc']['q_accum_sol_mass'])
+
+        data['monc']['q_accum_sol_number'] = np.zeros(arrlen)
+        data['monc']['q_accum_sol_number'][:] = 1.00e8
+        print (data['monc']['q_accum_sol_number'])
+
+    elif case == 'CASIM-UKCA-AeroProf':
+
+        ### For UM_CASIM-100, the following were set:
+        ###         accum_sol_mass_var=70*1.50e-9
+        ###         accum_sol_num_var=70*1.00e8
+
+        data['monc']['ukca'] = {}
+        data['monc']['ukca'] = np.load('../MOCCHA/input/MONC_UKCAInputs-20180913.npy').item()
+
+
+        data['monc']['q_accum_sol_number'] = np.zeros(arrlen)
+        data['monc']['q_accum_sol_number'][:] = data['monc']['ukca']['moncNumAccum']
+        print (data['monc']['q_accum_sol_number'])
+
+        rho_air = calcAirDensity(data['monc']['temperature'],data['monc']['pressure']/1e2)
+        plt.plot(rho_air,data['monc']['z']);plt.show()
+
+        modeFlag = 1 ### accumulation mode
+        data['monc']['q_accum_sol_mass'] = estimateMass(data['monc']['q_accum_sol_number'][:], rho_air, modeFlag)
+        print (data['monc']['q_accum_sol_mass'])
+
+    ####    --------------- FIGURE
+
+    SMALL_SIZE = 12
+    MED_SIZE = 14
+    LARGE_SIZE = 16
+
+    plt.rc('font',size=MED_SIZE)
+    plt.rc('axes',titlesize=MED_SIZE)
+    plt.rc('axes',labelsize=MED_SIZE)
+    plt.rc('xtick',labelsize=MED_SIZE)
+    plt.rc('ytick',labelsize=MED_SIZE)
+    plt.figure(figsize=(10,5))
+    plt.rc('legend',fontsize=MED_SIZE)
+    plt.subplots_adjust(top = 0.9, bottom = 0.12, right = 0.95, left = 0.1,
+            hspace = 0.22, wspace = 0.4)
+
+    yylim = 2.4e3
+
+    plt.subplot(121)
+    plt.plot(data['monc']['q_accum_sol_number'], data['monc']['z'],'k.', label = 'MONC input')
+    plt.ylabel('Z [m]')
+    plt.xlabel('N$_{sol, accum}$ [m$^{-3}$]')
+    plt.grid('on')
+    plt.ylim([0,yylim])
+    plt.title('CASE = ' + case)
+    # plt.xlim([0, 1.1e8])
+    plt.legend()
+
+    plt.subplot(122)
+    plt.plot(data['monc']['q_accum_sol_mass'], data['monc']['z'],'k.')
+    plt.ylabel('Z [m]')
+    plt.xlabel('M$_{sol, accum}$ [kg/kg]')
+    plt.grid('on')
+    plt.ylim([0,yylim])
+    plt.title('CASE = ' + case)
+    # plt.xlim([0, 1.1e8])
+
+    plt.savefig('../MOCCHA/FIGS/20180913_NsolAccum_MsolAccum_' + case + '.png')
+    plt.show()
+
 
     ### combine to existing q field input
     data['monc']['q_accum_sol'] = np.append(data['monc']['q_accum_sol_mass'], data['monc']['q_accum_sol_number'])
     data['monc']['qinit'] = np.append(data['monc']['qinit'], data['monc']['q_accum_sol'])
 
-    ####    --------------- FIGURE
 
-    # SMALL_SIZE = 12
-    # MED_SIZE = 14
-    # LARGE_SIZE = 16
-    #
-    # plt.rc('font',size=MED_SIZE)
-    # plt.rc('axes',titlesize=MED_SIZE)
-    # plt.rc('axes',labelsize=MED_SIZE)
-    # plt.rc('xtick',labelsize=MED_SIZE)
-    # plt.rc('ytick',labelsize=MED_SIZE)
-    # plt.figure(figsize=(13,5))
-    # plt.rc('legend',fontsize=MED_SIZE)
-    # plt.subplots_adjust(top = 0.9, bottom = 0.12, right = 0.95, left = 0.1,
-    #         hspace = 0.22, wspace = 0.4)
-    #
     return data
+
+def estimateMass(N, rho_air, flag):
+
+    #### -------------------------------------------------------------
+    #### SCALE AEROSOL MASS (accumulation mode: 1.5*1e-9 for every 1.00*1e8 aerosol particles)
+    #### -------------------------------------------------------------
+
+    print('')
+    print('****')
+    print('Estimate mass by mean modal radius and assuming spherical particles:')
+    print('')
+
+    #### Accumulation mode: 0.1um < d_p < 1um
+
+    ### make dummy variables
+    # M = 1.0
+    if flag == 1:
+        sigma = 1.5         #### == fixed_aerosol_sigma (mphys_constants.F90)
+        rho = 1777.0        #### == fixed_aerosol_density (mphys_constants.F90); kg/m3
+        Rm = 0.5*1.0e-6     #### == fixed_aerosol_rm (mphys_constants.F90); 500nm
+    elif flag == 2:
+        sigma = 1.5         #### == fixed_aerosol_sigma (mphys_constants.F90)
+        rho = 2000.0        #### == fixed_aerosol_density (mphys_constants.F90); kg/m3
+        Rm = 5*1.0e-6       #### == fixed_aerosol_rm (mphys_constants.F90); 5 um
+    else:
+        print('****Mode option not valid!****')
+
+    print('Calculating aerosol mass mixing ratio assuming: ')
+    print('rho_aero = ', rho, ' kg/m3')
+    print('Rm = ', Rm*1e6, ' um')
+    print('...')
+
+    ### calculation for mean radius given mass and number:
+    # MNtoRm = ( 3.0*M*np.exp(-4.5*np.log(sigma)**2) /
+    #     (4.0*N*np.pi*rho) )**(1.0/3.0)
+                ### just copied from casim/lognormal_funcs.F90
+
+    mass = ( (4.0/3.0)*np.pi*Rm**3 ) * (N*rho) / (np.exp(-4.5*np.log(sigma)**2))
+            ### gives mass concentration in kg/m3
+
+    #### need mass concentration in kg/kg for casim input
+    M = mass / rho_air
+
+    print('mass = ', M)
+    print('')
+
+    return M
 
 def moncInput(data):
 
