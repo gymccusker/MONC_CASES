@@ -526,11 +526,11 @@ def estimateMass(N, rho_air, flag):
     # M = 1.0
     if flag == 1:
         sigma = 1.5         #### == fixed_aerosol_sigma (mphys_constants.F90)
-        rho = 1777.0        #### == fixed_aerosol_density (mphys_constants.F90); kg/m3
+        rho = 1.7770        #### == fixed_aerosol_density (mphys_constants.F90); g/m3
         Rm = 0.5*1.0e-6     #### == fixed_aerosol_rm (mphys_constants.F90); 500nm
     elif flag == 2:
         sigma = 1.5         #### == fixed_aerosol_sigma (mphys_constants.F90)
-        rho = 2000.0        #### == fixed_aerosol_density (mphys_constants.F90); kg/m3
+        rho = 2.0000        #### == fixed_aerosol_density (mphys_constants.F90); g/m3
         Rm = 5*1.0e-6       #### == fixed_aerosol_rm (mphys_constants.F90); 5 um
     else:
         print('****Mode option not valid!****')
