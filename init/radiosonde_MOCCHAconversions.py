@@ -236,45 +236,45 @@ def sondeWINDS(data):
     print(np.nanmean(data['monc']['v']))
 
     ####    --------------- FIGURE
-
-    SMALL_SIZE = 12
-    MED_SIZE = 14
-    LARGE_SIZE = 16
-
-    plt.rc('font',size=MED_SIZE)
-    plt.rc('axes',titlesize=MED_SIZE)
-    plt.rc('axes',labelsize=MED_SIZE)
-    plt.rc('xtick',labelsize=MED_SIZE)
-    plt.rc('ytick',labelsize=MED_SIZE)
-    plt.figure(figsize=(8,5))
-    plt.rc('legend',fontsize=MED_SIZE)
-    plt.subplots_adjust(top = 0.9, bottom = 0.12, right = 0.95, left = 0.1,
-            hspace = 0.22, wspace = 0.4)
-
-    yylim = 2.5e3
-
-    plt.subplot(121)
-    # plt.plot(data['ascos1']['thinit'], data['ascos1']['z'], label = 'ASCOS1')
-    plt.plot(data['sonde']['u'][:], data['sonde']['Z'], label = 'SONDE')
-    plt.plot(data['monc']['u'], data['monc']['z'][:], 'k.', label = 'monc-namelist')
-    plt.ylabel('Z [m]')
-    plt.xlabel('u [m/s]')
-    plt.grid('on')
-    plt.ylim([0,yylim])
-    plt.xlim([-20,10])
-
-    plt.subplot(122)
-    # plt.plot(data['ascos1']['qinit1'][data['ascos1']['qinit1'] > 0], data['ascos1']['z'][data['ascos1']['qinit1'] > 0], label = 'ASCOS1')
-    plt.plot(data['sonde']['v'][:], data['sonde']['Z'], label = 'SONDE')
-    plt.plot(data['monc']['v'], data['monc']['z'][:], 'k.', label = 'monc-namelist')
-    plt.xlabel('v [m/s]')
-    plt.grid('on')
-    plt.ylim([0,yylim])
-    plt.legend()
-    plt.xlim([-20,20])
-
-    # plt.savefig('../MOCCHA/FIGS/Quicklooks_winds_20180912T1800Z.png')
-    plt.show()
+    #
+    # SMALL_SIZE = 12
+    # MED_SIZE = 14
+    # LARGE_SIZE = 16
+    #
+    # plt.rc('font',size=MED_SIZE)
+    # plt.rc('axes',titlesize=MED_SIZE)
+    # plt.rc('axes',labelsize=MED_SIZE)
+    # plt.rc('xtick',labelsize=MED_SIZE)
+    # plt.rc('ytick',labelsize=MED_SIZE)
+    # plt.figure(figsize=(8,5))
+    # plt.rc('legend',fontsize=MED_SIZE)
+    # plt.subplots_adjust(top = 0.9, bottom = 0.12, right = 0.95, left = 0.1,
+    #         hspace = 0.22, wspace = 0.4)
+    #
+    # yylim = 2.5e3
+    #
+    # plt.subplot(121)
+    # # plt.plot(data['ascos1']['thinit'], data['ascos1']['z'], label = 'ASCOS1')
+    # plt.plot(data['sonde']['u'][:], data['sonde']['Z'], label = 'SONDE')
+    # plt.plot(data['monc']['u'], data['monc']['z'][:], 'k.', label = 'monc-namelist')
+    # plt.ylabel('Z [m]')
+    # plt.xlabel('u [m/s]')
+    # plt.grid('on')
+    # plt.ylim([0,yylim])
+    # plt.xlim([-20,10])
+    #
+    # plt.subplot(122)
+    # # plt.plot(data['ascos1']['qinit1'][data['ascos1']['qinit1'] > 0], data['ascos1']['z'][data['ascos1']['qinit1'] > 0], label = 'ASCOS1')
+    # plt.plot(data['sonde']['v'][:], data['sonde']['Z'], label = 'SONDE')
+    # plt.plot(data['monc']['v'], data['monc']['z'][:], 'k.', label = 'monc-namelist')
+    # plt.xlabel('v [m/s]')
+    # plt.grid('on')
+    # plt.ylim([0,yylim])
+    # plt.legend()
+    # plt.xlim([-20,20])
+    #
+    # # plt.savefig('../MOCCHA/FIGS/Quicklooks_winds_20180912T1800Z.png')
+    # plt.show()
 
     return data
 
@@ -319,7 +319,7 @@ def sondeQINIT2(data):
     print (dlwcdz.shape)
 
     ## define cloud layer
-    freetrop_index = np.where(data['monc']['z'] >= 1000.0)
+    freetrop_index = np.where(data['monc']['z'] > 400.0)
     dheight[int(freetrop_index[0][0]):] = 0.0   ## ignore points in the free troposphere
     blcloud_index = np.where(data['monc']['z'] < 200.0)
     dheight[blcloud_index] = 0.0   ## ignore points in the free troposphere
