@@ -319,7 +319,7 @@ def sondeQINIT2(data):
     print (dlwcdz.shape)
 
     ## define cloud layer
-    freetrop_index = np.where(data['monc']['z'] > 400.0)
+    freetrop_index = np.where(data['monc']['z'] >= 1000.0)
     dheight[int(freetrop_index[0][0]):] = 0.0   ## ignore points in the free troposphere
     blcloud_index = np.where(data['monc']['z'] < 200.0)
     dheight[blcloud_index] = 0.0   ## ignore points in the free troposphere
@@ -399,7 +399,7 @@ def sondeQINIT2(data):
     plt.xlabel('temperature [K]')
     plt.grid('on')
     plt.ylim([0,yylim])
-    plt.xlim([265,275])
+    plt.xlim([260,275])
 
     plt.subplot(155)
     plt.plot(data['monc']['qinit2']*1e3, data['monc']['z'], 'k.', label = 'monc-namelist')
@@ -408,7 +408,7 @@ def sondeQINIT2(data):
     plt.ylim([0,yylim])
     # plt.xlim([265,275])
 
-    # plt.savefig('../MOCCHA/FIGS/Quicklooks_thref-qinit1-pres-temp-qinit2_MONCnmlist_20180912T1800Z.png')
+    # plt.savefig('../MOCCHA/FIGS/Quicklooks_thref-qinit1-pres-temp-qinit2-1km_MONCnmlist_20180913T0000Z.png')
     plt.show()
 
     return data
@@ -425,7 +425,7 @@ def aerosolACCUM(data):
     arrlen = np.size(data['monc']['z'])
     print(arrlen)
 
-    case = 'CASIM-UKCA-AeroProf' # 'CASIM-100'
+    case = 'CASIM-100' # 'CASIM-UKCA-AeroProf'
     if case == 'CASIM-100':
 
         ### For UM_CASIM-100, the following were set:
