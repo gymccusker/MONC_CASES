@@ -556,6 +556,46 @@ def estimateMass(N, rho_air, flag):
 
     return M
 
+def thetaTendencies(data):
+
+    '''
+    Design accummulation mode aerosol inputs:
+        names_init_pl_q=accum_sol_mass, accum_sol_number
+    '''
+
+    print ('Designing theta tendency input from subsequent two sondes:')
+
+    ### plot sonde theta profiles to check data has loaded correctly
+
+    ####    --------------- FIGURE
+
+    SMALL_SIZE = 12
+    MED_SIZE = 14
+    LARGE_SIZE = 16
+
+    plt.rc('font',size=MED_SIZE)
+    plt.rc('axes',titlesize=MED_SIZE)
+    plt.rc('axes',labelsize=MED_SIZE)
+    plt.rc('xtick',labelsize=MED_SIZE)
+    plt.rc('ytick',labelsize=MED_SIZE)
+    plt.figure(figsize=(6,5))
+    plt.rc('legend',fontsize=MED_SIZE)
+    plt.subplots_adjust(top = 0.9, bottom = 0.15, right = 0.95, left = 0.15,
+            hspace = 0.22, wspace = 0.5)
+
+    plt.plot(data['sonde']['pottemp'][:] + 273.16, data['sonde']['Z'], label = 'SONDE')
+    plt.plot(data['sonde+1']['pottemp'][:] + 273.16, data['sonde+1']['Z'], label = 'SONDE+1')
+    plt.plot(data['sonde+2']['pottemp'][:] + 273.16, data['sonde+2']['Z'], label = 'SONDE+2')
+    plt.plot(data['sonde+3']['pottemp'][:] + 273.16, data['sonde+3']['Z'], label = 'SONDE+3')
+    plt.ylim([0,2.5e3])
+    plt.xlim([265,290])
+    plt.legend()
+    plt.ylabel('Z [m]')
+    plt.xlabel('$\Theta$ [K]')
+    plt.show()
+
+    return data
+
 def moncInput(data):
 
 
@@ -642,33 +682,44 @@ def main():
     ## -------------------------------------------------------------
     ## Choose sonde for initialisation:
     ## -------------------------------------------------------------
-    sonde_option = '20180913T0000'#'20180912T1800' #
+    data = {}
+    data['sonde_option'] = '20180913T0000'#'20180912T1800' #
 
-    if sonde_option == '20180912T1800':
+    if data['sonde_option'] == '20180912T1800':
         ## -------------------------------------------------------------
         ## Load radiosonde from 20180912 1800UTC
         ## -------------------------------------------------------------
         index256 = np.where(np.round(sondes['doy'][:,:]) == 256.)
+        print (index256)
         print (sondes['doy'][:,index256[1][0]])
-        data = {}
         data['sonde'] = {}
         for k in sondes.keys():
             if k == 'Z': continue
             data['sonde'][k] = sondes[k][:,index256[1][0]]
         data['sonde']['Z'] = sondes['Z']
 
-    elif sonde_option == '20180913T0000':
+    elif data['sonde_option'] == '20180913T0000':
         ## -------------------------------------------------------------
         ## Load radiosonde from 20180913 0000UTC
         ## -------------------------------------------------------------
-        index256 = np.where(np.round(sondes['doy'][:,:]) == 256.)
+        index256 = np.where(np.logical_or(np.round(sondes['doy'][:,:]) == 256., np.round(sondes['doy'][:,:]) == 257.))
         print (sondes['doy'][:,index256[1][1]])
-        data = {}
         data['sonde'] = {}
         for k in sondes.keys():
             if k == 'Z': continue
             data['sonde'][k] = sondes[k][:,index256[1][1]]
         data['sonde']['Z'] = sondes['Z']
+
+        ### load subsequent sondes
+        for i in np.arange(0,3):
+            data['sonde+' + str(i+1)] = {}
+            print ('sonde+' + str(i+1))
+            print (sondes['doy'][:,index256[1][i+2]])
+            for k in sondes.keys():
+                if k == 'Z': continue
+                data['sonde+' + str(i+1)][k] = sondes[k][:,index256[1][i+2]]
+            data['sonde+' + str(i+1)]['Z'] = sondes['Z']
+
 
     print (data['sonde'].keys())
     print (data['sonde']['doy'][:])
@@ -687,7 +738,10 @@ def main():
 
     ### design qfield inputs
     data = sondeQINIT2(data)
-    data = aerosolACCUM(data)
+    # data = aerosolACCUM(data)
+
+    ### design theta tendency profiles
+    data = thetaTendencies(data)
 
     ## -------------------------------------------------------------
     ## Print out data in monc namelist format
