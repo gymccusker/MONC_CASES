@@ -349,67 +349,67 @@ def sondeQINIT2(data):
 
     ####    --------------- FIGURE
 
-    SMALL_SIZE = 12
-    MED_SIZE = 14
-    LARGE_SIZE = 16
-
-    plt.rc('font',size=MED_SIZE)
-    plt.rc('axes',titlesize=MED_SIZE)
-    plt.rc('axes',labelsize=MED_SIZE)
-    plt.rc('xtick',labelsize=MED_SIZE)
-    plt.rc('ytick',labelsize=MED_SIZE)
-    plt.figure(figsize=(13,5))
-    plt.rc('legend',fontsize=MED_SIZE)
-    plt.subplots_adjust(top = 0.9, bottom = 0.12, right = 0.95, left = 0.1,
-            hspace = 0.22, wspace = 0.4)
-
-    yylim = 2.4e3
-
-    plt.subplot(151)
-    # ax = plt.gca()
-    # ax.fill_between(data)
-    plt.plot(data['sonde']['pottemp'][:] + 273.16, data['sonde']['Z'], color = 'darkorange', label = 'SONDE')
-    plt.plot(data['monc']['thref'], data['monc']['z'][:], 'k.', label = 'monc-namelist')
-    plt.ylabel('Z [m]')
-    plt.xlabel('$\Theta$ [K]')
-    plt.grid('on')
-    plt.ylim([0,yylim])
-    plt.xlim([265,295])
-
-    plt.subplot(152)
-    plt.plot(data['sonde']['sphum'][:]/1e3, data['sonde']['Z'], color = 'darkorange', label = 'SONDE')
-    plt.plot(data['monc']['qinit1'], data['monc']['z'], 'k.', label = 'monc-namelist')
-    plt.xlabel('qinit1 [g/kg]')
-    plt.grid('on')
-    plt.ylim([0,yylim])
-    plt.xlim([0.2/1e3, 5./1e3])
-    plt.legend(bbox_to_anchor=(0.25, 1.01, 1., .102), loc=3, ncol=3)
-
-    plt.subplot(153)
-    plt.plot(data['sonde']['pressure'][:]*1e2, data['sonde']['Z'], color = 'darkorange', label = 'SONDE')
-    plt.plot(data['monc']['pressure'], data['monc']['z'], 'k.', label = 'monc-namelist')
-    plt.xlabel('pressure [Pa]')
-    plt.grid('on')
-    plt.ylim([0,yylim])
+    # SMALL_SIZE = 12
+    # MED_SIZE = 14
+    # LARGE_SIZE = 16
+    #
+    # plt.rc('font',size=MED_SIZE)
+    # plt.rc('axes',titlesize=MED_SIZE)
+    # plt.rc('axes',labelsize=MED_SIZE)
+    # plt.rc('xtick',labelsize=MED_SIZE)
+    # plt.rc('ytick',labelsize=MED_SIZE)
+    # plt.figure(figsize=(13,5))
+    # plt.rc('legend',fontsize=MED_SIZE)
+    # plt.subplots_adjust(top = 0.9, bottom = 0.12, right = 0.95, left = 0.1,
+    #         hspace = 0.22, wspace = 0.4)
+    #
+    # yylim = 2.4e3
+    #
+    # plt.subplot(151)
+    # # ax = plt.gca()
+    # # ax.fill_between(data)
+    # plt.plot(data['sonde']['pottemp'][:] + 273.16, data['sonde']['Z'], color = 'darkorange', label = 'SONDE')
+    # plt.plot(data['monc']['thref'], data['monc']['z'][:], 'k.', label = 'monc-namelist')
+    # plt.ylabel('Z [m]')
+    # plt.xlabel('$\Theta$ [K]')
+    # plt.grid('on')
+    # plt.ylim([0,yylim])
+    # plt.xlim([265,295])
+    #
+    # plt.subplot(152)
+    # plt.plot(data['sonde']['sphum'][:]/1e3, data['sonde']['Z'], color = 'darkorange', label = 'SONDE')
+    # plt.plot(data['monc']['qinit1'], data['monc']['z'], 'k.', label = 'monc-namelist')
+    # plt.xlabel('qinit1 [g/kg]')
+    # plt.grid('on')
+    # plt.ylim([0,yylim])
+    # plt.xlim([0.2/1e3, 5./1e3])
+    # plt.legend(bbox_to_anchor=(0.25, 1.01, 1., .102), loc=3, ncol=3)
+    #
+    # plt.subplot(153)
+    # plt.plot(data['sonde']['pressure'][:]*1e2, data['sonde']['Z'], color = 'darkorange', label = 'SONDE')
+    # plt.plot(data['monc']['pressure'], data['monc']['z'], 'k.', label = 'monc-namelist')
+    # plt.xlabel('pressure [Pa]')
+    # plt.grid('on')
+    # plt.ylim([0,yylim])
     # plt.xlim([7e4, 10.5e4])
-
-    plt.subplot(154)
-    plt.plot(data['sonde']['temperature'][:] + 273.16, data['sonde']['Z'], color = 'darkorange', label = 'SONDE')
-    plt.plot(data['monc']['temperature'], data['monc']['z'], 'k.', label = 'monc-namelist')
-    plt.xlabel('temperature [K]')
-    plt.grid('on')
-    plt.ylim([0,yylim])
-    plt.xlim([260,275])
-
-    plt.subplot(155)
-    plt.plot(data['monc']['qinit2']*1e3, data['monc']['z'], 'k.', label = 'monc-namelist')
-    plt.xlabel('qinit2 [g/kg]')
-    plt.grid('on')
-    plt.ylim([0,yylim])
-    # plt.xlim([265,275])
-
+    #
+    # plt.subplot(154)
+    # plt.plot(data['sonde']['temperature'][:] + 273.16, data['sonde']['Z'], color = 'darkorange', label = 'SONDE')
+    # plt.plot(data['monc']['temperature'], data['monc']['z'], 'k.', label = 'monc-namelist')
+    # plt.xlabel('temperature [K]')
+    # plt.grid('on')
+    # plt.ylim([0,yylim])
+    # plt.xlim([260,275])
+    #
+    # plt.subplot(155)
+    # plt.plot(data['monc']['qinit2']*1e3, data['monc']['z'], 'k.', label = 'monc-namelist')
+    # plt.xlabel('qinit2 [g/kg]')
+    # plt.grid('on')
+    # plt.ylim([0,yylim])
+    # # plt.xlim([265,275])
+    #
     # plt.savefig('../MOCCHA/FIGS/Quicklooks_thref-qinit1-pres-temp-qinit2-1km_MONCnmlist_20180913T0000Z.png')
-    plt.show()
+    # plt.show()
 
     return data
 
@@ -702,8 +702,8 @@ def windTendencies(data):
     else:
         data['sonde2-sonde0'] = {}
 
-    ## change over 12 h (*2 to give K/day)
-    data['sonde2-sonde0']['u'] = -1*(data['sonde']['u'])# + (data['sonde']['u']))*2
+    ## change over 12 h (*2 to give m/s/day)
+    data['sonde2-sonde0']['u'] = (np.abs(data['sonde']['u']) - np.abs(data['sonde+2']['u']))*2
 
     ####    ---------------
     ### want to regrid theta tendency (in K/day) to monc vertical grid
@@ -746,14 +746,12 @@ def windTendencies(data):
     plt.plot(data['sonde2-sonde0']['u'], data['sonde']['Z'], label = 'SONDE2-SONDE0')
     plt.plot(data['monc']['uTend'], data['monc']['z'][:], 'k.', label = 'monc-namelist')
     plt.ylim([0,2.5e3])
-    plt.xlim([-20,10])
+    # plt.xlim([-20,10])
     plt.legend()
     plt.ylabel('Z [m]')
     plt.xlabel('$\Delta$ u [m s$^{-1}$ day$^{-1}$]')
     plt.savefig('../MOCCHA/FIGS/20180913_0000to1200-uTendency.png')
     plt.show()
-
-
 
     return data
 
@@ -817,6 +815,14 @@ def moncInput(data):
             print ('')
             print ('f_force_pl_q = ')
             for line in data['monc']['thTend']: sys.stdout.write('' + str(np.round(line,5)).strip() + ',')
+            print ('')
+
+        if data['uvTend_flag'] == 1:
+            print ('z_force_pl_u = ')
+            for line in data['monc']['z']: sys.stdout.write('' + str(line).strip() + ',')
+            print ('')
+            print ('f_force_pl_u = ')
+            for line in data['monc']['uTend']: sys.stdout.write('' + str(np.round(line,3)).strip() + ',')
             print ('')
 
 
