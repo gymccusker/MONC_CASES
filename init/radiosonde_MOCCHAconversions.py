@@ -565,7 +565,52 @@ def thetaTendencies(data):
 
     print ('Designing theta tendency input from subsequent two sondes:')
 
+    data['thTend_flag'] = 1
+
     ### plot sonde theta profiles to check data has loaded correctly
+
+    ####    --------------- FIGURE
+
+    # SMALL_SIZE = 12
+    # MED_SIZE = 14
+    # LARGE_SIZE = 16
+    #
+    # plt.rc('font',size=MED_SIZE)
+    # plt.rc('axes',titlesize=MED_SIZE)
+    # plt.rc('axes',labelsize=MED_SIZE)
+    # plt.rc('xtick',labelsize=MED_SIZE)
+    # plt.rc('ytick',labelsize=MED_SIZE)
+    # plt.figure(figsize=(6,5))
+    # plt.rc('legend',fontsize=MED_SIZE)
+    # plt.subplots_adjust(top = 0.9, bottom = 0.15, right = 0.95, left = 0.15,
+    #         hspace = 0.22, wspace = 0.5)
+    #
+    # plt.plot(data['sonde']['pottemp'][:] + 273.16, data['sonde']['Z'], label = 'SONDE')
+    # plt.plot(data['sonde+1']['pottemp'][:] + 273.16, data['sonde+1']['Z'], label = 'SONDE+1')
+    # plt.plot(data['sonde+2']['pottemp'][:] + 273.16, data['sonde+2']['Z'], label = 'SONDE+2')
+    # plt.plot(data['sonde+3']['pottemp'][:] + 273.16, data['sonde+3']['Z'], label = 'SONDE+3')
+    # plt.ylim([0,2.5e3])
+    # plt.xlim([265,290])
+    # plt.legend()
+    # plt.ylabel('Z [m]')
+    # plt.xlabel('$\Theta$ [K]')
+    # plt.show()
+
+    ####    ---------------
+    ### want to calculate theta tendency (in K/day) between sonde0 and sonde2
+    data['sonde2-sonde0'] = {}
+
+    ## change over 12 h (*2 to give K/day)
+    data['sonde2-sonde0']['th'] = (data['sonde+2']['pottemp'] - data['sonde']['pottemp'])*2
+
+    ####    ---------------
+    ### want to regrid theta tendency (in K/day) to monc vertical grid
+
+    ### build thref array
+    data['monc']['thTend'] = np.zeros(np.size(data['monc']['z']))
+    interp_thTend = interp1d(np.squeeze(data['sonde']['Z'][:]),data['sonde2-sonde0']['th'][:])
+    data['monc']['thTend'][1:] = interp_thTend(data['monc']['z'][1:])
+    data['monc']['thTend'][0] = data['sonde2-sonde0']['th'][0]
 
     ####    --------------- FIGURE
 
@@ -578,21 +623,33 @@ def thetaTendencies(data):
     plt.rc('axes',labelsize=MED_SIZE)
     plt.rc('xtick',labelsize=MED_SIZE)
     plt.rc('ytick',labelsize=MED_SIZE)
-    plt.figure(figsize=(6,5))
+    plt.figure(figsize=(9,5))
     plt.rc('legend',fontsize=MED_SIZE)
     plt.subplots_adjust(top = 0.9, bottom = 0.15, right = 0.95, left = 0.15,
             hspace = 0.22, wspace = 0.5)
 
+    plt.subplot(121)
     plt.plot(data['sonde']['pottemp'][:] + 273.16, data['sonde']['Z'], label = 'SONDE')
-    plt.plot(data['sonde+1']['pottemp'][:] + 273.16, data['sonde+1']['Z'], label = 'SONDE+1')
+    plt.plot(data['monc']['thref'], data['monc']['z'][:], 'k.', label = 'monc-namelist')
     plt.plot(data['sonde+2']['pottemp'][:] + 273.16, data['sonde+2']['Z'], label = 'SONDE+2')
-    plt.plot(data['sonde+3']['pottemp'][:] + 273.16, data['sonde+3']['Z'], label = 'SONDE+3')
     plt.ylim([0,2.5e3])
     plt.xlim([265,290])
     plt.legend()
     plt.ylabel('Z [m]')
     plt.xlabel('$\Theta$ [K]')
+
+    plt.subplot(122)
+    plt.plot([0,0],[0,2.5e3],'--', color = 'lightgrey')
+    plt.plot(data['sonde2-sonde0']['th'], data['sonde']['Z'], label = 'SONDE2-SONDE0')
+    plt.plot(data['monc']['thTend'], data['monc']['z'][:], 'k.', label = 'monc-namelist')
+    plt.ylim([0,2.5e3])
+    # plt.xlim([265,290])
+    plt.legend()
+    plt.ylabel('Z [m]')
+    plt.xlabel('$\Delta \Theta$ [K day$^{-1}$]')
     plt.show()
+
+
 
     return data
 
@@ -650,6 +707,13 @@ def moncInput(data):
 
                     # f_init_pl_q = 0.00244,0.00227,0.00228,0.0023,0.00221,0.00214,0.00213,0.00215,0.00215,0.00212,0.00213,0.00211,0.00207,0.00203,0.00202,0.00199,0.00201,0.00201,0.00201,0.00204,0.00202,0.00198,0.00206,0.00206,0.00202,0.00201,0.00243,0.00197,0.00184,0.00184,0.00142,0.00107,0.00068,0.00062,0.00054,0.00042,0.0,0.0,0.0,0.0,6e-05,6e-05,6e-05,6e-05,6e-05,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,
 
+        if data['thTend_flag'] == 1:
+            print ('z_force_pl_q = ')
+            for line in data['monc']['z']: sys.stdout.write('' + str(line).strip() + ',')
+            print ('')
+            print ('f_force_pl_q = ')
+            for line in data['monc']['thTend']: sys.stdout.write('' + str(np.round(line,5)).strip() + ',')
+            print ('')
 
 
         print ('***')
@@ -725,6 +789,11 @@ def main():
     print (data['sonde']['doy'][:])
 
     ## -------------------------------------------------------------
+    ## Set flags for output
+    ## -------------------------------------------------------------
+    data['thTend_flag'] = 0
+
+    ## -------------------------------------------------------------
     ## Quicklook plots of chosen sonde
     ## -------------------------------------------------------------
     # figure = quicklooksSonde(data)
@@ -751,7 +820,7 @@ def main():
     ## -------------------------------------------------------------
     ## save out working data for testing
     ## -------------------------------------------------------------
-    np.save('working_data', sondes)
+    np.save('working_data', data)
 
     # -------------------------------------------------------------
     # FIN.
