@@ -559,8 +559,8 @@ def estimateMass(N, rho_air, flag):
 def thetaTendencies(data):
 
     '''
-    Design accummulation mode aerosol inputs:
-        names_init_pl_q=accum_sol_mass, accum_sol_number
+    Design theta tendency input from subsequent two sondes
+        f_force_pl_th, z_force_pl_th
     '''
 
     print ('Designing theta tendency input from subsequent two sondes:')
@@ -648,6 +648,109 @@ def thetaTendencies(data):
     plt.ylabel('Z [m]')
     plt.xlabel('$\Delta \Theta$ [K day$^{-1}$]')
     plt.savefig('../MOCCHA/FIGS/20180913_0000to1200-thetaTendency.png')
+    plt.show()
+
+
+
+    return data
+
+def windTendencies(data):
+
+    '''
+    Design theta tendency input from subsequent two sondes
+                f_force_pl_u, z_force_pl_u
+                f_force_pl_v, z_force_pl_v
+    '''
+
+    print ('Designing wind tendency input from subsequent two sondes:')
+
+    data['uvTend_flag'] = 1
+
+    ### plot sonde theta profiles to check data has loaded correctly
+
+    ####    --------------- FIGURE
+
+    # SMALL_SIZE = 12
+    # MED_SIZE = 14
+    # LARGE_SIZE = 16
+    #
+    # plt.rc('font',size=MED_SIZE)
+    # plt.rc('axes',titlesize=MED_SIZE)
+    # plt.rc('axes',labelsize=MED_SIZE)
+    # plt.rc('xtick',labelsize=MED_SIZE)
+    # plt.rc('ytick',labelsize=MED_SIZE)
+    # plt.figure(figsize=(6,5))
+    # plt.rc('legend',fontsize=MED_SIZE)
+    # plt.subplots_adjust(top = 0.9, bottom = 0.15, right = 0.95, left = 0.15,
+    #         hspace = 0.22, wspace = 0.5)
+    #
+    # plt.plot(data['sonde']['pottemp'][:] + 273.16, data['sonde']['Z'], label = 'SONDE')
+    # plt.plot(data['sonde+1']['pottemp'][:] + 273.16, data['sonde+1']['Z'], label = 'SONDE+1')
+    # plt.plot(data['sonde+2']['pottemp'][:] + 273.16, data['sonde+2']['Z'], label = 'SONDE+2')
+    # plt.plot(data['sonde+3']['pottemp'][:] + 273.16, data['sonde+3']['Z'], label = 'SONDE+3')
+    # plt.ylim([0,2.5e3])
+    # plt.xlim([265,290])
+    # plt.legend()
+    # plt.ylabel('Z [m]')
+    # plt.xlabel('$\Theta$ [K]')
+    # plt.show()
+
+    ####    ---------------
+    ### want to calculate theta tendency (in K/day) between sonde0 and sonde2
+    if 'sonde2-sonde0' in data.keys():
+        print ('sonde2-sonde0 key already made')
+    else:
+        data['sonde2-sonde0'] = {}
+
+    ## change over 12 h (*2 to give K/day)
+    data['sonde2-sonde0']['u'] = -1*(data['sonde']['u'])# + (data['sonde']['u']))*2
+
+    ####    ---------------
+    ### want to regrid theta tendency (in K/day) to monc vertical grid
+
+    ### build thref array
+    data['monc']['uTend'] = np.zeros(np.size(data['monc']['z']))
+    interp_uTend = interp1d(np.squeeze(data['sonde']['Z'][:]),data['sonde2-sonde0']['u'][:])
+    data['monc']['uTend'][1:] = interp_uTend(data['monc']['z'][1:])
+    data['monc']['uTend'][0] = data['sonde2-sonde0']['u'][0]
+
+    ####    --------------- FIGURE
+
+    SMALL_SIZE = 12
+    MED_SIZE = 14
+    LARGE_SIZE = 16
+
+    plt.rc('font',size=MED_SIZE)
+    plt.rc('axes',titlesize=MED_SIZE)
+    plt.rc('axes',labelsize=MED_SIZE)
+    plt.rc('xtick',labelsize=MED_SIZE)
+    plt.rc('ytick',labelsize=MED_SIZE)
+    plt.figure(figsize=(9,5))
+    plt.rc('legend',fontsize=MED_SIZE)
+    plt.subplots_adjust(top = 0.9, bottom = 0.15, right = 0.95, left = 0.15,
+            hspace = 0.22, wspace = 0.5)
+
+    plt.subplot(121)
+    plt.plot([0,0],[0,2.5e3],'--', color = 'lightgrey')
+    plt.plot(data['sonde']['u'][:], data['sonde']['Z'], label = 'SONDE')
+    plt.plot(data['monc']['u'], data['monc']['z'][:], 'k.', label = 'monc-namelist')
+    plt.plot(data['sonde+2']['u'][:], data['sonde+2']['Z'], label = 'SONDE+2')
+    plt.ylim([0,2.5e3])
+    plt.xlim([-20,10])
+    plt.legend()
+    plt.ylabel('Z [m]')
+    plt.xlabel('u [m s$^{-1}$]')
+
+    plt.subplot(122)
+    plt.plot([0,0],[0,2.5e3],'--', color = 'lightgrey')
+    plt.plot(data['sonde2-sonde0']['u'], data['sonde']['Z'], label = 'SONDE2-SONDE0')
+    plt.plot(data['monc']['uTend'], data['monc']['z'][:], 'k.', label = 'monc-namelist')
+    plt.ylim([0,2.5e3])
+    plt.xlim([-20,10])
+    plt.legend()
+    plt.ylabel('Z [m]')
+    plt.xlabel('$\Delta$ u [m s$^{-1}$ day$^{-1}$]')
+    plt.savefig('../MOCCHA/FIGS/20180913_0000to1200-uTendency.png')
     plt.show()
 
 
@@ -774,6 +877,8 @@ def main():
             if k == 'Z': continue
             data['sonde'][k] = sondes[k][:,index256[1][1]]
         data['sonde']['Z'] = sondes['Z']
+        data['sonde']['u'][data['sonde']['u'] > 1e3] = np.nan
+        data['sonde']['v'][data['sonde']['v'] > 1e3] = np.nan
 
         ### load subsequent sondes
         for i in np.arange(0,3):
@@ -784,6 +889,8 @@ def main():
                 if k == 'Z': continue
                 data['sonde+' + str(i+1)][k] = sondes[k][:,index256[1][i+2]]
             data['sonde+' + str(i+1)]['Z'] = sondes['Z']
+            data['sonde+' + str(i+1)]['u'][data['sonde+' + str(i+1)]['u'] > 1e3] = np.nan
+            data['sonde+' + str(i+1)]['v'][data['sonde+' + str(i+1)]['v'] > 1e3] = np.nan
 
 
     print (data['sonde'].keys())
@@ -792,7 +899,8 @@ def main():
     ## -------------------------------------------------------------
     ## Set flags for output
     ## -------------------------------------------------------------
-    data['thTend_flag'] = 0
+    data['thTend_flag'] = 0     # theta tendencies?
+    data['uvTend_flag'] = 0     # wind tendencies?
 
     ## -------------------------------------------------------------
     ## Quicklook plots of chosen sonde
@@ -810,8 +918,9 @@ def main():
     data = sondeQINIT2(data)
     # data = aerosolACCUM(data)
 
-    ### design theta tendency profiles
-    data = thetaTendencies(data)
+    ### design tendency profiles
+    # data = thetaTendencies(data)
+    data = windTendencies(data)
 
     ## -------------------------------------------------------------
     ## Print out data in monc namelist format
