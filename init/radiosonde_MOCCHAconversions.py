@@ -654,6 +654,102 @@ def thetaTendencies(data):
 
     return data
 
+def qvTendencies(data):
+
+    '''
+    Design theta tendency input from subsequent two sondes
+        f_force_pl_th, z_force_pl_th
+    '''
+
+    print ('Designing theta tendency input from subsequent two sondes:')
+
+    data['qvTend_flag'] = 1
+
+    ### plot sonde theta profiles to check data has loaded correctly
+
+    ####    --------------- FIGURE
+
+    # SMALL_SIZE = 12
+    # MED_SIZE = 14
+    # LARGE_SIZE = 16
+    #
+    # plt.rc('font',size=MED_SIZE)
+    # plt.rc('axes',titlesize=MED_SIZE)
+    # plt.rc('axes',labelsize=MED_SIZE)
+    # plt.rc('xtick',labelsize=MED_SIZE)
+    # plt.rc('ytick',labelsize=MED_SIZE)
+    # plt.figure(figsize=(6,5))
+    # plt.rc('legend',fontsize=MED_SIZE)
+    # plt.subplots_adjust(top = 0.9, bottom = 0.15, right = 0.95, left = 0.15,
+    #         hspace = 0.22, wspace = 0.5)
+    #
+    # plt.plot(data['sonde']['pottemp'][:] + 273.16, data['sonde']['Z'], label = 'SONDE')
+    # plt.plot(data['sonde+1']['pottemp'][:] + 273.16, data['sonde+1']['Z'], label = 'SONDE+1')
+    # plt.plot(data['sonde+2']['pottemp'][:] + 273.16, data['sonde+2']['Z'], label = 'SONDE+2')
+    # plt.plot(data['sonde+3']['pottemp'][:] + 273.16, data['sonde+3']['Z'], label = 'SONDE+3')
+    # plt.ylim([0,2.5e3])
+    # plt.xlim([265,290])
+    # plt.legend()
+    # plt.ylabel('Z [m]')
+    # plt.xlabel('$\Theta$ [K]')
+    # plt.show()
+
+    ####    ---------------
+    ### want to calculate qv tendency (in kg/kg/day) between sonde0 and sonde2
+    data['sonde2-sonde0'] = {}
+
+    ## change over 12 h (*2 to give K/day)
+    data['sonde2-sonde0']['qvapour'] = (data['sonde+2']['sphum'] - data['sonde']['sphum'])*2
+
+    ####    ---------------
+    ### want to regrid qv tendency (in kg/kg/day) to monc vertical grid
+
+    ### build thref array
+    data['monc']['qvTend'] = np.zeros(np.size(data['monc']['z']))
+    interp_qvTend = interp1d(np.squeeze(data['sonde']['Z'][:]),data['sonde2-sonde0']['qvapour'][:])
+    data['monc']['qvTend'][1:] = interp_qvTend(data['monc']['z'][1:])
+    data['monc']['qvTend'][0] = data['sonde2-sonde0']['qvapour'][0]
+
+    ####    --------------- FIGURE
+
+    SMALL_SIZE = 12
+    MED_SIZE = 14
+    LARGE_SIZE = 16
+
+    plt.rc('font',size=MED_SIZE)
+    plt.rc('axes',titlesize=MED_SIZE)
+    plt.rc('axes',labelsize=MED_SIZE)
+    plt.rc('xtick',labelsize=MED_SIZE)
+    plt.rc('ytick',labelsize=MED_SIZE)
+    plt.figure(figsize=(9,5))
+    plt.rc('legend',fontsize=MED_SIZE)
+    plt.subplots_adjust(top = 0.9, bottom = 0.15, right = 0.95, left = 0.15,
+            hspace = 0.22, wspace = 0.5)
+
+    plt.subplot(121)
+    plt.plot(data['sonde']['sphum'][:], data['sonde']['Z'], label = 'SONDE')
+    # plt.plot(data['monc']['thref'], data['monc']['z'][:], 'k.', label = 'monc-namelist')
+    plt.plot(data['sonde+2']['sphum'][:], data['sonde+2']['Z'], label = 'SONDE+2')
+    plt.ylim([0,2.5e3])
+    # plt.xlim([265,290])
+    plt.legend()
+    plt.ylabel('Z [m]')
+    plt.xlabel('q$_{v}$ [kg kg$^{-1}$]')
+
+    plt.subplot(122)
+    plt.plot([0,0],[0,2.5e3],'--', color = 'lightgrey')
+    plt.plot(data['sonde2-sonde0']['qvapour'], data['sonde']['Z'], label = 'SONDE2-SONDE0')
+    plt.plot(data['monc']['qvTend'], data['monc']['z'][:], 'k.', label = 'monc-namelist')
+    plt.ylim([0,2.5e3])
+    # plt.xlim([265,290])
+    plt.legend()
+    plt.ylabel('Z [m]')
+    plt.xlabel('$\Delta$ q$_{v}$ [kg kg$^{-1}$ day$^{-1}$]')
+    plt.savefig('../MOCCHA/FIGS/20180913_0000to1200-qvTendency.png')
+    plt.show()
+
+    return data
+
 def windTendencies(data):
 
     '''
@@ -906,6 +1002,7 @@ def main():
     ## Set flags for output
     ## -------------------------------------------------------------
     data['thTend_flag'] = 0     # theta tendencies?
+    data['qvTend_flag'] = 0     # wind tendencies?
     data['uvTend_flag'] = 0     # wind tendencies?
 
     ## -------------------------------------------------------------
@@ -926,7 +1023,8 @@ def main():
 
     ### design tendency profiles
     # data = thetaTendencies(data)
-    data = windTendencies(data)
+    data = qvTendencies(data)
+    # data = windTendencies(data)
 
     ## -------------------------------------------------------------
     ## Print out data in monc namelist format
