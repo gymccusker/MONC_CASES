@@ -352,7 +352,7 @@ def sondeQINIT2(data):
     data['monc']['qinit'] = np.append(data['monc']['qinit1'], data['monc']['qinit2'])
 
     ####    --------------- FIGURE
-
+    #
     # SMALL_SIZE = 12
     # MED_SIZE = 14
     # LARGE_SIZE = 16
@@ -622,6 +622,10 @@ def thetaTendencies(data):
     data['monc']['thRelax'][1:] = interp_thRelax(data['monc']['z'][1:])
     data['monc']['thRelax'][0] = data['sonde+2']['pottemp'][0]+273.16
     ####    --------------- FIGURE
+
+    print (data['monc']['z'].shape)
+    print (data['monc']['thTend'].shape)
+    print (data['monc']['thRelax'].shape)
 
     SMALL_SIZE = 12
     MED_SIZE = 14
