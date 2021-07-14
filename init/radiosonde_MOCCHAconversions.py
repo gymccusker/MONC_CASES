@@ -144,12 +144,16 @@ def sondeTHINIT_QINIT1(data):
     print (np.squeeze(data['sonde']['Z'][4:]).shape)
     print (data['sonde']['sphum'][4:].shape)
 
+    nml_qinit1 = np.zeros(np.size(nml_Z))
     interp_qinit1 = interp1d(np.squeeze(data['sonde']['Z'][:]),data['sonde']['sphum'][:])
-    nml_qinit1 = interp_qinit1(nml_Z[1:])
+    nml_qinit1[1:] = interp_qinit1(nml_Z[1:])
+    nml_qinit1[0] = data['sonde']['sphum'][0]
 
     ### build thref array
+    nml_thref = np.zeros(np.size(nml_Z))
     interp_thref = interp1d(np.squeeze(data['sonde']['Z'][:]),data['sonde']['pottemp'][:] + 273.16)
-    nml_thref = interp_thref(nml_Z[1:])
+    nml_thref[1:] = interp_thref(nml_Z[1:])
+    nml_thref[0] = data['sonde']['pottemp'][0] + 273.16
 
     ### manually append last value to 2400m (since last Z in ASCOS1 is 2395m and above interpolation range)
     # nml_Z = np.append(nml_Z, 2400.)
@@ -299,7 +303,7 @@ def sondeQINIT2(data):
     # plt.show()
 
     ### calculate temperature from thref and pressure
-    temp_T = calcTemperature(data['monc']['thref'], data['monc']['pressure'][1:])
+    temp_T = calcTemperature(data['monc']['thref'], data['monc']['pressure'])
 
     ### adapt temperature array
     data['monc']['temperature'] = temp_T # np.zeros(np.size(data['monc']['z']))
@@ -335,14 +339,14 @@ def sondeQINIT2(data):
 
     ### adapt theta (thinit and thref) based on revised temperature profile
     data['monc']['thref'] = np.zeros(np.size(data['monc']['z']))
-    data['monc']['thinit'], thetaE = calcThetaE(data['monc']['temperature'][1:], data['monc']['pressure'][1:], data['monc']['qinit1'])
-    data['monc']['thref'][1:] = data['monc']['thinit']
-    data['monc']['thref'][0] = 267.27
+    data['monc']['thinit'], thetaE = calcThetaE(data['monc']['temperature'], data['monc']['pressure'], data['monc']['qinit1'])
+    data['monc']['thref'] = data['monc']['thinit']
+    # data['monc']['thref'][0] = 267.27
 
     tempvar = data['monc']['qinit1']
     data['monc']['qinit1'] = np.zeros(np.size(data['monc']['z']))
-    data['monc']['qinit1'][1:] = tempvar / 1e3
-    data['monc']['qinit1'][0] = data['sonde']['sphum'][0] / 1e3
+    data['monc']['qinit1'] = tempvar / 1e3
+    # data['monc']['qinit1'][0] = data['sonde']['sphum'][0] / 1e3
 
     ### combine q01 and q02 into one input field
     data['monc']['qinit'] = np.append(data['monc']['qinit1'], data['monc']['qinit2'])
