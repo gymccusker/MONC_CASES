@@ -347,7 +347,7 @@ def LEM_LoadQINIT2(data, sondenumber):
     blcloud_index = np.where(data['monc']['z'] < 300.0)
     dheight[blcloud_index] = 0.0   ## ignore points in the free troposphere
 
-    data['monc']['qinit2'] = dlwcdz[:-1] * dheight
+    data['monc']['qinit2'] = dqldz[:-1] * dheight
     data['monc']['qinit2'] = np.append(data['monc']['qinit2'], 0.)
 
     ### adapt theta (thinit and thref) based on revised temperature profile
