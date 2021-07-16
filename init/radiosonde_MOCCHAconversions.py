@@ -814,17 +814,79 @@ def windTendencies(data):
 
     ## change over 12 h (*2 to give m/s/day)
     data['sonde2-sonde0']['u'] = (np.abs(data['sonde']['u']) - np.abs(data['sonde+2']['u']))*2
+    data['sonde2-sonde0']['v'] = (np.abs(data['sonde']['v']) - np.abs(data['sonde+2']['v']))*2
+
+    data['sonde2-sonde0']['v'][data['sonde2-sonde0']['v'] > 1e3] = np.nan
 
     ####    ---------------
-    ### want to regrid theta tendency (in K/day) to monc vertical grid
+    ### want to regrid u/v tendency (in m/s/day) to monc vertical grid
 
-    ### build thref array
+    ### build uTend array
     data['monc']['uTend'] = np.zeros(np.size(data['monc']['z']))
     interp_uTend = interp1d(np.squeeze(data['sonde']['Z'][:]),data['sonde2-sonde0']['u'][:])
     data['monc']['uTend'][1:] = interp_uTend(data['monc']['z'][1:])
     data['monc']['uTend'][0] = data['sonde2-sonde0']['u'][0]
 
+    ### build uRelax array
+    data['monc']['uRelax'] = np.zeros(np.size(data['monc']['z']))
+    interp_uRelax = interp1d(np.squeeze(data['sonde']['Z'][:]),data['sonde+2']['u'][:])
+    data['monc']['uRelax'][1:] = interp_uRelax(data['monc']['z'][1:])
+    data['monc']['uRelax'][0] = data['sonde+2']['u'][0]
+
+    ### build vTend array
+    data['monc']['vTend'] = np.zeros(np.size(data['monc']['z']))
+    interp_vTend = interp1d(np.squeeze(data['sonde']['Z'][:]),data['sonde2-sonde0']['v'][:])
+    data['monc']['vTend'][1:] = interp_vTend(data['monc']['z'][1:])
+    data['monc']['vTend'][0] = data['sonde2-sonde0']['v'][0]
+
+    ### build vRelax array
+    data['monc']['vRelax'] = np.zeros(np.size(data['monc']['z']))
+    interp_vRelax = interp1d(np.squeeze(data['sonde']['Z'][:]),data['sonde+2']['v'][:])
+    data['monc']['vRelax'][1:] = interp_vRelax(data['monc']['z'][1:])
+    data['monc']['vRelax'][0] = data['sonde+2']['v'][0]
+
+
+
     ####    --------------- FIGURE
+
+    # SMALL_SIZE = 12
+    # MED_SIZE = 14
+    # LARGE_SIZE = 16
+    #
+    # plt.rc('font',size=MED_SIZE)
+    # plt.rc('axes',titlesize=MED_SIZE)
+    # plt.rc('axes',labelsize=MED_SIZE)
+    # plt.rc('xtick',labelsize=MED_SIZE)
+    # plt.rc('ytick',labelsize=MED_SIZE)
+    # plt.figure(figsize=(9,5))
+    # plt.rc('legend',fontsize=MED_SIZE)
+    # plt.subplots_adjust(top = 0.9, bottom = 0.15, right = 0.95, left = 0.15,
+    #         hspace = 0.22, wspace = 0.5)
+    #
+    # plt.subplot(121)
+    # plt.plot([0,0],[0,2.5e3],'--', color = 'lightgrey')
+    # plt.plot(data['sonde']['u'][:], data['sonde']['Z'], label = 'SONDE')
+    # plt.plot(data['monc']['u'], data['monc']['z'][:], 'k.', label = 'monc-u')
+    # plt.plot(data['sonde+2']['u'][:], data['sonde+2']['Z'], label = 'SONDE+2')
+    # plt.plot(data['monc']['uRelax'], data['monc']['z'][:], 'k.', label = 'monc-uRelax')
+    # plt.ylim([0,2.5e3])
+    # plt.xlim([-20,10])
+    # plt.legend()
+    # plt.ylabel('Z [m]')
+    # plt.xlabel('u [m s$^{-1}$]')
+    #
+    # plt.subplot(122)
+    # plt.plot([0,0],[0,2.5e3],'--', color = 'lightgrey')
+    # plt.plot(data['sonde2-sonde0']['u'], data['sonde']['Z'], label = 'SONDE2-SONDE0')
+    # plt.plot(data['monc']['uTend'], data['monc']['z'][:], 'k.', label = 'monc-uTend')
+    # plt.ylim([0,2.5e3])
+    # # plt.xlim([-20,10])
+    # plt.legend()
+    # plt.ylabel('Z [m]')
+    # plt.xlabel('$\Delta$ u [m s$^{-1}$ day$^{-1}$]')
+    # plt.savefig('../MOCCHA/FIGS/20180913_0000to1200-uTendency.png')
+    # plt.show()
+
 
     SMALL_SIZE = 12
     MED_SIZE = 14
@@ -842,26 +904,28 @@ def windTendencies(data):
 
     plt.subplot(121)
     plt.plot([0,0],[0,2.5e3],'--', color = 'lightgrey')
-    plt.plot(data['sonde']['u'][:], data['sonde']['Z'], label = 'SONDE')
-    plt.plot(data['monc']['u'], data['monc']['z'][:], 'k.', label = 'monc-namelist')
-    plt.plot(data['sonde+2']['u'][:], data['sonde+2']['Z'], label = 'SONDE+2')
+    plt.plot(data['sonde']['v'][:], data['sonde']['Z'], label = 'SONDE')
+    plt.plot(data['monc']['v'], data['monc']['z'][:], 'k.', label = 'monc-v')
+    plt.plot(data['sonde+2']['v'][:], data['sonde+2']['Z'], label = 'SONDE+2')
+    plt.plot(data['monc']['vRelax'], data['monc']['z'][:], 'k.', label = 'monc-vRelax')
     plt.ylim([0,2.5e3])
     plt.xlim([-20,10])
     plt.legend()
     plt.ylabel('Z [m]')
-    plt.xlabel('u [m s$^{-1}$]')
+    plt.xlabel('v [m s$^{-1}$]')
 
     plt.subplot(122)
     plt.plot([0,0],[0,2.5e3],'--', color = 'lightgrey')
-    plt.plot(data['sonde2-sonde0']['u'], data['sonde']['Z'], label = 'SONDE2-SONDE0')
-    plt.plot(data['monc']['uTend'], data['monc']['z'][:], 'k.', label = 'monc-namelist')
+    plt.plot(data['sonde2-sonde0']['v'], data['sonde']['Z'], label = 'SONDE2-SONDE0')
+    plt.plot(data['monc']['vTend'], data['monc']['z'][:], 'k.', label = 'monc-vTend')
     plt.ylim([0,2.5e3])
     # plt.xlim([-20,10])
     plt.legend()
     plt.ylabel('Z [m]')
-    plt.xlabel('$\Delta$ u [m s$^{-1}$ day$^{-1}$]')
-    plt.savefig('../MOCCHA/FIGS/20180913_0000to1200-uTendency.png')
+    plt.xlabel('$\Delta$ v [m s$^{-1}$ day$^{-1}$]')
+    plt.savefig('../MOCCHA/FIGS/20180913_0000to1200-vTendency.png')
     plt.show()
+
 
     return data
 
@@ -933,7 +997,16 @@ def moncInput(data):
             for line in data['monc']['z']: sys.stdout.write('' + str(line).strip() + ',')
             print ('')
             print ('f_force_pl_u = ')
-            for line in data['monc']['uTend']: sys.stdout.write('' + str(np.round(line,3)).strip() + ',')
+            # for line in data['monc']['uTend']: sys.stdout.write('' + str(np.round(line,3)).strip() + ',')
+            for line in data['monc']['uRelax']: sys.stdout.write('' + str(np.round(line,3)).strip() + ',')
+            print ('')
+
+            print ('z_force_pl_v = ')
+            for line in data['monc']['z']: sys.stdout.write('' + str(line).strip() + ',')
+            print ('')
+            print ('f_force_pl_v = ')
+            # for line in data['monc']['vTend']: sys.stdout.write('' + str(np.round(line,3)).strip() + ',')
+            for line in data['monc']['vRelax']: sys.stdout.write('' + str(np.round(line,3)).strip() + ',')
             print ('')
 
 
@@ -1039,7 +1112,7 @@ def main():
     ### design tendency profiles
     data = thetaTendencies(data)
     # data = qvTendencies(data)
-    # data = windTendencies(data)
+    data = windTendencies(data)
 
     ## -------------------------------------------------------------
     ## Print out data in monc namelist format
