@@ -285,7 +285,7 @@ def sondeWINDS(data):
 def sondeQINIT2(data):
 
     '''
-    Calculate adiabatic lwc up to 650m (main inversion):
+    Calculate adiabatic lwc up to 1km (main inversion):
         -- take thref and pressure, & calculate temperature
         # lwc_adiabatic(ii,liquid_bases(jj):liquid_tops(jj)) = dlwc_dz.*[1:(liquid_tops(jj)-liquid_bases(jj)+1)].*dheight;
     '''
@@ -294,6 +294,7 @@ def sondeQINIT2(data):
     # print (data['pressure'][:,1].shape)
     print (data['monc']['z'][1:])
 
+    ### define pressure array
     data['monc']['pressure'] = np.zeros(np.size(data['monc']['z']))
     interp_pres = interp1d(np.squeeze(data['sonde']['Z']),np.squeeze(data['sonde']['pressure'][:])*1e2)
     data['monc']['pressure'][1:] = interp_pres(data['monc']['z'][1:])
@@ -303,10 +304,7 @@ def sondeQINIT2(data):
     # plt.show()
 
     ### calculate temperature from thref and pressure
-    temp_T = calcTemperature(data['monc']['thref'], data['monc']['pressure'])
-
-    ### adapt temperature array
-    data['monc']['temperature'] = temp_T # np.zeros(np.size(data['monc']['z']))
+    # data['monc']['temperature'] = calcTemperature(data['monc']['thref'], data['monc']['pressure'])
 
     ### calculate qinit2
     ### interpolate free troposphere temperatures from radiosonde onto monc namelist gridding
@@ -326,10 +324,10 @@ def sondeQINIT2(data):
     freetrop_index = np.where(data['monc']['z'] >= 1000.0)
     dheight[int(freetrop_index[0][0]):] = 0.0   ## ignore points in the free troposphere
     blcloud_index = np.where(data['monc']['z'] < 200.0)
-    dheight[blcloud_index] = 0.0   ## ignore points in the free troposphere
+    dheight[blcloud_index] = 0.0   ## ignore points towards the surface
 
-    ## calculate adiabatic cloud liquid water content
-    data['monc']['qinit2'] = dlwcdz[:-1] * dheight
+    ## calculate adiabatic cloud liquid water mixing ratio
+    data['monc']['qinit2'] = dqldz[:-1] * dheight
     data['monc']['qinit2'] = np.append(data['monc']['qinit2'], 0.)
 
     print (data['monc']['temperature'].shape)
@@ -343,6 +341,7 @@ def sondeQINIT2(data):
     data['monc']['thref'] = data['monc']['thinit']
     # data['monc']['thref'][0] = 267.27
 
+    ### change qinit1 input to kg/kg
     tempvar = data['monc']['qinit1']
     data['monc']['qinit1'] = np.zeros(np.size(data['monc']['z']))
     data['monc']['qinit1'] = tempvar / 1e3
@@ -352,68 +351,68 @@ def sondeQINIT2(data):
     data['monc']['qinit'] = np.append(data['monc']['qinit1'], data['monc']['qinit2'])
 
     ####    --------------- FIGURE
-    #
-    # SMALL_SIZE = 12
-    # MED_SIZE = 14
-    # LARGE_SIZE = 16
-    #
-    # plt.rc('font',size=MED_SIZE)
-    # plt.rc('axes',titlesize=MED_SIZE)
-    # plt.rc('axes',labelsize=MED_SIZE)
-    # plt.rc('xtick',labelsize=MED_SIZE)
-    # plt.rc('ytick',labelsize=MED_SIZE)
-    # plt.figure(figsize=(13,5))
-    # plt.rc('legend',fontsize=MED_SIZE)
-    # plt.subplots_adjust(top = 0.9, bottom = 0.12, right = 0.95, left = 0.1,
-    #         hspace = 0.22, wspace = 0.4)
-    #
-    # yylim = 2.4e3
-    #
-    # plt.subplot(151)
-    # # ax = plt.gca()
-    # # ax.fill_between(data)
-    # plt.plot(data['sonde']['pottemp'][:] + 273.16, data['sonde']['Z'], color = 'darkorange', label = 'SONDE')
-    # plt.plot(data['monc']['thref'], data['monc']['z'][:], 'k.', label = 'monc-namelist')
-    # plt.ylabel('Z [m]')
-    # plt.xlabel('$\Theta$ [K]')
-    # plt.grid('on')
-    # plt.ylim([0,yylim])
-    # plt.xlim([265,295])
-    #
-    # plt.subplot(152)
-    # plt.plot(data['sonde']['sphum'][:]/1e3, data['sonde']['Z'], color = 'darkorange', label = 'SONDE')
-    # plt.plot(data['monc']['qinit1'], data['monc']['z'], 'k.', label = 'monc-namelist')
-    # plt.xlabel('qinit1 [g/kg]')
-    # plt.grid('on')
-    # plt.ylim([0,yylim])
-    # plt.xlim([0.2/1e3, 5./1e3])
-    # plt.legend(bbox_to_anchor=(0.25, 1.01, 1., .102), loc=3, ncol=3)
-    #
-    # plt.subplot(153)
-    # plt.plot(data['sonde']['pressure'][:]*1e2, data['sonde']['Z'], color = 'darkorange', label = 'SONDE')
-    # plt.plot(data['monc']['pressure'], data['monc']['z'], 'k.', label = 'monc-namelist')
-    # plt.xlabel('pressure [Pa]')
-    # plt.grid('on')
-    # plt.ylim([0,yylim])
-    # plt.xlim([7e4, 10.5e4])
-    #
-    # plt.subplot(154)
-    # plt.plot(data['sonde']['temperature'][:] + 273.16, data['sonde']['Z'], color = 'darkorange', label = 'SONDE')
-    # plt.plot(data['monc']['temperature'], data['monc']['z'], 'k.', label = 'monc-namelist')
-    # plt.xlabel('temperature [K]')
-    # plt.grid('on')
-    # plt.ylim([0,yylim])
-    # plt.xlim([260,275])
-    #
-    # plt.subplot(155)
-    # plt.plot(data['monc']['qinit2']*1e3, data['monc']['z'], 'k.', label = 'monc-namelist')
-    # plt.xlabel('qinit2 [g/kg]')
-    # plt.grid('on')
-    # plt.ylim([0,yylim])
-    # # plt.xlim([265,275])
-    #
-    # plt.savefig('../MOCCHA/FIGS/Quicklooks_thref-qinit1-pres-temp-qinit2-1km_MONCnmlist_20180913T0000Z.png')
-    # plt.show()
+
+    SMALL_SIZE = 12
+    MED_SIZE = 14
+    LARGE_SIZE = 16
+
+    plt.rc('font',size=MED_SIZE)
+    plt.rc('axes',titlesize=MED_SIZE)
+    plt.rc('axes',labelsize=MED_SIZE)
+    plt.rc('xtick',labelsize=MED_SIZE)
+    plt.rc('ytick',labelsize=MED_SIZE)
+    plt.figure(figsize=(13,5))
+    plt.rc('legend',fontsize=MED_SIZE)
+    plt.subplots_adjust(top = 0.9, bottom = 0.12, right = 0.95, left = 0.1,
+            hspace = 0.22, wspace = 0.4)
+
+    yylim = 2.4e3
+
+    plt.subplot(151)
+    # ax = plt.gca()
+    # ax.fill_between(data)
+    plt.plot(data['sonde']['pottemp'][:] + 273.16, data['sonde']['Z'], color = 'darkorange', label = 'SONDE')
+    plt.plot(data['monc']['thref'], data['monc']['z'][:], 'k.', label = 'monc-namelist')
+    plt.ylabel('Z [m]')
+    plt.xlabel('$\Theta$ [K]')
+    plt.grid('on')
+    plt.ylim([0,yylim])
+    plt.xlim([265,295])
+
+    plt.subplot(152)
+    plt.plot(data['sonde']['sphum'][:]/1e3, data['sonde']['Z'], color = 'darkorange', label = 'SONDE')
+    plt.plot(data['monc']['qinit1'], data['monc']['z'], 'k.', label = 'monc-namelist')
+    plt.xlabel('qinit1 [g/kg]')
+    plt.grid('on')
+    plt.ylim([0,yylim])
+    plt.xlim([0.2/1e3, 5./1e3])
+    plt.legend(bbox_to_anchor=(0.25, 1.01, 1., .102), loc=3, ncol=3)
+
+    plt.subplot(153)
+    plt.plot(data['sonde']['pressure'][:]*1e2, data['sonde']['Z'], color = 'darkorange', label = 'SONDE')
+    plt.plot(data['monc']['pressure'], data['monc']['z'], 'k.', label = 'monc-namelist')
+    plt.xlabel('pressure [Pa]')
+    plt.grid('on')
+    plt.ylim([0,yylim])
+    plt.xlim([7e4, 10.5e4])
+
+    plt.subplot(154)
+    plt.plot(data['sonde']['temperature'][:] + 273.16, data['sonde']['Z'], color = 'darkorange', label = 'SONDE')
+    plt.plot(data['monc']['temperature'], data['monc']['z'], 'k.', label = 'monc-namelist')
+    plt.xlabel('temperature [K]')
+    plt.grid('on')
+    plt.ylim([0,yylim])
+    plt.xlim([260,275])
+
+    plt.subplot(155)
+    plt.plot(data['monc']['qinit2']*1e3, data['monc']['z'], 'k.', label = 'monc-namelist')
+    plt.xlabel('qinit2 [g/kg]')
+    plt.grid('on')
+    plt.ylim([0,yylim])
+    # plt.xlim([265,275])
+
+    plt.savefig('../MOCCHA/FIGS/Quicklooks_thref-qinit1-pres-temp-qinit2-1km_MONCnmlist_20180913T0000Z.png')
+    plt.show()
 
     return data
 
@@ -1110,9 +1109,9 @@ def main():
     # data = aerosolACCUM(data)
 
     ### design tendency profiles
-    data = thetaTendencies(data)
+    # data = thetaTendencies(data)
     # data = qvTendencies(data)
-    data = windTendencies(data)
+    # data = windTendencies(data)
 
     ## -------------------------------------------------------------
     ## Print out data in monc namelist format
