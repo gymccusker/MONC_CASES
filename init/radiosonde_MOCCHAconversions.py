@@ -140,16 +140,16 @@ def sondeTHINIT_QINIT1(data):
     nml_Z = np.append(nml_Z, np.arange(1000., 2501., 100.))
     print (nml_Z)
 
-    ### build qinit1 array
+    ### build qinit1 array (in kg/kg)
     print (np.squeeze(data['sonde']['Z'][4:]).shape)
     print (data['sonde']['sphum'][4:].shape)
 
     nml_qinit1 = np.zeros(np.size(nml_Z))
-    interp_qinit1 = interp1d(np.squeeze(data['sonde']['Z'][:]),data['sonde']['sphum'][:])
+    interp_qinit1 = interp1d(np.squeeze(data['sonde']['Z'][:]),data['sonde']['sphum'][:]/1e3)
     nml_qinit1[1:] = interp_qinit1(nml_Z[1:])
-    nml_qinit1[0] = data['sonde']['sphum'][0]
+    nml_qinit1[0] = data['sonde']['sphum'][0]/1e3
 
-    ### build thref array
+    ### build thref array (in K)
     nml_thref = np.zeros(np.size(nml_Z))
     interp_thref = interp1d(np.squeeze(data['sonde']['Z'][:]),data['sonde']['pottemp'][:] + 273.16)
     nml_thref[1:] = interp_thref(nml_Z[1:])
@@ -342,9 +342,9 @@ def sondeQINIT2(data):
     # data['monc']['thref'][0] = 267.27
 
     ### change qinit1 input to kg/kg
-    tempvar = data['monc']['qinit1']
-    data['monc']['qinit1'] = np.zeros(np.size(data['monc']['z']))
-    data['monc']['qinit1'] = tempvar / 1e3
+    # tempvar = data['monc']['qinit1']
+    # data['monc']['qinit1'] = np.zeros(np.size(data['monc']['z']))
+    # data['monc']['qinit1'] = tempvar / 1e3
     # data['monc']['qinit1'][0] = data['sonde']['sphum'][0] / 1e3
 
     ### combine q01 and q02 into one input field
@@ -380,12 +380,12 @@ def sondeQINIT2(data):
     plt.xlim([265,295])
 
     plt.subplot(152)
-    plt.plot(data['sonde']['sphum'][:]/1e3, data['sonde']['Z'], color = 'darkorange', label = 'SONDE')
-    plt.plot(data['monc']['qinit1'], data['monc']['z'], 'k.', label = 'monc-namelist')
+    plt.plot(data['sonde']['sphum'][:], data['sonde']['Z'], color = 'darkorange', label = 'SONDE')
+    plt.plot(data['monc']['qinit1']*1e3, data['monc']['z'], 'k.', label = 'monc-namelist')
     plt.xlabel('qinit1 [g/kg]')
     plt.grid('on')
     plt.ylim([0,yylim])
-    plt.xlim([0.2/1e3, 5./1e3])
+    # plt.xlim([0.2/1e3, 5./1e3])
     plt.legend(bbox_to_anchor=(0.25, 1.01, 1., .102), loc=3, ncol=3)
 
     plt.subplot(153)
