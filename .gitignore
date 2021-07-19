@@ -38,6 +38,7 @@ ASCOS/output/*
 ## ignore working data
 *.npy
 init/*.npy
+init/working_data.npy
 
 ## ignore casim directory
 casim/*
