@@ -574,30 +574,30 @@ def thetaTendencies(data):
 
     ####    --------------- FIGURE
 
-    SMALL_SIZE = 12
-    MED_SIZE = 14
-    LARGE_SIZE = 16
-
-    plt.rc('font',size=MED_SIZE)
-    plt.rc('axes',titlesize=MED_SIZE)
-    plt.rc('axes',labelsize=MED_SIZE)
-    plt.rc('xtick',labelsize=MED_SIZE)
-    plt.rc('ytick',labelsize=MED_SIZE)
-    plt.figure(figsize=(6,5))
-    plt.rc('legend',fontsize=MED_SIZE)
-    plt.subplots_adjust(top = 0.9, bottom = 0.15, right = 0.95, left = 0.15,
-            hspace = 0.22, wspace = 0.5)
-
-    plt.plot(data['sonde']['pottemp'][:] + 273.16, data['sonde']['Z'], label = 'SONDE')
-    plt.plot(data['sonde+1']['pottemp'][:] + 273.16, data['sonde+1']['Z'], label = 'SONDE+1')
-    plt.plot(data['sonde+2']['pottemp'][:] + 273.16, data['sonde+2']['Z'], label = 'SONDE+2')
-    plt.plot(data['sonde+3']['pottemp'][:] + 273.16, data['sonde+3']['Z'], label = 'SONDE+3')
-    plt.ylim([0,2.5e3])
-    plt.xlim([265,290])
-    plt.legend()
-    plt.ylabel('Z [m]')
-    plt.xlabel('$\Theta$ [K]')
-    plt.show()
+    # SMALL_SIZE = 12
+    # MED_SIZE = 14
+    # LARGE_SIZE = 16
+    #
+    # plt.rc('font',size=MED_SIZE)
+    # plt.rc('axes',titlesize=MED_SIZE)
+    # plt.rc('axes',labelsize=MED_SIZE)
+    # plt.rc('xtick',labelsize=MED_SIZE)
+    # plt.rc('ytick',labelsize=MED_SIZE)
+    # plt.figure(figsize=(6,5))
+    # plt.rc('legend',fontsize=MED_SIZE)
+    # plt.subplots_adjust(top = 0.9, bottom = 0.15, right = 0.95, left = 0.15,
+    #         hspace = 0.22, wspace = 0.5)
+    #
+    # plt.plot(data['sonde']['pottemp'][:] + 273.16, data['sonde']['Z'], label = 'SONDE')
+    # plt.plot(data['sonde+1']['pottemp'][:] + 273.16, data['sonde+1']['Z'], label = 'SONDE+1')
+    # plt.plot(data['sonde+2']['pottemp'][:] + 273.16, data['sonde+2']['Z'], label = 'SONDE+2')
+    # plt.plot(data['sonde+3']['pottemp'][:] + 273.16, data['sonde+3']['Z'], label = 'SONDE+3')
+    # plt.ylim([0,2.5e3])
+    # plt.xlim([265,290])
+    # plt.legend()
+    # plt.ylabel('Z [m]')
+    # plt.xlabel('$\Theta$ [K]')
+    # plt.show()
 
     ####    ---------------
     ### want to calculate theta tendency (in K/day) between sonde0 and sondeX
@@ -606,8 +606,10 @@ def thetaTendencies(data):
 
     data['sonde' + str(X) + '-sonde0'] = {}
 
-    ## change over 12 h (*2 to give K/day)
-    data['sonde' + str(X) + '-sonde0']['th'] = (data['sonde+' + str(X)]['pottemp'] - data['sonde']['pottemp'])*2
+    ## change to give K/day
+        ### if X = 2, 4/2 = 2 (12h)
+        ### if X = 1, 4/1 = 4 (6h)
+    data['sonde' + str(X) + '-sonde0']['th'] = (data['sonde+' + str(X)]['pottemp'] - data['sonde']['pottemp'])*(4./X)
 
     ####    ---------------
     ### want to regrid theta tendency (in K/day) to monc vertical grid
@@ -822,8 +824,10 @@ def windTendencies(data):
         data['sonde' + str(X) + '-sonde0'] = {}
 
     ## change over 12 h (*2 to give m/s/day)
-    data['sonde' + str(X) + '-sonde0']['u'] = (np.abs(data['sonde']['u']) - np.abs(data['sonde+' + str(X)]['u']))*2
-    data['sonde' + str(X) + '-sonde0']['v'] = (np.abs(data['sonde']['v']) - np.abs(data['sonde+' + str(X)]['v']))*2
+        ### if X = 2, 4/2 = 2 (12h)
+        ### if X = 1, 4/1 = 4 (6h)
+    data['sonde' + str(X) + '-sonde0']['u'] = (np.abs(data['sonde']['u']) - np.abs(data['sonde+' + str(X)]['u']))*(4./X)
+    data['sonde' + str(X) + '-sonde0']['v'] = (np.abs(data['sonde']['v']) - np.abs(data['sonde+' + str(X)]['v']))*(4./X)
 
     data['sonde' + str(X) + '-sonde0']['v'][data['sonde' + str(X) + '-sonde0']['v'] > 1e3] = np.nan
 
@@ -1114,7 +1118,7 @@ def main():
 
     ### design tendency profiles
     ###     monc input will not be printed unless active
-    # data = thetaTendencies(data)
+    data = thetaTendencies(data)
     # data = qvTendencies(data)
     data = windTendencies(data)
 
