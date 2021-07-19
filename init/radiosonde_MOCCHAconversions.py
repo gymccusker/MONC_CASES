@@ -1080,7 +1080,7 @@ def main():
     print (data['sonde']['doy'][:])
 
     ## -------------------------------------------------------------
-    ## Set flags for output
+    ## Initialise conditional flags for output
     ## -------------------------------------------------------------
     data['thTend_flag'] = 0     # theta tendencies?
     data['qvTend_flag'] = 0     # wind tendencies?
@@ -1103,6 +1103,7 @@ def main():
     # data = aerosolACCUM(data)
 
     ### design tendency profiles
+    ###     monc input will not be printed unless active
     data = thetaTendencies(data)
     # data = qvTendencies(data)
     # data = windTendencies(data)
