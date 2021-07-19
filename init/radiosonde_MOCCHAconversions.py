@@ -948,76 +948,76 @@ def moncInput(data):
         print ('***')
         print ('***')
         ### print out to terminal in format for monc namelists
-        print ('z_init_pl_theta = ')
+        print ('z_init_pl_theta=')
         for line in data['monc']['z']: sys.stdout.write('' + str(line).strip() + ',')
         print ('')
 
                     # z_init_pl_theta = 0.0,50.0,100.0,150.0,200.0,250.0,300.0,350.0,400.0,450.0,500.0,550.0,600.0,650.0,700.0,750.0,800.0,850.0,900.0,950.0,1000.0,1100.0,1200.0,1300.0,1400.0,1500.0,1600.0,1700.0,1800.0,1900.0,2000.0,2100.0,2200.0,2300.0,2400.0,2500.0
 
-        print ('f_init_pl_theta = ')
+        print ('f_init_pl_theta=')
         for line in data['monc']['thref']: sys.stdout.write('' + str(np.round(line,2)).strip() + ',')
         print ('')
 
                     # f_init_pl_theta = 267.27,267.58,267.59,267.57,267.65,267.74,268.06,268.91,269.5,269.95,270.35,270.53,270.72,271.07,271.46,272.2,273.29,273.68,274.34,274.53,274.62,275.2,276.39,276.7,276.77,276.89,279.95,282.59,282.9,283.5,284.72,286.12,287.18,287.81,288.38,288.95
 
-        print ('z_init_pl_u = ')
+        print ('z_init_pl_u=')
         for line in data['monc']['z']: sys.stdout.write('' + str(line).strip() + ',')
         print ('')
 
                     # z_init_pl_u = 0.0,50.0,100.0,150.0,200.0,250.0,300.0,350.0,400.0,450.0,500.0,550.0,600.0,650.0,700.0,750.0,800.0,850.0,900.0,950.0,1000.0,1100.0,1200.0,1300.0,1400.0,1500.0,1600.0,1700.0,1800.0,1900.0,2000.0,2100.0,2200.0,2300.0,2400.0,2500.0
 
-        print ('f_init_pl_u = ')
+        print ('f_init_pl_u=')
         for line in data['monc']['u']: sys.stdout.write('' + str(np.round(line,5)).strip() + ',')
         print ('')
 
                     # f_init_pl_u = -9.4125,-10.43,-11.875,-12.43,-12.55,-12.17,-11.38167,-10.9,-11.57,-12.7,-13.54,-13.45,-12.86,-11.93,-11.08333,-10.9,-11.28333,-11.95,-12.55,-12.7,-12.45,-10.83,-9.75,-9.6,-10.52333,-11.2,-11.2,-11.85,-11.7875,-11.28333,-10.96667,-11.35,-12.55,-12.03333,-11.55,-10.95
 
-        print ('z_init_pl_v = ')
+        print ('z_init_pl_v=')
         for line in data['monc']['z']: sys.stdout.write('' + str(line).strip() + ',')
         print ('')
 
                     # z_init_pl_v = 0.0,50.0,100.0,150.0,200.0,250.0,300.0,350.0,400.0,450.0,500.0,550.0,600.0,650.0,700.0,750.0,800.0,850.0,900.0,950.0,1000.0,1100.0,1200.0,1300.0,1400.0,1500.0,1600.0,1700.0,1800.0,1900.0,2000.0,2100.0,2200.0,2300.0,2400.0,2500.0
 
-        print ('f_init_pl_v = ')
+        print ('f_init_pl_v=')
         for line in data['monc']['v']: sys.stdout.write('' + str(np.round(line,5)).strip() + ',')
         print ('')
 
                     # f_init_pl_v = 0.825,1.74,2.85,2.9,3.26,3.93,4.4,4.11,3.03,2.5,3.2775,4.16,4.72,4.75,4.05,2.46667,1.08333,0.6,1.15,2.13167,2.85,2.93,0.11,0.01333,0.8,-0.40333,-3.175,-2.7,-3.0,-2.9,-2.95,-3.45,-3.0,-4.15,-4.45,-4.6
 
-        print ('z_init_pl_q = ')
+        print ('z_init_pl_q=')
         for line in data['monc']['z']: sys.stdout.write('' + str(line).strip() + ',')
         print ('')
 
                     # z_init_pl_q = 0.0,50.0,100.0,150.0,200.0,250.0,300.0,350.0,400.0,450.0,500.0,550.0,600.0,650.0,700.0,750.0,800.0,850.0,900.0,950.0,1000.0,1100.0,1200.0,1300.0,1400.0,1500.0,1600.0,1700.0,1800.0,1900.0,2000.0,2100.0,2200.0,2300.0,2400.0,2500.0
 
-        print ('f_init_pl_q = ')
+        print ('f_init_pl_q=')
         for line in data['monc']['qinit']: sys.stdout.write('' + str(np.round(line,10)).strip() + ',')
         print ('')
 
                     # f_init_pl_q = 0.00244,0.00227,0.00228,0.0023,0.00221,0.00214,0.00213,0.00215,0.00215,0.00212,0.00213,0.00211,0.00207,0.00203,0.00202,0.00199,0.00201,0.00201,0.00201,0.00204,0.00202,0.00198,0.00206,0.00206,0.00202,0.00201,0.00243,0.00197,0.00184,0.00184,0.00142,0.00107,0.00068,0.00062,0.00054,0.00042,0.0,0.0,0.0,0.0,6e-05,6e-05,6e-05,6e-05,6e-05,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,
 
         if data['thTend_flag'] == 1:
-            print ('z_force_pl_th = ')
+            print ('z_force_pl_th=')
             for line in data['monc']['z']: sys.stdout.write('' + str(line).strip() + ',')
             print ('')
-            print ('f_force_pl_th = ')
+            print ('f_force_pl_th=')
             # for line in data['monc']['thTend']: sys.stdout.write('' + str(np.round(line,5)).strip() + ',')
             for line in data['monc']['thRelax']: sys.stdout.write('' + str(np.round(line,5)).strip() + ',')
             print ('')
 
         if data['uvTend_flag'] == 1:
-            print ('z_force_pl_u = ')
+            print ('z_force_pl_u=')
             for line in data['monc']['z']: sys.stdout.write('' + str(line).strip() + ',')
             print ('')
-            print ('f_force_pl_u = ')
+            print ('f_force_pl_u=')
             # for line in data['monc']['uTend']: sys.stdout.write('' + str(np.round(line,3)).strip() + ',')
             for line in data['monc']['uRelax']: sys.stdout.write('' + str(np.round(line,3)).strip() + ',')
             print ('')
 
-            print ('z_force_pl_v = ')
+            print ('z_force_pl_v=')
             for line in data['monc']['z']: sys.stdout.write('' + str(line).strip() + ',')
             print ('')
-            print ('f_force_pl_v = ')
+            print ('f_force_pl_v=')
             # for line in data['monc']['vTend']: sys.stdout.write('' + str(np.round(line,3)).strip() + ',')
             for line in data['monc']['vRelax']: sys.stdout.write('' + str(np.round(line,3)).strip() + ',')
             print ('')
