@@ -574,30 +574,30 @@ def thetaTendencies(data):
 
     ####    --------------- FIGURE
 
-    # SMALL_SIZE = 12
-    # MED_SIZE = 14
-    # LARGE_SIZE = 16
-    #
-    # plt.rc('font',size=MED_SIZE)
-    # plt.rc('axes',titlesize=MED_SIZE)
-    # plt.rc('axes',labelsize=MED_SIZE)
-    # plt.rc('xtick',labelsize=MED_SIZE)
-    # plt.rc('ytick',labelsize=MED_SIZE)
-    # plt.figure(figsize=(6,5))
-    # plt.rc('legend',fontsize=MED_SIZE)
-    # plt.subplots_adjust(top = 0.9, bottom = 0.15, right = 0.95, left = 0.15,
-    #         hspace = 0.22, wspace = 0.5)
-    #
-    # plt.plot(data['sonde']['pottemp'][:] + 273.16, data['sonde']['Z'], label = 'SONDE')
-    # plt.plot(data['sonde+1']['pottemp'][:] + 273.16, data['sonde+1']['Z'], label = 'SONDE+1')
-    # plt.plot(data['sonde+2']['pottemp'][:] + 273.16, data['sonde+2']['Z'], label = 'SONDE+2')
-    # plt.plot(data['sonde+3']['pottemp'][:] + 273.16, data['sonde+3']['Z'], label = 'SONDE+3')
-    # plt.ylim([0,2.5e3])
-    # plt.xlim([265,290])
-    # plt.legend()
-    # plt.ylabel('Z [m]')
-    # plt.xlabel('$\Theta$ [K]')
-    # plt.show()
+    SMALL_SIZE = 12
+    MED_SIZE = 14
+    LARGE_SIZE = 16
+
+    plt.rc('font',size=MED_SIZE)
+    plt.rc('axes',titlesize=MED_SIZE)
+    plt.rc('axes',labelsize=MED_SIZE)
+    plt.rc('xtick',labelsize=MED_SIZE)
+    plt.rc('ytick',labelsize=MED_SIZE)
+    plt.figure(figsize=(6,5))
+    plt.rc('legend',fontsize=MED_SIZE)
+    plt.subplots_adjust(top = 0.9, bottom = 0.15, right = 0.95, left = 0.15,
+            hspace = 0.22, wspace = 0.5)
+
+    plt.plot(data['sonde']['pottemp'][:] + 273.16, data['sonde']['Z'], label = 'SONDE')
+    plt.plot(data['sonde+1']['pottemp'][:] + 273.16, data['sonde+1']['Z'], label = 'SONDE+1')
+    plt.plot(data['sonde+2']['pottemp'][:] + 273.16, data['sonde+2']['Z'], label = 'SONDE+2')
+    plt.plot(data['sonde+3']['pottemp'][:] + 273.16, data['sonde+3']['Z'], label = 'SONDE+3')
+    plt.ylim([0,2.5e3])
+    plt.xlim([265,290])
+    plt.legend()
+    plt.ylabel('Z [m]')
+    plt.xlabel('$\Theta$ [K]')
+    plt.show()
 
     ####    ---------------
     ### want to calculate theta tendency (in K/day) between sonde0 and sonde2
@@ -1040,7 +1040,7 @@ def main():
     ## Choose sonde for initialisation:
     ## -------------------------------------------------------------
     data = {}
-    data['sonde_option'] = '20180913T0600' #'20180913T0000'#'20180912T1800'
+    data['sonde_option'] = '20180913T0000'#'20180912T1800''20180913T0600' #
 
     if data['sonde_option'] == '20180912T1800':
         numindex = 0
@@ -1067,10 +1067,10 @@ def main():
     for i in np.arange(0,3):
         data['sonde+' + str(i+1)] = {}
         print ('sonde+' + str(i+1))
-        print (sondes['doy'][:,index256[1][i+numindex]])
+        print (sondes['doy'][:,index256[1][i+1+numindex]])
         for k in sondes.keys():
             if k == 'Z': continue
-            data['sonde+' + str(i+1)][k] = sondes[k][:,index256[1][i+numindex]]
+            data['sonde+' + str(i+1)][k] = sondes[k][:,index256[1][i+1+numindex]]
         data['sonde+' + str(i+1)]['Z'] = sondes['Z']
         data['sonde+' + str(i+1)]['u'][data['sonde+' + str(i+1)]['u'] > 1e3] = np.nan
         data['sonde+' + str(i+1)]['v'][data['sonde+' + str(i+1)]['v'] > 1e3] = np.nan
