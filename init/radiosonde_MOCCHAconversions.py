@@ -411,7 +411,7 @@ def sondeQINIT2(data):
     plt.ylim([0,yylim])
     # plt.xlim([265,275])
 
-    plt.savefig('../MOCCHA/FIGS/Quicklooks_thref-qinit1-pres-temp-qinit2-1km_MONCnmlist_20180913T0000Z.png')
+    plt.savefig('../MOCCHA/FIGS/Quicklooks_thref-qinit1-pres-temp-qinit2-1km_MONCnmlist_' + data['sonde_option'] + '.png')
     plt.show()
 
     return data
@@ -644,7 +644,7 @@ def thetaTendencies(data):
     plt.plot(data['sonde']['pottemp'][:] + 273.16, data['sonde']['Z'], label = 'SONDE')
     plt.plot(data['monc']['thref'], data['monc']['z'][:], 'k.', label = 'monc-thinit')
     plt.plot(data['sonde+2']['pottemp'][:] + 273.16, data['sonde+2']['Z'], label = 'SONDE+2')
-    plt.plot(data['monc']['thRelax'], data['monc']['z'][:], 'k.', label = 'monc-thRelax')
+    plt.plot(data['monc']['thRelax'], data['monc']['z'][:], 'ks', markersize = 3, label = 'monc-thRelax')
     plt.ylim([0,2.5e3])
     plt.xlim([265,290])
     plt.legend()
@@ -654,13 +654,13 @@ def thetaTendencies(data):
     plt.subplot(122)
     plt.plot([0,0],[0,2.5e3],'--', color = 'lightgrey')
     plt.plot(data['sonde2-sonde0']['th'], data['sonde']['Z'], label = 'SONDE2-SONDE0')
-    plt.plot(data['monc']['thTend'], data['monc']['z'][:], 'k.', label = 'monc-thTend')
+    plt.plot(data['monc']['thTend'], data['monc']['z'][:], 'kd', markersize = 4, label = 'monc-thTend')
     plt.ylim([0,2.5e3])
     # plt.xlim([265,290])
     plt.legend()
     plt.ylabel('Z [m]')
     plt.xlabel('$\Delta \Theta$ [K day$^{-1}$]')
-    plt.savefig('../MOCCHA/FIGS/20180913_0000to1200-thetaTendency.png')
+    plt.savefig('../MOCCHA/FIGS/' + data['sonde_option'] + '-thetaTendency.png')
     plt.show()
 
 
@@ -1040,46 +1040,80 @@ def main():
     ## Choose sonde for initialisation:
     ## -------------------------------------------------------------
     data = {}
-    data['sonde_option'] = '20180913T0000'#'20180912T1800' #
+    data['sonde_option'] = '20180913T0600' #'20180913T0000'#'20180912T1800' 
 
     if data['sonde_option'] == '20180912T1800':
-        ## -------------------------------------------------------------
-        ## Load radiosonde from 20180912 1800UTC
-        ## -------------------------------------------------------------
-        index256 = np.where(np.round(sondes['doy'][:,:]) == 256.)
-        print (index256)
-        print (sondes['doy'][:,index256[1][0]])
-        data['sonde'] = {}
-        for k in sondes.keys():
-            if k == 'Z': continue
-            data['sonde'][k] = sondes[k][:,index256[1][0]]
-        data['sonde']['Z'] = sondes['Z']
-
+        numindex = 0
     elif data['sonde_option'] == '20180913T0000':
+        numindex = 1
+    elif data['sonde_option'] == '20180913T0600':
+        numindex = 2
+
+
+        # ## -------------------------------------------------------------
+        # ## Load radiosonde from 20180912 1800UTC
+        # ## -------------------------------------------------------------
+        # index256 = np.where(np.round(sondes['doy'][:,:]) == 256.)
+        # print (index256)
+        # print (sondes['doy'][:,index256[1][0]])
+        # data['sonde'] = {}
+        # for k in sondes.keys():
+        #     if k == 'Z': continue
+        #     data['sonde'][k] = sondes[k][:,index256[1][0]]
+        # data['sonde']['Z'] = sondes['Z']
+
+
         ## -------------------------------------------------------------
-        ## Load radiosonde from 20180913 0000UTC
-        ## -------------------------------------------------------------
-        index256 = np.where(np.logical_or(np.round(sondes['doy'][:,:]) == 256., np.round(sondes['doy'][:,:]) == 257.))
-        print (sondes['doy'][:,index256[1][1]])
-        data['sonde'] = {}
+        # ## Load radiosonde from 20180913 0000UTC
+        # ## -------------------------------------------------------------
+        # index256 = np.where(np.logical_or(np.round(sondes['doy'][:,:]) == 256., np.round(sondes['doy'][:,:]) == 257.))
+        # print (sondes['doy'][:,index256[1][1]])
+        # data['sonde'] = {}
+        # for k in sondes.keys():
+        #     if k == 'Z': continue
+        #     data['sonde'][k] = sondes[k][:,index256[1][1]]
+        # data['sonde']['Z'] = sondes['Z']
+        # data['sonde']['u'][data['sonde']['u'] > 1e3] = np.nan
+        # data['sonde']['v'][data['sonde']['v'] > 1e3] = np.nan
+        #
+        # ### load subsequent sondes
+        # for i in np.arange(0,3):
+        #     data['sonde+' + str(i+1)] = {}
+        #     print ('sonde+' + str(i+1))
+        #     print (sondes['doy'][:,index256[1][i+2]])
+        #     for k in sondes.keys():
+        #         if k == 'Z': continue
+        #         data['sonde+' + str(i+1)][k] = sondes[k][:,index256[1][i+2]]
+        #     data['sonde+' + str(i+1)]['Z'] = sondes['Z']
+        #     data['sonde+' + str(i+1)]['u'][data['sonde+' + str(i+1)]['u'] > 1e3] = np.nan
+        #     data['sonde+' + str(i+1)]['v'][data['sonde+' + str(i+1)]['v'] > 1e3] = np.nan
+
+
+    ## -------------------------------------------------------------
+    ## Load radiosonde from 20180913 0000UTC
+    ## -------------------------------------------------------------
+    index256 = np.where(np.logical_or(np.round(sondes['doy'][:,:]) == 256., np.round(sondes['doy'][:,:]) == 257.))
+
+    print (sondes['doy'][:,index256[1][numindex]])
+    data['sonde'] = {}
+    for k in sondes.keys():
+        if k == 'Z': continue
+        data['sonde'][k] = sondes[k][:,index256[1][numindex]]
+    data['sonde']['Z'] = sondes['Z']
+    data['sonde']['u'][data['sonde']['u'] > 1e3] = np.nan
+    data['sonde']['v'][data['sonde']['v'] > 1e3] = np.nan
+
+    ### load subsequent sondes
+    for i in np.arange(0,3):
+        data['sonde+' + str(i+1)] = {}
+        print ('sonde+' + str(i+1))
+        print (sondes['doy'][:,index256[1][i+numindex]])
         for k in sondes.keys():
             if k == 'Z': continue
-            data['sonde'][k] = sondes[k][:,index256[1][1]]
-        data['sonde']['Z'] = sondes['Z']
-        data['sonde']['u'][data['sonde']['u'] > 1e3] = np.nan
-        data['sonde']['v'][data['sonde']['v'] > 1e3] = np.nan
-
-        ### load subsequent sondes
-        for i in np.arange(0,3):
-            data['sonde+' + str(i+1)] = {}
-            print ('sonde+' + str(i+1))
-            print (sondes['doy'][:,index256[1][i+2]])
-            for k in sondes.keys():
-                if k == 'Z': continue
-                data['sonde+' + str(i+1)][k] = sondes[k][:,index256[1][i+2]]
-            data['sonde+' + str(i+1)]['Z'] = sondes['Z']
-            data['sonde+' + str(i+1)]['u'][data['sonde+' + str(i+1)]['u'] > 1e3] = np.nan
-            data['sonde+' + str(i+1)]['v'][data['sonde+' + str(i+1)]['v'] > 1e3] = np.nan
+            data['sonde+' + str(i+1)][k] = sondes[k][:,index256[1][i+numindex]]
+        data['sonde+' + str(i+1)]['Z'] = sondes['Z']
+        data['sonde+' + str(i+1)]['u'][data['sonde+' + str(i+1)]['u'] > 1e3] = np.nan
+        data['sonde+' + str(i+1)]['v'][data['sonde+' + str(i+1)]['v'] > 1e3] = np.nan
 
 
     print (data['sonde'].keys())
@@ -1109,7 +1143,7 @@ def main():
     # data = aerosolACCUM(data)
 
     ### design tendency profiles
-    # data = thetaTendencies(data)
+    data = thetaTendencies(data)
     # data = qvTendencies(data)
     # data = windTendencies(data)
 
