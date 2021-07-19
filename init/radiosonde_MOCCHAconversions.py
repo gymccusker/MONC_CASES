@@ -812,8 +812,9 @@ def windTendencies(data):
 
     if 'sondeX' in data.keys():
         print ('sonde' + str(X) + ' already chosen')
-    else:
         X = data['monc']['sondeX']
+    else:
+        X = 1
 
     if 'sonde' + str(X) + '-sonde0' in data.keys():
         print ('sonde' + str(X) + '-sonde0 key already made')
@@ -1113,7 +1114,7 @@ def main():
 
     ### design tendency profiles
     ###     monc input will not be printed unless active
-    data = thetaTendencies(data)
+    # data = thetaTendencies(data)
     # data = qvTendencies(data)
     data = windTendencies(data)
 
