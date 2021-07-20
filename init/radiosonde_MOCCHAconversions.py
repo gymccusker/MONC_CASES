@@ -1017,6 +1017,14 @@ def moncInput(data):
             # for line in data['monc']['thRelax']: sys.stdout.write('' + str(np.round(line,5)).strip() + ',')
             print ('')
 
+        if data['qvTend_flag'] == 1:
+            print ('z_force_pl_q=')
+            for line in data['monc']['z']: sys.stdout.write('' + str(line).strip() + ',')
+            print ('')
+            print ('f_force_pl_q=')
+            for line in data['monc']['qvTend']: sys.stdout.write('' + str(np.round(line,10)).strip() + ',')
+            print ('')
+
         if data['uvTend_flag'] == 1:
             print ('z_force_pl_u=')
             for line in data['monc']['z']: sys.stdout.write('' + str(line).strip() + ',')
