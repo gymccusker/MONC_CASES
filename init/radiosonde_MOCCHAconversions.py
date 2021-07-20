@@ -713,20 +713,32 @@ def qvTendencies(data):
     # plt.show()
 
     ####    ---------------
-    ### want to calculate qv tendency (in kg/kg/day) between sonde0 and sonde2
-    data['sonde2-sonde0'] = {}
+    ### want to calculate qv tendency (in kg/kg/day) between sonde0 and sondeX
 
-    ## change over 12 h (*2 to give K/day)
-    data['sonde2-sonde0']['qvapour'] = (data['sonde+2']['sphum'] - data['sonde']['sphum'])*2
+    if 'sondeX' in data.keys():
+        print ('sonde' + str(X) + ' already chosen')
+        X = data['monc']['sondeX']
+    else:
+        X = 1
+
+    if 'sonde' + str(X) + '-sonde0' in data.keys():
+        print ('sonde' + str(X) + '-sonde0 key already made')
+    else:
+        data['sonde' + str(X) + '-sonde0'] = {}
+
+    ## change over 24 h (g/kg/day)
+        ### if X = 2, 4/2 = 2 (12h)
+        ### if X = 1, 4/1 = 4 (6h)
+    data['sonde' + str(X) + '-sonde0']['qvapour'] = (data['sonde+' + str(X)]['sphum'] - data['sonde']['sphum'])*(X/4)
 
     ####    ---------------
     ### want to regrid qv tendency (in kg/kg/day) to monc vertical grid
 
     ### build thref array
     data['monc']['qvTend'] = np.zeros(np.size(data['monc']['z']))
-    interp_qvTend = interp1d(np.squeeze(data['sonde']['Z'][:]),data['sonde2-sonde0']['qvapour'][:])
-    data['monc']['qvTend'][1:] = interp_qvTend(data['monc']['z'][1:])
-    data['monc']['qvTend'][0] = data['sonde2-sonde0']['qvapour'][0]
+    interp_qvTend = interp1d(np.squeeze(data['sonde']['Z'][:]),data['sonde' + str(X) + '-sonde0']['qvapour'][:])
+    data['monc']['qvTend'][1:] = interp_qvTend(data['monc']['z'][1:])/1e3
+    data['monc']['qvTend'][0] = data['sonde' + str(X) + '-sonde0']['qvapour'][0]/1e3
 
     ####    --------------- FIGURE
 
@@ -745,9 +757,9 @@ def qvTendencies(data):
             hspace = 0.22, wspace = 0.5)
 
     plt.subplot(121)
-    plt.plot(data['sonde']['sphum'][:], data['sonde']['Z'], label = 'SONDE')
-    # plt.plot(data['monc']['thref'], data['monc']['z'][:], 'k.', label = 'monc-namelist')
-    plt.plot(data['sonde+2']['sphum'][:], data['sonde+2']['Z'], label = 'SONDE+2')
+    plt.plot(data['sonde']['sphum'][:]/1e3, data['sonde']['Z'], label = 'SONDE')
+    plt.plot(data['monc']['qinit1'], data['monc']['z'][:], 'k.', label = 'monc-namelist')
+    plt.plot(data['sonde+' + str(X)]['sphum'][:]/1e3, data['sonde+' + str(X)]['Z'], label = 'SONDE+' + str(X))
     plt.ylim([0,2.5e3])
     # plt.xlim([265,290])
     plt.legend()
@@ -756,14 +768,14 @@ def qvTendencies(data):
 
     plt.subplot(122)
     plt.plot([0,0],[0,2.5e3],'--', color = 'lightgrey')
-    plt.plot(data['sonde2-sonde0']['qvapour'], data['sonde']['Z'], label = 'SONDE2-SONDE0')
-    plt.plot(data['monc']['qvTend'], data['monc']['z'][:], 'k.', label = 'monc-namelist')
+    plt.plot(data['sonde' + str(X) + '-sonde0']['qvapour']/1e3, data['sonde']['Z'], label = 'SONDE' + str(X) + '-SONDE0')
+    plt.plot(data['monc']['qvTend'], data['monc']['z'][:], 'kd', markersize = 4, label = 'monc-namelist')
     plt.ylim([0,2.5e3])
     # plt.xlim([265,290])
     plt.legend()
     plt.ylabel('Z [m]')
     plt.xlabel('$\Delta$ q$_{v}$ [kg kg$^{-1}$ day$^{-1}$]')
-    plt.savefig('../MOCCHA/FIGS/20180913_0000to1200-qvTendency.png')
+    plt.savefig('../MOCCHA/FIGS/' + data['sonde_option'] + '-sonde' + str(X) + '_qvTendency.png')
     plt.show()
 
     return data
@@ -810,7 +822,7 @@ def windTendencies(data):
     # plt.show()
 
     ####    ---------------
-    ### want to calculate theta tendency (in K/day) between sonde0 and and sondeX
+    ### want to calculate wind tendency (in K/day) between sonde0 and and sondeX
 
     if 'sondeX' in data.keys():
         print ('sonde' + str(X) + ' already chosen')
@@ -1118,9 +1130,9 @@ def main():
 
     ### design tendency profiles
     ###     monc input will not be printed unless active
-    data = thetaTendencies(data)
-    # data = qvTendencies(data)
-    data = windTendencies(data)
+    # data = thetaTendencies(data)
+    data = qvTendencies(data)
+    # data = windTendencies(data)
 
     ## -------------------------------------------------------------
     ## Print out data in monc namelist format
