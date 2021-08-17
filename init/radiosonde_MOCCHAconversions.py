@@ -1074,7 +1074,7 @@ def main():
     print ('...')
 
     print ('Load radiosonde data from Jutta...')
-    obs_root_dir = '/home/gillian/MOCCHA/ODEN/DATA/'
+    obs_root_dir = '/home/gillian/MOCCHA/MOCCHA_GIT/ODEN/DATA/'
     sondes = readMatlabStruct(obs_root_dir + 'radiosondes/SondeData_h10int_V02.mat')
 
     print ('')
