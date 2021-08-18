@@ -491,59 +491,120 @@ def aerosolACCUM(data):
         data['monc']['ukca']['naer_sol_accum'] = data['ukca']['field2207'][:]
         data['monc']['ukca']['maer_sol_accum'] = data['ukca']['field2208'][:] + data['ukca']['field2209'][:] + data['ukca']['field2210'][:] + data['ukca']['field2211'][:]
 
-        plt.figure()
-        plt.plot(np.nanmean(np.nanmean(np.squeeze(data['monc']['ukca']['naer_sol_accum'][0,:,:,-2:]),2),1),
-            data['ukca'].variables['hybrid_ht'])
-        plt.ylim([0,1e4])
-        plt.show()
+        data['monc']['ukca']['naer_sol_coarse'] = data['ukca']['field2213'][:]
+
+
+        # plt.figure()
+        # plt.plot(np.nanmean(np.nanmean(np.squeeze(data['monc']['ukca']['naer_sol_accum'][0,:,:,-2:]),2),1),
+        #     data['ukca'].variables['hybrid_ht'])
+        # plt.ylim([0,1e4])
+        # plt.show()
+
+        ####        FIGURE
+
+        SMALL_SIZE = 12
+        MED_SIZE = 14
+        LARGE_SIZE = 16
+
+        plt.rc('font',size=MED_SIZE)
+        plt.rc('axes',titlesize=LARGE_SIZE)
+        plt.rc('axes',labelsize=LARGE_SIZE)
+        plt.rc('xtick',labelsize=LARGE_SIZE)
+        plt.rc('ytick',labelsize=LARGE_SIZE)
+        plt.rc('legend',fontsize=LARGE_SIZE)
+        fig = plt.figure(figsize=(8,6))
+        plt.subplots_adjust(top = 0.93, bottom = 0.1, right = 0.82, left = 0.08,
+                hspace = 0.3, wspace = 0.1)
+
+        plt.subplot(211)
+        ax = plt.gca()
+        img = plt.pcolormesh(data['ukca'].variables['t'][:],data['ukca'].variables['hybrid_ht'][:],
+            np.transpose(np.nanmean(np.nanmean(data['monc']['ukca']['naer_sol_accum'][:,:,-2:,:],3),2)),
+            # vmin = 0, vmax = 0.3
+            )
+        plt.ylim([0, 1e4])
+        # ax.set_xlim([doy[0],doy[-1]])
+        # plt.xticks([230,235,240,245,250,255])
+        # ax.set_xticklabels(['18 Aug','23 Aug','28 Aug','2 Sep','7 Sep','12 Sep'])
+        plt.ylabel('Z [km]')
+        plt.ylim([0,9000])
+        axmajor = np.arange(0,9.01e3,3.0e3)
+        axminor = np.arange(0,9.01e3,0.5e3)
+        plt.yticks(axmajor)
+        ax.set_yticklabels([0,3,6,9])
+        ax.set_yticks(axminor, minor = True)
+        cbaxes = fig.add_axes([0.85, 0.6, 0.015, 0.3])
+        cb = plt.colorbar(img, cax = cbaxes, orientation = 'vertical')
+        plt.ylabel('N$_{aer, sol, coarse}$ [cm$^{-3}$]', rotation = 270, labelpad = 25)
+
+        plt.subplot(212)
+        ax = plt.gca()
+        img = plt.pcolormesh(data['ukca'].variables['t'][:],data['ukca'].variables['hybrid_ht'][:],
+            np.transpose(np.nanmean(np.nanmean(data['monc']['ukca']['naer_sol_coarse'][:,:,-2:,:],3),2)),
+            # vmin = 0, vmax = 200
+            )
+        plt.ylim([0, 1e4])
+        # ax.set_xlim([doy[0],doy[-1]])
+        # plt.xticks([230,235,240,245,250,255])
+        # ax.set_xticklabels(['18 Aug','23 Aug','28 Aug','2 Sep','7 Sep','12 Sep'])
+        plt.xlabel('Date')
+        plt.ylabel('Z [km]')
+        plt.ylim([0,9000])
+        plt.yticks(axmajor)
+        ax.set_yticklabels([0,3,6,9])
+        ax.set_yticks(axminor, minor = True)
+        cbaxes = fig.add_axes([0.85, 0.12, 0.015, 0.3])
+        cb = plt.colorbar(img, cax = cbaxes, orientation = 'vertical')
+        plt.ylabel('N$_{aer, sol, coarse}$ [cm$^{-3}$]', rotation = 270, labelpad = 25)
+
 
         data['monc']['q_accum_sol_number'] = np.zeros(arrlen)
 
 
     ####    --------------- FIGURE
 
-    SMALL_SIZE = 12
-    MED_SIZE = 14
-    LARGE_SIZE = 16
+    # SMALL_SIZE = 12
+    # MED_SIZE = 14
+    # LARGE_SIZE = 16
+    #
+    # plt.rc('font',size=MED_SIZE)
+    # plt.rc('axes',titlesize=MED_SIZE)
+    # plt.rc('axes',labelsize=MED_SIZE)
+    # plt.rc('xtick',labelsize=MED_SIZE)
+    # plt.rc('ytick',labelsize=MED_SIZE)
+    # plt.figure(figsize=(10,5))
+    # plt.rc('legend',fontsize=MED_SIZE)
+    # plt.subplots_adjust(top = 0.9, bottom = 0.12, right = 0.95, left = 0.1,
+    #         hspace = 0.22, wspace = 0.4)
+    #
+    # yylim = 2.4e3
 
-    plt.rc('font',size=MED_SIZE)
-    plt.rc('axes',titlesize=MED_SIZE)
-    plt.rc('axes',labelsize=MED_SIZE)
-    plt.rc('xtick',labelsize=MED_SIZE)
-    plt.rc('ytick',labelsize=MED_SIZE)
-    plt.figure(figsize=(10,5))
-    plt.rc('legend',fontsize=MED_SIZE)
-    plt.subplots_adjust(top = 0.9, bottom = 0.12, right = 0.95, left = 0.1,
-            hspace = 0.22, wspace = 0.4)
-
-    yylim = 2.4e3
-
-    plt.subplot(121)
-    plt.plot(data['monc']['q_accum_sol_number'], data['monc']['z'],'k.', label = 'MONC input')
-    plt.ylabel('Z [m]')
-    plt.xlabel('N$_{sol, accum}$ [m$^{-3}$]')
-    plt.grid('on')
-    plt.ylim([0,yylim])
-    plt.title('CASE = ' + case)
-    # plt.xlim([0, 1.1e8])
-    plt.legend()
-
-    plt.subplot(122)
-    plt.plot(data['monc']['q_accum_sol_mass'], data['monc']['z'],'k.')
-    plt.ylabel('Z [m]')
-    plt.xlabel('M$_{sol, accum}$ [kg/kg]')
-    plt.grid('on')
-    plt.ylim([0,yylim])
-    plt.title('CASE = ' + case)
-    # plt.xlim([0, 1.1e8])
-
-    plt.savefig('../MOCCHA/FIGS/20180913_NsolAccum_MsolAccum_' + case + '.png')
-    plt.show()
+    # plt.subplot(121)
+    # plt.plot(data['monc']['q_accum_sol_number'], data['monc']['z'],'k.', label = 'MONC input')
+    # plt.ylabel('Z [m]')
+    # plt.xlabel('N$_{sol, accum}$ [m$^{-3}$]')
+    # plt.grid('on')
+    # plt.ylim([0,yylim])
+    # plt.title('CASE = ' + case)
+    # # plt.xlim([0, 1.1e8])
+    # plt.legend()
+    #
+    # plt.subplot(122)
+    # plt.plot(data['monc']['q_accum_sol_mass'], data['monc']['z'],'k.')
+    # plt.ylabel('Z [m]')
+    # plt.xlabel('M$_{sol, accum}$ [kg/kg]')
+    # plt.grid('on')
+    # plt.ylim([0,yylim])
+    # plt.title('CASE = ' + case)
+    # # plt.xlim([0, 1.1e8])
+    #
+    # plt.savefig('../MOCCHA/FIGS/20180913_NsolAccum_MsolAccum_' + case + '.png')
+    # plt.show()
 
 
-    ### combine to existing q field input
-    data['monc']['q_accum_sol'] = np.append(data['monc']['q_accum_sol_mass'], data['monc']['q_accum_sol_number'])
-    data['monc']['qinit'] = np.append(data['monc']['qinit'], data['monc']['q_accum_sol'])
+    # ### combine to existing q field input
+    # data['monc']['q_accum_sol'] = np.append(data['monc']['q_accum_sol_mass'], data['monc']['q_accum_sol_number'])
+    # data['monc']['qinit'] = np.append(data['monc']['qinit'], data['monc']['q_accum_sol'])
 
 
     return data
