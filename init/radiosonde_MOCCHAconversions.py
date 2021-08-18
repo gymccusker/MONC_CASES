@@ -493,6 +493,9 @@ def aerosolACCUM(data):
 
         data['monc']['ukca']['naer_sol_coarse'] = data['ukca']['field2213'][:]
 
+        srl_nos = data['ukca'].variables['t'][:].data
+        data['ukca']['doy'] = np.zeros(len(data['ukca']['t']))
+        for srl_no in srl_nos: data['ukca']['doy'] = serial_date_to_doy(np.float(srl_no)))
 
         # plt.figure()
         # plt.plot(np.nanmean(np.nanmean(np.squeeze(data['monc']['ukca']['naer_sol_accum'][0,:,:,-2:]),2),1),
@@ -518,7 +521,7 @@ def aerosolACCUM(data):
 
         plt.subplot(211)
         ax = plt.gca()
-        img = plt.pcolormesh(data['ukca'].variables['t'][:],data['ukca'].variables['hybrid_ht'][:],
+        img = plt.pcolormesh(data['ukca'].variables['time'][:],data['ukca'].variables['hybrid_ht'][:],
             np.transpose(np.nanmean(np.nanmean(data['monc']['ukca']['naer_sol_accum'][:,:,-2:,:],3),2)),
             # vmin = 0, vmax = 0.3
             )
@@ -539,7 +542,7 @@ def aerosolACCUM(data):
 
         plt.subplot(212)
         ax = plt.gca()
-        img = plt.pcolormesh(data['ukca'].variables['t'][:],data['ukca'].variables['hybrid_ht'][:],
+        img = plt.pcolormesh(data['ukca'].variables['time'][:],data['ukca'].variables['hybrid_ht'][:],
             np.transpose(np.nanmean(np.nanmean(data['monc']['ukca']['naer_sol_coarse'][:,:,-2:,:],3),2)),
             # vmin = 0, vmax = 200
             )
