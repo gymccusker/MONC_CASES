@@ -521,7 +521,7 @@ def aerosolACCUM(data):
 
         plt.subplot(211)
         ax = plt.gca()
-        img = plt.pcolormesh(data['ukca'].variables['time'][:],data['ukca'].variables['hybrid_ht'][:],
+        img = plt.pcolormesh(data['monc']['ukca']['doy'],data['ukca'].variables['hybrid_ht'][:],
             np.transpose(np.nanmean(np.nanmean(data['monc']['ukca']['naer_sol_accum'][:,:,-2:,:],3),2)),
             # vmin = 0, vmax = 0.3
             )
@@ -542,7 +542,7 @@ def aerosolACCUM(data):
 
         plt.subplot(212)
         ax = plt.gca()
-        img = plt.pcolormesh(data['ukca'].variables['time'][:],data['ukca'].variables['hybrid_ht'][:],
+        img = plt.pcolormesh(data['monc']['ukca']['doy'],data['ukca'].variables['hybrid_ht'][:],
             np.transpose(np.nanmean(np.nanmean(data['monc']['ukca']['naer_sol_coarse'][:,:,-2:,:],3),2)),
             # vmin = 0, vmax = 200
             )
