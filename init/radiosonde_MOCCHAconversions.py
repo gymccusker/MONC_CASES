@@ -557,6 +557,8 @@ def aerosolACCUM(data):
         cb = plt.colorbar(img, cax = cbaxes, orientation = 'vertical')
         plt.ylabel('N$_{aer, sol, coarse}$ [cm$^{-3}$]', rotation = 270, labelpad = 25)
 
+        plt.show()
+
 
         data['monc']['q_accum_sol_number'] = np.zeros(arrlen)
 
