@@ -50,8 +50,20 @@ def calcTime_Date2DOY(date):
 def serial_date_to_string(srl_no):
 
     '''
-    Function to convert date (wrt 1981-10-01)
+    Function to convert serial date (wrt 1981-10-01) to string
     '''
 
     new_date = datetime.datetime(1981,10,1,0,0) + datetime.timedelta(srl_no)
     return new_date.strftime("%Y-%m-%d")
+
+def serial_date_to_doy(srl_no):
+
+    '''
+    Function to convert serial date (wrt 1981-10-01) to doy (in 2018)
+    '''
+
+    new_date = datetime.datetime(1981,10,1,0,0) + datetime.timedelta(srl_no)
+    doy_temp = new_date - datetime.datetime(2018,1,1,0,0)
+    doy = doy_temp.days + 1
+
+    return doy
