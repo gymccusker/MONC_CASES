@@ -665,7 +665,7 @@ def thetaTendencies(data):
     plt.legend()
     plt.ylabel('Z [m]')
     plt.xlabel('$\Delta \Theta$ [K day$^{-1}$]')
-    plt.savefig('../MOCCHA/FIGS/' + data['sonde_option'] + '-sonde' + str(X) + '_thetaTendency.png')
+    # plt.savefig('../MOCCHA/FIGS/' + data['sonde_option'] + '-sonde' + str(X) + '_thetaTendency.png')
     plt.show()
 
 
@@ -1073,7 +1073,7 @@ def main():
     print ('Import MOCCHA radiosonde data:')
     print ('...')
 
-    platform = 'LAPTOP'
+    platform = 'JASMIN'
     ####            options:
     ####                LAPTOP, JASMIN
 
@@ -1081,7 +1081,7 @@ def main():
     if platform == 'LAPTOP':
         obs_root_dir = '/home/gillian/MOCCHA/MOCCHA_GIT/ODEN/DATA/'
     elif platform == 'JASMIN':
-        obs_root_dir = '/gws/nopw/j04/ncas_radar_vol1/gillian/Obs/radiosondes/'
+        obs_root_dir = '/gws/nopw/j04/ncas_radar_vol1/gillian/Obs/'
 
     sondes = readMatlabStruct(obs_root_dir + 'radiosondes/SondeData_h10int_V02.mat')
 
