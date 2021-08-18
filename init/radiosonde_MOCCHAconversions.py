@@ -27,6 +27,16 @@ from readMAT import readMatlabStruct, readMatlabData
 from physFuncts import calcThetaE, calcThetaVL, adiabatic_lwc, calcTemperature, calcAirDensity
 from pyFixes import py3_FixNPLoad
 
+def serial_date_to_string(srl_no):
+
+    '''
+    Function to convert date (wrt 1981-10-01)
+    '''
+
+    new_date = datetime.datetime(1981,10,1,0,0) + datetime.timedelta(srl_no - 1)
+    return new_date.strftime("%Y-%m-%d")
+
+
 def quicklooksSonde(data):
 
     '''
