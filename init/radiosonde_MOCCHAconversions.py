@@ -1073,8 +1073,16 @@ def main():
     print ('Import MOCCHA radiosonde data:')
     print ('...')
 
+    platform = 'LAPTOP'
+    ####            options:
+    ####                LAPTOP, JASMIN
+
     print ('Load radiosonde data from Jutta...')
-    obs_root_dir = '/home/gillian/MOCCHA/MOCCHA_GIT/ODEN/DATA/'
+    if platform == 'LAPTOP':
+        obs_root_dir = '/home/gillian/MOCCHA/MOCCHA_GIT/ODEN/DATA/'
+    elif platform == 'JASMIN':
+        obs_root_dir = '/gws/nopw/j04/ncas_radar_vol1/gillian/Obs/radiosondes/'
+
     sondes = readMatlabStruct(obs_root_dir + 'radiosondes/SondeData_h10int_V02.mat')
 
     print ('')
