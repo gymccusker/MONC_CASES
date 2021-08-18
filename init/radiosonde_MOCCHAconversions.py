@@ -428,7 +428,9 @@ def aerosolACCUM(data):
     arrlen = np.size(data['monc']['z'])
     print(arrlen)
 
-    case = 'CASIM-100' # 'CASIM-UKCA-AeroProf'
+    case = 'CASIM-UKCA'
+        ### 'CASIM-100' - as Young et al., 2021
+        ### 'CASIM-UKCA-AeroProf' - as Young et al., 2021
     if case == 'CASIM-100':
 
         ### For UM_CASIM-100, the following were set:
@@ -445,16 +447,13 @@ def aerosolACCUM(data):
 
     elif case == 'CASIM-UKCA-AeroProf':
 
-        ### For UM_CASIM-100, the following were set:
-        ###         accum_sol_mass_var=70*1.50e-9
-        ###         accum_sol_num_var=70*1.00e8
+        ### Load aerosol data from Ruth
 
-        data['monc']['ukca'] = {}
-        data['monc']['ukca'] = np.load('../MOCCHA/input/MONC_UKCAInputs-20180913.npy').item()
-
+        data['monc']['ukca-aeroprof'] = {}
+        data['monc']['ukca-aeroprof'] = np.load('../MOCCHA/input/MONC_UKCAInputs-20180913.npy').item()
 
         data['monc']['q_accum_sol_number'] = np.zeros(arrlen)
-        data['monc']['q_accum_sol_number'][:] = data['monc']['ukca']['moncNumAccum']
+        data['monc']['q_accum_sol_number'][:] = data['monc']['ukca-aeroprof']['moncNumAccum']
         print (data['monc']['q_accum_sol_number'])
 
         rho_air = calcAirDensity(data['monc']['temperature'],data['monc']['pressure']/1e2)
@@ -463,6 +462,33 @@ def aerosolACCUM(data):
         modeFlag = 1 ### accumulation mode
         data['monc']['q_accum_sol_mass'] = estimateMass(data['monc']['q_accum_sol_number'][:], rho_air, modeFlag)
         print (data['monc']['q_accum_sol_mass'])
+
+    elif case == 'CASIM-UKCA':
+
+        ### Load aerosol data from Alberto
+
+        data['monc']['ukca'] = Dataset('../../../UKCA/DATA/2018_aug_sep_aerosol__cg495.nc','r')
+
+        ### Fields are as follows:
+        ###         field2207 = ACCUMULATION MODE (SOLUBLE) NUMBER
+        ###         field2208 = ACCUMULATION MODE (SOL) H2SO4 MMR
+        ###         field2209 = ACCUMULATION MODE (SOL) BC MMR
+        ###         field2210 = ACCUMULATION MODE (SOL) OM MMR
+        ###         field2211 = ACCUMULATION MODE (SOL) SEA SALT MMR
+        ###         field2213 = COARSE MODE (SOLUBLE) NUMBER
+        ###         field2214 = COARSE MODE (SOLUBLE) H2SO4 MMR
+        ###         field2215 = COARSE MODE (SOLUBLE) BC MMR
+        ###         field2216 = COARSE MODE (SOLUBLE) OM MMR
+        ###         field2217 = COARSE MODE (SOLUBLE) SEA SALT MMR
+        ###         field1634 = Dust division 1 mass mixing ratio
+        ###         field1634_1 = Dust division 2 mass mixing ratio
+        ###         field1634_2 = Dust division 3 mass mixing ratio
+        ###         field1634_3 = Dust division 4 mass mixing ratio
+        ###         field1634_4 = Dust division 5 mass mixing ratio
+        ###         field1634_5 = Dust division 6 mass mixing ratio
+        
+
+
 
     ####    --------------- FIGURE
 
