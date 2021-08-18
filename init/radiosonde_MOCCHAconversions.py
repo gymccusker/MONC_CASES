@@ -526,7 +526,7 @@ def aerosolACCUM(data):
             # vmin = 0, vmax = 0.3
             )
         plt.ylim([0, 1e4])
-        # ax.set_xlim([doy[0],doy[-1]])
+        ax.set_xlim([226,258])
         # plt.xticks([230,235,240,245,250,255])
         # ax.set_xticklabels(['18 Aug','23 Aug','28 Aug','2 Sep','7 Sep','12 Sep'])
         plt.ylabel('Z [km]')
@@ -547,7 +547,7 @@ def aerosolACCUM(data):
             # vmin = 0, vmax = 200
             )
         plt.ylim([0, 1e4])
-        # ax.set_xlim([doy[0],doy[-1]])
+        ax.set_xlim([226,258])
         # plt.xticks([230,235,240,245,250,255])
         # ax.set_xticklabels(['18 Aug','23 Aug','28 Aug','2 Sep','7 Sep','12 Sep'])
         plt.xlabel('Date')
