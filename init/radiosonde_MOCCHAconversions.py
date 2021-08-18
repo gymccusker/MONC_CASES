@@ -489,8 +489,7 @@ def aerosolACCUM(data):
 
         data['monc']['ukca'] = {}
         data['monc']['ukca']['naer_sol_accum'] = data['ukca']['field2207'][:]
-        data['monc']['ukca']['maer_sol_accum'] = data['ukca']['field2208'][:] + data['ukca']['field2209'][:] +
-            data['ukca']['field2210'][:] + data['ukca']['field2211'][:]
+        data['monc']['ukca']['maer_sol_accum'] = data['ukca']['field2208'][:] + data['ukca']['field2209'][:] + data['ukca']['field2210'][:] + data['ukca']['field2211'][:]
 
         plt.figure()
         plt.plot(np.nanmean(np.nanmean(np.squeeze(data['monc']['ukca']['naer_sol_accum'][0,:,:,-2:]),2),1),
