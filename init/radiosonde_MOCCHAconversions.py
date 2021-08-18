@@ -494,7 +494,7 @@ def aerosolACCUM(data):
         data['monc']['ukca']['naer_sol_coarse'] = data['ukca']['field2213'][:]
 
         srl_nos = data['ukca'].variables['t'][:].data
-        data['ukca']['doy'] = np.zeros(len(data['ukca']['t']))
+        data['ukca']['doy'] = np.zeros(len(data['ukca']['t'][:].data))
         for i in range(0,len(srl_nos)): data['ukca']['doy'][i] = serial_date_to_doy(np.float(srl_nos[i])))
 
         # plt.figure()
