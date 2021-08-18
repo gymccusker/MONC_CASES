@@ -53,5 +53,5 @@ def serial_date_to_string(srl_no):
     Function to convert date (wrt 1981-10-01)
     '''
 
-    new_date = datetime.datetime(1981,10,1,0,0) + datetime.timedelta(srl_no - 1)
+    new_date = datetime.datetime(1981,10,1,0,0) + datetime.timedelta(srl_no)
     return new_date.strftime("%Y-%m-%d")
