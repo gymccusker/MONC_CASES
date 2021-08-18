@@ -495,7 +495,7 @@ def aerosolACCUM(data):
 
         srl_nos = data['ukca'].variables['t'][:].data
         data['ukca']['doy'] = np.zeros(len(data['ukca']['t'][:].data))
-        for i in range(0,len(srl_nos)): data['ukca']['doy'][i] = serial_date_to_doy(np.float(srl_nos[i])))
+        for i in range(0,len(srl_nos)): data['ukca']['doy'][i] = serial_date_to_doy(np.float(srl_nos[i]))
 
         # plt.figure()
         # plt.plot(np.nanmean(np.nanmean(np.squeeze(data['monc']['ukca']['naer_sol_accum'][0,:,:,-2:]),2),1),
