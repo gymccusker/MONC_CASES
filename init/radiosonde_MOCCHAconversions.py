@@ -467,7 +467,7 @@ def aerosolACCUM(data):
 
         ### Load aerosol data from Alberto
 
-        data['monc']['ukca'] = Dataset('../../../UKCA/DATA/2018_aug_sep_aerosol__cg495.nc','r')
+        data['ukca'] = Dataset('../../../UKCA/DATA/2018_aug_sep_aerosol__cg495.nc','r')
 
         ### Fields are as follows:
         ###         field2207 = ACCUMULATION MODE (SOLUBLE) NUMBER
@@ -486,8 +486,19 @@ def aerosolACCUM(data):
         ###         field1634_3 = Dust division 4 mass mixing ratio
         ###         field1634_4 = Dust division 5 mass mixing ratio
         ###         field1634_5 = Dust division 6 mass mixing ratio
-        
 
+        data['monc']['ukca'] = {}
+        data['monc']['ukca']['naer_sol_accum'] = data['ukca']['field2207'][:]
+        data['monc']['ukca']['maer_sol_accum'] = data['ukca']['field2208'][:] + data['ukca']['field2209'][:] +
+            data['ukca']['field2210'][:] + data['ukca']['field2211'][:]
+
+        plt.figure()
+        plt.plot(np.nanmean(np.nanmean(np.squeeze(data['monc']['ukca']['naer_sol_accum'][0,:,:,-2:]),2),1),
+            data['ukca'].variables['hybrid_ht'])
+        plt.ylim([0,1e4])
+        plt.show()
+
+        data['monc']['q_accum_sol_number'] = np.zeros(arrlen)
 
 
     ####    --------------- FIGURE
@@ -1178,11 +1189,11 @@ def main():
 
     ### design qfield inputs
     data = sondeQINIT2(data)
-    # data = aerosolACCUM(data)
+    data = aerosolACCUM(data)
 
     ### design tendency profiles
     ###     monc input will not be printed unless active
-    data = thetaTendencies(data)
+    # data = thetaTendencies(data)
     # data = qvTendencies(data)
     # data = windTendencies(data)
 
