@@ -1175,7 +1175,7 @@ def main():
     print ('Import MOCCHA radiosonde data:')
     print ('...')
 
-    platform = 'JASMIN'
+    platform = 'LAPTOP'
     ####            options:
     ####                LAPTOP, JASMIN
 
@@ -1194,7 +1194,7 @@ def main():
     ## Choose sonde for initialisation:
     ## -------------------------------------------------------------
     data = {}
-    data['sonde_option'] = '20180913T0600' # '20180912T1800' #'20180913T0000'#
+    data['sonde_option'] = '20180913T0000' # '20180912T1800' #'20180913T0000'#
 
     if data['sonde_option'] == '20180912T1800':
         numindex = 0
@@ -1254,11 +1254,11 @@ def main():
 
     ### design qfield inputs
     data = sondeQINIT2(data)
-    data = aerosolACCUM(data)
+    # data = aerosolACCUM(data)
 
     ### design tendency profiles
     ###     monc input will not be printed unless active
-    # data = thetaTendencies(data)
+    data = thetaTendencies(data)
     # data = qvTendencies(data)
     # data = windTendencies(data)
 
