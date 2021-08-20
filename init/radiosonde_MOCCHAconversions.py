@@ -428,10 +428,27 @@ def aerosolACCUM(data):
     arrlen = np.size(data['monc']['z'])
     print(arrlen)
 
-    case = 'CASIM-UKCA'
+    case = 'CASIM-0'
+        ### 'CASIM-0' - initialising qfields only
         ### 'CASIM-100' - as Young et al., 2021
         ### 'CASIM-UKCA-AeroProf' - as Young et al., 2021
-    if case == 'CASIM-100':
+        ### 'CASIM-UKCA' - using Alberto's UKCA inputs
+
+    if case == 'CASIM-0':
+
+        ### For UM_CASIM-100, the following were set:
+        ###         accum_sol_mass_var=70*1.50e-9
+        ###         accum_sol_num_var=70*1.00e8
+
+        data['monc']['q_accum_sol_mass'] = np.zeros(arrlen)
+        data['monc']['q_accum_sol_mass'][:] = 0.0
+        print (data['monc']['q_accum_sol_mass'])
+
+        data['monc']['q_accum_sol_number'] = np.zeros(arrlen)
+        data['monc']['q_accum_sol_number'][:] = 0.0
+        print (data['monc']['q_accum_sol_number'])
+
+    elif case == 'CASIM-100':
 
         ### For UM_CASIM-100, the following were set:
         ###         accum_sol_mass_var=70*1.50e-9
@@ -568,48 +585,48 @@ def aerosolACCUM(data):
 
     ####    --------------- FIGURE
 
-    # SMALL_SIZE = 12
-    # MED_SIZE = 14
-    # LARGE_SIZE = 16
-    #
-    # plt.rc('font',size=MED_SIZE)
-    # plt.rc('axes',titlesize=MED_SIZE)
-    # plt.rc('axes',labelsize=MED_SIZE)
-    # plt.rc('xtick',labelsize=MED_SIZE)
-    # plt.rc('ytick',labelsize=MED_SIZE)
-    # plt.figure(figsize=(10,5))
-    # plt.rc('legend',fontsize=MED_SIZE)
-    # plt.subplots_adjust(top = 0.9, bottom = 0.12, right = 0.95, left = 0.1,
-    #         hspace = 0.22, wspace = 0.4)
-    #
-    # yylim = 2.4e3
+    SMALL_SIZE = 12
+    MED_SIZE = 14
+    LARGE_SIZE = 16
 
-    # plt.subplot(121)
-    # plt.plot(data['monc']['q_accum_sol_number'], data['monc']['z'],'k.', label = 'MONC input')
-    # plt.ylabel('Z [m]')
-    # plt.xlabel('N$_{sol, accum}$ [m$^{-3}$]')
-    # plt.grid('on')
-    # plt.ylim([0,yylim])
-    # plt.title('CASE = ' + case)
-    # # plt.xlim([0, 1.1e8])
-    # plt.legend()
-    #
-    # plt.subplot(122)
-    # plt.plot(data['monc']['q_accum_sol_mass'], data['monc']['z'],'k.')
-    # plt.ylabel('Z [m]')
-    # plt.xlabel('M$_{sol, accum}$ [kg/kg]')
-    # plt.grid('on')
-    # plt.ylim([0,yylim])
-    # plt.title('CASE = ' + case)
-    # # plt.xlim([0, 1.1e8])
-    #
-    # plt.savefig('../MOCCHA/FIGS/20180913_NsolAccum_MsolAccum_' + case + '.png')
-    # plt.show()
+    plt.rc('font',size=MED_SIZE)
+    plt.rc('axes',titlesize=MED_SIZE)
+    plt.rc('axes',labelsize=MED_SIZE)
+    plt.rc('xtick',labelsize=MED_SIZE)
+    plt.rc('ytick',labelsize=MED_SIZE)
+    plt.figure(figsize=(10,5))
+    plt.rc('legend',fontsize=MED_SIZE)
+    plt.subplots_adjust(top = 0.9, bottom = 0.12, right = 0.95, left = 0.1,
+            hspace = 0.22, wspace = 0.4)
+
+    yylim = 2.4e3
+
+    plt.subplot(121)
+    plt.plot(data['monc']['q_accum_sol_number'], data['monc']['z'],'k.', label = 'MONC input')
+    plt.ylabel('Z [m]')
+    plt.xlabel('N$_{sol, accum}$ [m$^{-3}$]')
+    plt.grid('on')
+    plt.ylim([0,yylim])
+    plt.title('CASE = ' + case)
+    # plt.xlim([0, 1.1e8])
+    plt.legend()
+
+    plt.subplot(122)
+    plt.plot(data['monc']['q_accum_sol_mass'], data['monc']['z'],'k.')
+    plt.ylabel('Z [m]')
+    plt.xlabel('M$_{sol, accum}$ [kg/kg]')
+    plt.grid('on')
+    plt.ylim([0,yylim])
+    plt.title('CASE = ' + case)
+    # plt.xlim([0, 1.1e8])
+
+    plt.savefig('../MOCCHA/FIGS/20180913_NsolAccum_MsolAccum_' + case + '.png')
+    plt.show()
 
 
-    # ### combine to existing q field input
-    # data['monc']['q_accum_sol'] = np.append(data['monc']['q_accum_sol_mass'], data['monc']['q_accum_sol_number'])
-    # data['monc']['qinit'] = np.append(data['monc']['qinit'], data['monc']['q_accum_sol'])
+    ### combine to existing q field input
+    data['monc']['q_accum_sol'] = np.append(data['monc']['q_accum_sol_mass'], data['monc']['q_accum_sol_number'])
+    data['monc']['qinit'] = np.append(data['monc']['qinit'], data['monc']['q_accum_sol'])
 
 
     return data
@@ -1254,7 +1271,7 @@ def main():
 
     ### design qfield inputs
     data = sondeQINIT2(data)
-    # data = aerosolACCUM(data)
+    data = aerosolACCUM(data)
 
     ### design tendency profiles
     ###     monc input will not be printed unless active
