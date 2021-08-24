@@ -784,7 +784,7 @@ def thetaTendencies(data):
     plt.legend()
     plt.ylabel('Z [m]')
     plt.xlabel('$\Delta \Theta$ [K day$^{-1}$]')
-    # plt.savefig('../MOCCHA/FIGS/' + data['sonde_option'] + '-sonde' + str(X) + '_thetaTendency.png')
+    plt.savefig('../MOCCHA/FIGS/' + data['sonde_option'] + '-sonde' + str(X) + '_thetaTendency.png')
     plt.show()
 
 
