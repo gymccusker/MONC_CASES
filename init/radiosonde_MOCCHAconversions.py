@@ -425,6 +425,8 @@ def aerosolACCUM(data):
 
     print ('Designing soluble accummulation mode input:')
 
+    data['qAccum_flag'] = 1
+
     arrlen = np.size(data['monc']['z'])
     print(arrlen)
 
@@ -1127,6 +1129,20 @@ def moncInput(data):
 
                     # f_init_pl_q = 0.00244,0.00227,0.00228,0.0023,0.00221,0.00214,0.00213,0.00215,0.00215,0.00212,0.00213,0.00211,0.00207,0.00203,0.00202,0.00199,0.00201,0.00201,0.00201,0.00204,0.00202,0.00198,0.00206,0.00206,0.00202,0.00201,0.00243,0.00197,0.00184,0.00184,0.00142,0.00107,0.00068,0.00062,0.00054,0.00042,0.0,0.0,0.0,0.0,6e-05,6e-05,6e-05,6e-05,6e-05,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,
 
+        if data['qAccum_flag'] == 1:
+            print ('')
+            print ('Reduced accumulation mode information for manual MONC restart:')
+            print ('names_init_pl_q=accum_sol_mass, accum_sol_number')
+            print ('z_init_pl_q=')
+            for line in data['monc']['z'][::10]: sys.stdout.write('' + str(line).strip() + ',')
+            print ('')
+            print ('f_init_pl_q=')
+            for line in data['monc']['q_accum_sol_mass'][::10]: sys.stdout.write('' + str(np.round(line,10)).strip() + ',')
+            for line in data['monc']['q_accum_sol_number'][::10]: sys.stdout.write('' + str(np.round(line)).strip() + ',')
+            # for line in data['monc']['thRelax']: sys.stdout.write('' + str(np.round(line,5)).strip() + ',')
+            print ('')
+            print ('')
+
         if data['thTend_flag'] == 1:
             print ('z_force_pl_th=')
             for line in data['monc']['z']: sys.stdout.write('' + str(line).strip() + ',')
@@ -1136,6 +1152,7 @@ def moncInput(data):
             # for line in data['monc']['thRelax']: sys.stdout.write('' + str(np.round(line,5)).strip() + ',')
             print ('')
 
+            print ('')
             print ('Reduced theta forcing for manual MONC restart:')
             print ('z_force_pl_th=')
             for line in data['monc']['z'][::2]: sys.stdout.write('' + str(line).strip() + ',')
@@ -1144,7 +1161,7 @@ def moncInput(data):
             for line in data['monc']['thTend'][::2]: sys.stdout.write('' + str(np.round(line,5)).strip() + ',')
             # for line in data['monc']['thRelax']: sys.stdout.write('' + str(np.round(line,5)).strip() + ',')
             print ('')
-
+            print ('')
 
         if data['qvTend_flag'] == 1:
             print ('z_force_pl_q=')
@@ -1256,6 +1273,7 @@ def main():
     data['thTend_flag'] = 0     # theta tendencies?
     data['qvTend_flag'] = 0     # wind tendencies?
     data['uvTend_flag'] = 0     # wind tendencies?
+    data['qAccum_flag'] = 0     # accumulation mode aerosol used?
 
     ## -------------------------------------------------------------
     ## Quicklook plots of chosen sonde
