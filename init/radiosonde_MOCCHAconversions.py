@@ -432,6 +432,7 @@ def aerosolACCUM(data):
 
     case = 'CASIM-100'
         ### 'CASIM-0' - initialising qfields only
+        ### 'CASIM-20' - 20/cc at all Z
         ### 'CASIM-100' - as Young et al., 2021
         ### 'CASIM-UKCA-AeroProf' - as Young et al., 2021
         ### 'CASIM-UKCA' - using Alberto's UKCA inputs
@@ -448,6 +449,16 @@ def aerosolACCUM(data):
 
         data['monc']['q_accum_sol_number'] = np.zeros(arrlen)
         data['monc']['q_accum_sol_number'][:] = 0.0
+        print (data['monc']['q_accum_sol_number'])
+
+    elif case == 'CASIM-20':
+
+        data['monc']['q_accum_sol_mass'] = np.zeros(arrlen)
+        data['monc']['q_accum_sol_mass'][:] = 3.0e-10
+        print (data['monc']['q_accum_sol_mass'])
+
+        data['monc']['q_accum_sol_number'] = np.zeros(arrlen)
+        data['monc']['q_accum_sol_number'][:] = 2.00e7
         print (data['monc']['q_accum_sol_number'])
 
     elif case == 'CASIM-100':
