@@ -430,7 +430,7 @@ def aerosolACCUM(data):
     arrlen = np.size(data['monc']['z'])
     print(arrlen)
 
-    case = 'CASIM-100'
+    case = 'CASIM-20'
         ### 'CASIM-0' - initialising qfields only
         ### 'CASIM-20' - 20/cc at all Z
         ### 'CASIM-100' - as Young et al., 2021
