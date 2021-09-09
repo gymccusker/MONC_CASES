@@ -150,10 +150,10 @@ def sondeTHINIT_QINIT1(data):
     nml_qinit1[0] = data['sonde']['sphum'][0]/1e3
 
     ### build thref array (in K)
-    nml_thref = np.zeros(np.size(nml_Z))
-    interp_thref = interp1d(np.squeeze(data['sonde']['Z'][:]),data['sonde']['pottemp'][:] + 273.16)
-    nml_thref[1:] = interp_thref(nml_Z[1:])
-    nml_thref[0] = data['sonde']['pottemp'][0] + 273.16
+    nml_thinit = np.zeros(np.size(nml_Z))
+    interp_thinit = interp1d(np.squeeze(data['sonde']['Z'][:]),data['sonde']['pottemp'][:] + 273.16)
+    nml_thinit[1:] = interp_thinit(nml_Z[1:])
+    nml_thinit[0] = data['sonde']['pottemp'][0] + 273.16
 
     ### manually append last value to 2400m (since last Z in ASCOS1 is 2395m and above interpolation range)
     # nml_Z = np.append(nml_Z, 2400.)
@@ -163,8 +163,8 @@ def sondeTHINIT_QINIT1(data):
     ### save to dictionary so data can be easily passed to next function
     data['monc'] = {}
     data['monc']['z'] = nml_Z
-    data['monc']['thref'] = nml_thref
-    data['monc']['thinit'] = nml_thref
+    # data['monc']['thref'] = nml_thref
+    data['monc']['thinit'] = nml_thinit
     data['monc']['qinit1'] = nml_qinit1
 
 
@@ -757,6 +757,11 @@ def thetaTendencies(data):
     interp_thRelax = interp1d(np.squeeze(data['sonde']['Z'][:]),data['sonde+' + str(X)]['pottemp'][:]+273.16)
     data['monc']['thRelax'][1:] = interp_thRelax(data['monc']['z'][1:])
     data['monc']['thRelax'][0] = data['sonde+' + str(X)]['pottemp'][0]+273.16
+
+    data['monc']['thref'] = np.zeros(np.size(data['monc']['z']))
+    data['monc']['thref'][:] = 267.17
+    data['monc']['threfRelax'] = data['monc']['thRelax'] - data['monc']['thref']
+
     ####    --------------- FIGURE
 
     print (data['monc']['z'].shape)
@@ -779,7 +784,7 @@ def thetaTendencies(data):
 
     plt.subplot(121)
     plt.plot(data['sonde']['pottemp'][:] + 273.16, data['sonde']['Z'], label = 'SONDE')
-    plt.plot(data['monc']['thref'], data['monc']['z'][:], 'k.', label = 'monc-thinit')
+    plt.plot(data['monc']['thinit'], data['monc']['z'][:], 'k.', label = 'monc-thinit')
     plt.plot(data['sonde+' + str(X)]['pottemp'][:] + 273.16, data['sonde+2']['Z'], label = 'SONDE+' + str(X))
     plt.plot(data['monc']['thRelax'], data['monc']['z'][:], 'ks', markersize = 3, label = 'monc-thRelax')
     plt.ylim([0,2.5e3])
@@ -792,12 +797,13 @@ def thetaTendencies(data):
     plt.plot([0,0],[0,2.5e3],'--', color = 'lightgrey')
     plt.plot(data['sonde' + str(X) + '-sonde0']['th'], data['sonde']['Z'], label = 'SONDE' + str(X) + '-SONDE0')
     plt.plot(data['monc']['thTend'], data['monc']['z'][:], 'kd', markersize = 4, label = 'monc-thTend')
+    plt.plot(data['monc']['threfRelax'], data['monc']['z'][:], 'ks', markersize = 3, label = 'monc-thRelax')
     plt.ylim([0,2.5e3])
     # plt.xlim([265,290])
     plt.legend()
     plt.ylabel('Z [m]')
     plt.xlabel('$\Delta \Theta$ [K day$^{-1}$]')
-    plt.savefig('../MOCCHA/FIGS/' + data['sonde_option'] + '-sonde' + str(X) + '_thetaTendency.png')
+    plt.savefig('../MOCCHA/FIGS/' + data['sonde_option'] + '-sonde' + str(X) + '_thetaTendency_thetaRelax.png')
     plt.show()
 
 
@@ -1099,7 +1105,7 @@ def moncInput(data):
                     # z_init_pl_theta = 0.0,50.0,100.0,150.0,200.0,250.0,300.0,350.0,400.0,450.0,500.0,550.0,600.0,650.0,700.0,750.0,800.0,850.0,900.0,950.0,1000.0,1100.0,1200.0,1300.0,1400.0,1500.0,1600.0,1700.0,1800.0,1900.0,2000.0,2100.0,2200.0,2300.0,2400.0,2500.0
 
         print ('f_init_pl_theta=')
-        for line in data['monc']['thref']: sys.stdout.write('' + str(np.round(line,2)).strip() + ',')
+        for line in data['monc']['thinit']: sys.stdout.write('' + str(np.round(line,2)).strip() + ',')
         print ('')
 
                     # f_init_pl_theta = 267.27,267.58,267.59,267.57,267.65,267.74,268.06,268.91,269.5,269.95,270.35,270.53,270.72,271.07,271.46,272.2,273.29,273.68,274.34,274.53,274.62,275.2,276.39,276.7,276.77,276.89,279.95,282.59,282.9,283.5,284.72,286.12,287.18,287.81,288.38,288.95
@@ -1300,7 +1306,7 @@ def main():
 
     ### design qfield inputs
     data = sondeQINIT2(data)
-    data = aerosolACCUM(data)
+    # data = aerosolACCUM(data)
 
     ### design tendency profiles
     ###     monc input will not be printed unless active
