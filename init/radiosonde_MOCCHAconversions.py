@@ -1165,8 +1165,8 @@ def moncInput(data):
             for line in data['monc']['z']: sys.stdout.write('' + str(line).strip() + ',')
             print ('')
             print ('f_force_pl_th=')
-            for line in data['monc']['thTend']: sys.stdout.write('' + str(np.round(line,5)).strip() + ',')
-            # for line in data['monc']['thRelax']: sys.stdout.write('' + str(np.round(line,5)).strip() + ',')
+            # for line in data['monc']['thTend']: sys.stdout.write('' + str(np.round(line,5)).strip() + ',')
+            for line in data['monc']['thRelax']: sys.stdout.write('' + str(np.round(line,5)).strip() + ',')
             print ('')
 
             print ('')
@@ -1245,7 +1245,7 @@ def main():
     ## Choose sonde for initialisation:
     ## -------------------------------------------------------------
     data = {}
-    data['sonde_option'] = '20180913T0000' # '20180912T1800' #'20180913T0000'#
+    data['sonde_option'] = '20180913T0600' # '20180912T1800' #'20180913T0000'#
 
     if data['sonde_option'] == '20180912T1800':
         numindex = 0
