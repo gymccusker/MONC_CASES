@@ -1190,7 +1190,7 @@ def moncInput(data):
 
         if data['uvTend_flag'] == 1:
             print ('z_force_pl_u=')
-            for line in data['monc']['z']: sys.stdout.write('' + str(line).strip() + ',')
+            for line in data['monc']['z'][::2]: sys.stdout.write('' + str(line).strip() + ',')
             print ('')
             print ('f_force_pl_u=')
             # for line in data['monc']['uTend']: sys.stdout.write('' + str(np.round(line,3)).strip() + ',')
@@ -1198,7 +1198,7 @@ def moncInput(data):
             print ('')
 
             print ('z_force_pl_v=')
-            for line in data['monc']['z']: sys.stdout.write('' + str(line).strip() + ',')
+            for line in data['monc']['z'][::2]: sys.stdout.write('' + str(line).strip() + ',')
             print ('')
             print ('f_force_pl_v=')
             # for line in data['monc']['vTend']: sys.stdout.write('' + str(np.round(line,3)).strip() + ',')
