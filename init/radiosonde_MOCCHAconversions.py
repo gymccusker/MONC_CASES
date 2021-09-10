@@ -1194,7 +1194,7 @@ def moncInput(data):
             print ('')
             print ('f_force_pl_u=')
             # for line in data['monc']['uTend']: sys.stdout.write('' + str(np.round(line,3)).strip() + ',')
-            for line in data['monc']['uRelax']: sys.stdout.write('' + str(np.round(line,3)).strip() + ',')
+            for line in data['monc']['uRelax'][::2]: sys.stdout.write('' + str(np.round(line,3)).strip() + ',')
             print ('')
 
             print ('z_force_pl_v=')
@@ -1202,7 +1202,7 @@ def moncInput(data):
             print ('')
             print ('f_force_pl_v=')
             # for line in data['monc']['vTend']: sys.stdout.write('' + str(np.round(line,3)).strip() + ',')
-            for line in data['monc']['vRelax']: sys.stdout.write('' + str(np.round(line,3)).strip() + ',')
+            for line in data['monc']['vRelax'][::2]: sys.stdout.write('' + str(np.round(line,3)).strip() + ',')
             print ('')
 
 
