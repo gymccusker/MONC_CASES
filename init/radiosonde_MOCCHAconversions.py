@@ -1031,7 +1031,7 @@ def windTendencies(data):
     plt.plot(data['sonde']['u'][:], data['sonde']['Z'], label = 'SONDE')
     plt.plot(data['monc']['u'], data['monc']['z'][:], 'k.', label = 'monc-u')
     plt.plot(data['sonde+' + str(X)]['u'][:], data['sonde+' + str(X)]['Z'], label = 'SONDE+' + str(X))
-    plt.plot(data['monc']['uRelax'], data['monc']['z'][:], 'k.', label = 'monc-uRelax')
+    plt.plot(data['monc']['uRelax'], data['monc']['z'][:], 'ks',markersize = 3, label = 'monc-uRelax')
     plt.ylim([0,2.5e3])
     plt.xlim([-20,10])
     plt.legend()
@@ -1070,7 +1070,7 @@ def windTendencies(data):
     plt.plot(data['sonde']['v'][:], data['sonde']['Z'], label = 'SONDE')
     plt.plot(data['monc']['v'], data['monc']['z'][:], 'k.', label = 'monc-v')
     plt.plot(data['sonde+' + str(X)]['v'][:], data['sonde+' + str(X)]['Z'], label = 'SONDE+' + str(X))
-    plt.plot(data['monc']['vRelax'], data['monc']['z'][:], 'k.', label = 'monc-vRelax')
+    plt.plot(data['monc']['vRelax'], data['monc']['z'][:], 'ks', markersize = 3, label = 'monc-vRelax')
     plt.ylim([0,2.5e3])
     plt.xlim([-20,10])
     plt.legend()
@@ -1245,7 +1245,7 @@ def main():
     ## Choose sonde for initialisation:
     ## -------------------------------------------------------------
     data = {}
-    data['sonde_option'] = '20180913T0600' # '20180912T1800' #'20180913T0000'#
+    data['sonde_option'] = '20180913T0000' # '20180912T1800' #'20180913T0000'#
 
     if data['sonde_option'] == '20180912T1800':
         numindex = 0
@@ -1310,9 +1310,9 @@ def main():
 
     ### design tendency profiles
     ###     monc input will not be printed unless active
-    data = thetaTendencies(data)
+    # data = thetaTendencies(data)
     # data = qvTendencies(data)
-    # data = windTendencies(data)
+    data = windTendencies(data)
 
     ## -------------------------------------------------------------
     ## Print out data in monc namelist format
