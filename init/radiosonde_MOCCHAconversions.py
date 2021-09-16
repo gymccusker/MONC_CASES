@@ -142,7 +142,7 @@ def sondeTHINIT_QINIT1(data):
 
     ### build qinit1 array (in kg/kg)
     print (np.squeeze(data['sonde']['Z'][4:]).shape)
-    print (data['sonde']['sphum'][4:].shape)
+    print (data['sonde']['mr'][4:].shape)
 
     nml_qinit1 = np.zeros(np.size(nml_Z))
     interp_qinit1 = interp1d(np.squeeze(data['sonde']['Z'][:]),data['sonde']['mr'][:]/1e3)
@@ -380,7 +380,7 @@ def sondeQINIT2(data):
     plt.xlim([265,295])
 
     plt.subplot(152)
-    plt.plot(data['sonde']['sphum'][:], data['sonde']['Z'], color = 'darkorange', label = 'SONDE')
+    plt.plot(data['sonde']['mr'][:], data['sonde']['Z'], color = 'darkorange', label = 'SONDE')
     plt.plot(data['monc']['qinit1']*1e3, data['monc']['z'], 'k.', label = 'monc-namelist')
     plt.xlabel('qinit1 [g/kg]')
     plt.grid('on')
