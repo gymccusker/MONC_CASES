@@ -145,9 +145,9 @@ def sondeTHINIT_QINIT1(data):
     print (data['sonde']['sphum'][4:].shape)
 
     nml_qinit1 = np.zeros(np.size(nml_Z))
-    interp_qinit1 = interp1d(np.squeeze(data['sonde']['Z'][:]),data['sonde']['sphum'][:]/1e3)
+    interp_qinit1 = interp1d(np.squeeze(data['sonde']['Z'][:]),data['sonde']['mr'][:]/1e3)
     nml_qinit1[1:] = interp_qinit1(nml_Z[1:])
-    nml_qinit1[0] = data['sonde']['sphum'][0]/1e3
+    nml_qinit1[0] = data['sonde']['mr'][0]/1e3
 
     ### build thref array (in K)
     nml_thinit = np.zeros(np.size(nml_Z))
