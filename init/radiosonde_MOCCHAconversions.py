@@ -1043,11 +1043,12 @@ def windTendencies(data):
     plt.plot([0,0],[0,2.5e3],'--', color = 'lightgrey')
     plt.plot(data['sonde' + str(X) + '-sonde0']['u'], data['sonde']['Z'], label = 'SONDE' + str(X) + '-SONDE0')
     plt.plot(data['monc']['uTend'], data['monc']['z'][:], 'k.', label = 'monc-uTend')
+    plt.plot(data['monc']['uTend'][::2], data['monc']['z'][::2], 'rs',markersize = 3, label = 'monc-uTend[::2]')
     plt.ylim([0,2.5e3])
     # plt.xlim([-20,10])
     plt.legend()
     plt.ylabel('Z [m]')
-    plt.xlabel('$\Delta$ u [m s$^{-1}$ day$^{-1}$]')
+    plt.xlabel('$\Delta$ u [m s$^{-1}$ s$^{-1}$]')
     plt.savefig('../MOCCHA/FIGS/' + data['sonde_option'] + '-sonde' + str(X) + '_uTendency.png')
     plt.show()
 
@@ -1083,13 +1084,15 @@ def windTendencies(data):
     plt.plot([0,0],[0,2.5e3],'--', color = 'lightgrey')
     plt.plot(data['sonde' + str(X) + '-sonde0']['v'], data['sonde']['Z'], label = 'SONDE' + str(X) + '-SONDE0')
     plt.plot(data['monc']['vTend'], data['monc']['z'][:], 'k.', label = 'monc-vTend')
+    plt.plot(data['monc']['vTend'][::2], data['monc']['z'][::2], 'rs',markersize = 3, label = 'monc-uTend[::2]')
     plt.ylim([0,2.5e3])
     # plt.xlim([-20,10])
     plt.legend()
     plt.ylabel('Z [m]')
-    plt.xlabel('$\Delta$ v [m s$^{-1}$ day$^{-1}$]')
+    plt.xlabel('$\Delta$ v [m s$^{-1}$ s$^{-1}$]')
     plt.savefig('../MOCCHA/FIGS/' + data['sonde_option'] + '-sonde' + str(X) + '_vTendency.png')
     plt.show()
+
 
 
     return data
@@ -1195,18 +1198,26 @@ def moncInput(data):
             for line in data['monc']['z'][::2]: sys.stdout.write('' + str(line).strip() + ',')
             print ('')
             print ('f_force_pl_u=')
-            # for line in data['monc']['uTend']: sys.stdout.write('' + str(np.round(line,3)).strip() + ',')
-            for line in data['monc']['uRelax'][::2]: sys.stdout.write('' + str(np.round(line,3)).strip() + ',')
+            for line in data['monc']['uTend'][::2]: sys.stdout.write('' + str(np.round(line,3)).strip() + ',')
+            # for line in data['monc']['uRelax'][::2]: sys.stdout.write('' + str(np.round(line,3)).strip() + ',')
             print ('')
 
             print ('z_force_pl_v=')
             for line in data['monc']['z'][::2]: sys.stdout.write('' + str(line).strip() + ',')
             print ('')
             print ('f_force_pl_v=')
-            # for line in data['monc']['vTend']: sys.stdout.write('' + str(np.round(line,3)).strip() + ',')
-            for line in data['monc']['vRelax'][::2]: sys.stdout.write('' + str(np.round(line,3)).strip() + ',')
+            for line in data['monc']['vTend'][::2]: sys.stdout.write('' + str(np.round(line,3)).strip() + ',')
+            # for line in data['monc']['vRelax'][::2]: sys.stdout.write('' + str(np.round(line,3)).strip() + ',')
             print ('')
 
+            Zindex = np.where(data['sonde']['Z']<=2.5e3)
+            print ('surface_geostrophic_wind_x=')
+            sys.stdout.write('' + str(np.round(np.nanmean(data['sonde']['u'][Zindex[0]]),3)).strip())
+            print ('')
+            print ('surface_geostrophic_wind_y=')
+            sys.stdout.write('' + str(np.round(np.nanmean(data['sonde']['v'][Zindex[0]]),3)).strip())
+            # for line in data['monc']['vRelax'][::2]: sys.stdout.write('' + str(np.round(line,3)).strip() + ',')
+            print ('')
 
         print ('***')
         print ('***')
@@ -1247,7 +1258,7 @@ def main():
     ## Choose sonde for initialisation:
     ## -------------------------------------------------------------
     data = {}
-    data['sonde_option'] = '20180912T1800' # '20180912T1800' #'20180913T0000'#
+    data['sonde_option'] = '20180913T1200' # '20180912T1800' #'20180913T0000'#
 
     if data['sonde_option'] == '20180912T1800':
         numindex = 0
@@ -1255,6 +1266,8 @@ def main():
         numindex = 1
     elif data['sonde_option'] == '20180913T0600':
         numindex = 2
+    elif data['sonde_option'] == '20180913T1200':
+        numindex = 3        
 
     ## -------------------------------------------------------------
     ## Load radiosonde (relative to 20180912 1200UTC
