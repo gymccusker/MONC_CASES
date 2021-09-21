@@ -145,9 +145,9 @@ def sondeTHINIT_QINIT1(data):
     print (data['sonde']['mr'][4:].shape)
 
     nml_qinit1 = np.zeros(np.size(nml_Z))
-    interp_qinit1 = interp1d(np.squeeze(data['sonde']['Z'][:]),data['sonde']['mr'][:]/1e3)
+    interp_qinit1 = interp1d(np.squeeze(data['sonde']['Z'][:]),data['sonde']['sphum'][:]/1e3)
     nml_qinit1[1:] = interp_qinit1(nml_Z[1:])
-    nml_qinit1[0] = data['sonde']['mr'][0]/1e3
+    nml_qinit1[0] = data['sonde']['sphum'][0]/1e3
 
     ### build thref array (in K)
     nml_thinit = np.zeros(np.size(nml_Z))
@@ -380,7 +380,7 @@ def sondeQINIT2(data):
     plt.xlim([265,295])
 
     plt.subplot(152)
-    plt.plot(data['sonde']['mr'][:], data['sonde']['Z'], color = 'darkorange', label = 'SONDE')
+    plt.plot(data['sonde']['sphum'][:], data['sonde']['Z'], color = 'darkorange', label = 'SONDE')
     plt.plot(data['monc']['qinit1']*1e3, data['monc']['z'], 'k.', label = 'monc-namelist')
     plt.xlabel('qinit1 [g/kg]')
     plt.grid('on')
@@ -1210,7 +1210,7 @@ def moncInput(data):
             # for line in data['monc']['vRelax'][::2]: sys.stdout.write('' + str(np.round(line,3)).strip() + ',')
             print ('')
 
-            Zindex = np.where(data['sonde']['Z']<=2.5e3)
+            Zindex = np.where(data['sonde']['Z']<=1.5e3)
             print ('surface_geostrophic_wind_x=')
             sys.stdout.write('' + str(np.round(np.nanmean(data['sonde']['u'][Zindex[0]]),3)).strip())
             print ('')
@@ -1258,7 +1258,7 @@ def main():
     ## Choose sonde for initialisation:
     ## -------------------------------------------------------------
     data = {}
-    data['sonde_option'] = '20180913T1200' # '20180912T1800' #'20180913T0000'#
+    data['sonde_option'] = '20180913T0000' # '20180912T1800' #'20180913T0000'#
 
     if data['sonde_option'] == '20180912T1800':
         numindex = 0
@@ -1267,7 +1267,7 @@ def main():
     elif data['sonde_option'] == '20180913T0600':
         numindex = 2
     elif data['sonde_option'] == '20180913T1200':
-        numindex = 3        
+        numindex = 3
 
     ## -------------------------------------------------------------
     ## Load radiosonde (relative to 20180912 1200UTC
