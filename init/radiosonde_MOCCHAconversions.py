@@ -1252,7 +1252,7 @@ def moncInput(data):
             # for line in data['monc']['vRelax'][::2]: sys.stdout.write('' + str(np.round(line,3)).strip() + ',')
             print ('')
 
-            Zindex = np.where(np.logical_and(data['sonde']['Z']<=0.6e3,data['sonde']['Z']>=100.))
+            Zindex = np.where(np.logical_and(data['sonde']['Z']<=1.5e3,data['sonde']['Z']>=0.))
             print ('surface_geostrophic_wind_x=')
             sys.stdout.write('' + str(np.round(np.nanmean(data['sonde']['u'][Zindex[0]]),3)).strip())
             print ('')
@@ -1312,7 +1312,7 @@ def main():
     ## Choose sonde for initialisation:
     ## -------------------------------------------------------------
     data = {}
-    data['sonde_option'] = '20180913T0000' # '20180912T1800' #'20180913T0000'#
+    data['sonde_option'] = '20180913T1200' # '20180912T1800' #'20180913T0000'#
 
     if data['sonde_option'] == '20180912T1800':
         numindex = 0
