@@ -1097,6 +1097,48 @@ def windTendencies(data):
 
     return data
 
+def designSurface(data):
+
+    '''
+    Design surface time varying boundary conditions
+    '''
+
+    print ('Design surface time varying boundary conditions:')
+
+    data['surfTend_flag'] = 1
+
+    surface_temperatures  = 267.96
+    surface_latent_heat_flux   = 9.59
+    surface_sensible_heat_flux = 11.6
+
+    data['monc']['sfc_input_times'] = np.arange(0.,86401.,1800.)
+
+    data['monc']['sfc_lhf'] = np.zeros(len(data['monc']['sfc_input_times']))
+    data['monc']['sfc_lhf'][:17] = 9.59
+    data['monc']['sfc_lhf'][17:22] = np.array([9.59094265272111,11.4474360288672,9.40053762043553,12.553737161488,21.4016334697046])
+    LHFdiff = (data['monc']['sfc_lhf'][21] - data['monc']['sfc_lhf'][25])/4
+    data['monc']['sfc_lhf'][22:25] = np.array([data['monc']['sfc_lhf'][21]-(LHFdiff*1),data['monc']['sfc_lhf'][21]-(LHFdiff*2),data['monc']['sfc_lhf'][21]-(LHFdiff*3)])
+    data['monc']['sfc_lhf'][25:-3] = np.array([0.567784401319414,14.4389670588877,13.070410597997,11.3302876981664,10.1768372439951,11.4565765629715,9.83118306043983,6.3729863729462,7.43116240357125,4.64021053691432,-1.41337682315982,3.522168512247,2.95951608161327,5.28510884212855,4.54194258593234,3.78107851079097,3.5076253961854,3.43984494885063,2.891919149296,2.67777029981323,0.957099109957214])
+    data['monc']['sfc_lhf'][-3:] = np.array([0.957099109957214,0.957099109957214,0.957099109957214])
+
+    data['monc']['sfc_shf'] = np.zeros(len(data['monc']['sfc_input_times']))
+    data['monc']['sfc_shf'][:17] = 11.6
+    data['monc']['sfc_shf'][17:22] = np.array([11.6418246879677,8.5059479006874,-7.17919324613822,-5.55593442931676,12.7022017351639])
+    SHFdiff = (data['monc']['sfc_shf'][21] - data['monc']['sfc_shf'][25])/4
+    data['monc']['sfc_shf'][22:25] = np.array([data['monc']['sfc_shf'][21]-(SHFdiff*1),data['monc']['sfc_shf'][21]-(SHFdiff*2),data['monc']['sfc_shf'][21]-(SHFdiff*3)])
+    data['monc']['sfc_shf'][25:-3] = np.array([-2.0426981162081,-10.4798313593675,-8.78631763784968,-9.2170624116705,-10.1838618551183,-0.632302373393475,-2.12598793295032,-0.850272093617581,-4.47237444552327,2.74103909698,2.80216954941977,1.81976333140315,0.876931793200333,0.00490832454441755,1.35298938156583,2.21942284698982,3.00341409883826,2.68295583158,0.890526530522116,-1.53546997120751,-3.1526314039504])
+    data['monc']['sfc_shf'][-3:] = np.array([1.35298938156583,1.35298938156583,1.35298938156583])
+
+    plt.figure()
+    plt.plot(data['monc']['sfc_input_times'],data['monc']['sfc_shf'],label='SHF')
+    plt.plot(data['monc']['sfc_input_times'],data['monc']['sfc_lhf'],label='LHF')
+    plt.legend()
+    plt.xlabel('Time [s]')
+    plt.show()
+
+
+    return data
+
 def moncInput(data):
 
 
@@ -1210,7 +1252,7 @@ def moncInput(data):
             # for line in data['monc']['vRelax'][::2]: sys.stdout.write('' + str(np.round(line,3)).strip() + ',')
             print ('')
 
-            Zindex = np.where(data['sonde']['Z']<=1.5e3)
+            Zindex = np.where(np.logical_and(data['sonde']['Z']<=0.6e3,data['sonde']['Z']>=100.))
             print ('surface_geostrophic_wind_x=')
             sys.stdout.write('' + str(np.round(np.nanmean(data['sonde']['u'][Zindex[0]]),3)).strip())
             print ('')
@@ -1218,6 +1260,18 @@ def moncInput(data):
             sys.stdout.write('' + str(np.round(np.nanmean(data['sonde']['v'][Zindex[0]]),3)).strip())
             # for line in data['monc']['vRelax'][::2]: sys.stdout.write('' + str(np.round(line,3)).strip() + ',')
             print ('')
+
+        if data['surfTend_flag'] == 1:
+            print ('surface_boundary_input_times=')
+            for line in data['monc']['sfc_input_times']: sys.stdout.write('' + str(line).strip() + ',')
+            print ('')
+            print ('surface_latent_heat_flux=')
+            for line in data['monc']['sfc_lhf']: sys.stdout.write('' + str(np.round(line,3)).strip() + ',')
+            print ('')
+            print ('surface_sensible_heat_flux=')
+            for line in data['monc']['sfc_shf']: sys.stdout.write('' + str(np.round(line,3)).strip() + ',')
+            print ('')
+
 
         print ('***')
         print ('***')
@@ -1258,7 +1312,7 @@ def main():
     ## Choose sonde for initialisation:
     ## -------------------------------------------------------------
     data = {}
-    data['sonde_option'] = '20180913T1200' # '20180912T1800' #'20180913T0000'#
+    data['sonde_option'] = '20180913T0000' # '20180912T1800' #'20180913T0000'#
 
     if data['sonde_option'] == '20180912T1800':
         numindex = 0
@@ -1306,6 +1360,7 @@ def main():
     data['qvTend_flag'] = 0     # wind tendencies?
     data['uvTend_flag'] = 0     # wind tendencies?
     data['qAccum_flag'] = 0     # accumulation mode aerosol used?
+    data['surfTend_flag'] = 0   # time-varying surface conditions
 
     ## -------------------------------------------------------------
     ## Quicklook plots of chosen sonde
@@ -1328,6 +1383,9 @@ def main():
     # data = thetaTendencies(data)
     # data = qvTendencies(data)
     data = windTendencies(data)
+
+    ### design surface conditions
+    data = designSurface(data)
 
     ## -------------------------------------------------------------
     ## Print out data in monc namelist format
