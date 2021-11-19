@@ -1130,8 +1130,10 @@ def designSurface(data):
     data['monc']['sfc_shf'][-3:] = np.array([1.35298938156583,1.35298938156583,1.35298938156583])
 
     plt.figure()
+    plt.plot([data['monc']['sfc_input_times'][0],data['monc']['sfc_input_times'][-1]], [0,0], '--', color='lightgrey')
     plt.plot(data['monc']['sfc_input_times'],data['monc']['sfc_shf'],label='SHF')
     plt.plot(data['monc']['sfc_input_times'],data['monc']['sfc_lhf'],label='LHF')
+    plt.xlim([data['monc']['sfc_input_times'][0],data['monc']['sfc_input_times'][-1]])
     plt.legend()
     plt.xlabel('Time [s]')
     plt.show()
@@ -1312,7 +1314,7 @@ def main():
     ## Choose sonde for initialisation:
     ## -------------------------------------------------------------
     data = {}
-    data['sonde_option'] = '20180913T1200' # '20180912T1800' #'20180913T0000'#
+    data['sonde_option'] = '20180913T0000' # '20180912T1800' #'20180913T0000'#
 
     if data['sonde_option'] == '20180912T1800':
         numindex = 0
