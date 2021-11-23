@@ -430,7 +430,7 @@ def aerosolACCUM(data):
     arrlen = np.size(data['monc']['z'])
     print(arrlen)
 
-    case = 'CASIM-20'
+    case = 'CASIM-100'
         ### 'CASIM-0' - initialising qfields only
         ### 'CASIM-20' - 20/cc at all Z
         ### 'CASIM-100' - as Young et al., 2021
@@ -1378,13 +1378,13 @@ def main():
 
     ### design qfield inputs
     data = sondeQINIT2(data)
-    # data = aerosolACCUM(data)
+    data = aerosolACCUM(data)
 
     ### design tendency profiles
     ###     monc input will not be printed unless active
     # data = thetaTendencies(data)
     # data = qvTendencies(data)
-    data = windTendencies(data)
+    # data = windTendencies(data)
 
     ### design surface conditions
     data = designSurface(data)
