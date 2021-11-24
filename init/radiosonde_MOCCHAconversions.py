@@ -1295,7 +1295,7 @@ def main():
     print ('Import MOCCHA radiosonde data:')
     print ('...')
 
-    platform = 'LAPTOP'
+    platform = 'JASMIN'
     ####            options:
     ####                LAPTOP, JASMIN
 
