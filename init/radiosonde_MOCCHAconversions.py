@@ -552,7 +552,7 @@ def aerosolACCUM(data):
         plt.subplot(211)
         ax = plt.gca()
         img = plt.pcolormesh(data['monc']['ukca']['doy'],data['ukca'].variables['hybrid_ht'][:],
-            np.transpose(np.nanmean(np.nanmean(data['monc']['ukca']['naer_sol_accum'][:,:,-2:,:],3),2)),
+            np.transpose(np.nanmedian(np.nanmedian(data['monc']['ukca']['naer_sol_accum'][:,:,-2:,:],3),2)),
             # vmin = 0, vmax = 0.3
             )
         plt.ylim([0, 1e4])
@@ -573,7 +573,7 @@ def aerosolACCUM(data):
         plt.subplot(212)
         ax = plt.gca()
         img = plt.pcolormesh(data['monc']['ukca']['doy'],data['ukca'].variables['hybrid_ht'][:],
-            np.transpose(np.nanmean(np.nanmean(data['monc']['ukca']['naer_sol_coarse'][:,:,-2:,:],3),2)),
+            np.transpose(np.nanmedian(np.nanmedian(data['monc']['ukca']['naer_sol_coarse'][:,:,-2:,:],3),2)),
             # vmin = 0, vmax = 200
             )
         plt.ylim([0, 1e4])
@@ -596,50 +596,50 @@ def aerosolACCUM(data):
         data['monc']['q_accum_sol_number'] = np.zeros(arrlen)
 
 
-    ####    --------------- FIGURE
-
-    SMALL_SIZE = 12
-    MED_SIZE = 14
-    LARGE_SIZE = 16
-
-    plt.rc('font',size=MED_SIZE)
-    plt.rc('axes',titlesize=MED_SIZE)
-    plt.rc('axes',labelsize=MED_SIZE)
-    plt.rc('xtick',labelsize=MED_SIZE)
-    plt.rc('ytick',labelsize=MED_SIZE)
-    plt.figure(figsize=(10,5))
-    plt.rc('legend',fontsize=MED_SIZE)
-    plt.subplots_adjust(top = 0.9, bottom = 0.12, right = 0.95, left = 0.1,
-            hspace = 0.22, wspace = 0.4)
-
-    yylim = 2.4e3
-
-    plt.subplot(121)
-    plt.plot(data['monc']['q_accum_sol_number'], data['monc']['z'],'k.', label = 'MONC input')
-    plt.ylabel('Z [m]')
-    plt.xlabel('N$_{sol, accum}$ [m$^{-3}$]')
-    plt.grid('on')
-    plt.ylim([0,yylim])
-    plt.title('CASE = ' + case)
-    # plt.xlim([0, 1.1e8])
-    plt.legend()
-
-    plt.subplot(122)
-    plt.plot(data['monc']['q_accum_sol_mass'], data['monc']['z'],'k.')
-    plt.ylabel('Z [m]')
-    plt.xlabel('M$_{sol, accum}$ [kg/kg]')
-    plt.grid('on')
-    plt.ylim([0,yylim])
-    plt.title('CASE = ' + case)
-    # plt.xlim([0, 1.1e8])
-
-    plt.savefig('../MOCCHA/FIGS/20180913_NsolAccum_MsolAccum_' + case + '.png')
-    plt.show()
-
-
-    ### combine to existing q field input
-    data['monc']['q_accum_sol'] = np.append(data['monc']['q_accum_sol_mass'], data['monc']['q_accum_sol_number'])
-    data['monc']['qinit'] = np.append(data['monc']['qinit'], data['monc']['q_accum_sol'])
+    # ####    --------------- FIGURE
+    #
+    # SMALL_SIZE = 12
+    # MED_SIZE = 14
+    # LARGE_SIZE = 16
+    #
+    # plt.rc('font',size=MED_SIZE)
+    # plt.rc('axes',titlesize=MED_SIZE)
+    # plt.rc('axes',labelsize=MED_SIZE)
+    # plt.rc('xtick',labelsize=MED_SIZE)
+    # plt.rc('ytick',labelsize=MED_SIZE)
+    # plt.figure(figsize=(10,5))
+    # plt.rc('legend',fontsize=MED_SIZE)
+    # plt.subplots_adjust(top = 0.9, bottom = 0.12, right = 0.95, left = 0.1,
+    #         hspace = 0.22, wspace = 0.4)
+    #
+    # yylim = 2.4e3
+    #
+    # plt.subplot(121)
+    # plt.plot(data['monc']['q_accum_sol_number'], data['monc']['z'],'k.', label = 'MONC input')
+    # plt.ylabel('Z [m]')
+    # plt.xlabel('N$_{sol, accum}$ [m$^{-3}$]')
+    # plt.grid('on')
+    # plt.ylim([0,yylim])
+    # plt.title('CASE = ' + case)
+    # # plt.xlim([0, 1.1e8])
+    # plt.legend()
+    #
+    # plt.subplot(122)
+    # plt.plot(data['monc']['q_accum_sol_mass'], data['monc']['z'],'k.')
+    # plt.ylabel('Z [m]')
+    # plt.xlabel('M$_{sol, accum}$ [kg/kg]')
+    # plt.grid('on')
+    # plt.ylim([0,yylim])
+    # plt.title('CASE = ' + case)
+    # # plt.xlim([0, 1.1e8])
+    #
+    # plt.savefig('../MOCCHA/FIGS/20180913_NsolAccum_MsolAccum_' + case + '.png')
+    # plt.show()
+    #
+    #
+    # ### combine to existing q field input
+    # data['monc']['q_accum_sol'] = np.append(data['monc']['q_accum_sol_mass'], data['monc']['q_accum_sol_number'])
+    # data['monc']['qinit'] = np.append(data['monc']['qinit'], data['monc']['q_accum_sol'])
 
 
     return data
