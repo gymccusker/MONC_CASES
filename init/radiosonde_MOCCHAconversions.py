@@ -568,7 +568,7 @@ def aerosolACCUM(data):
         ax.set_yticks(axminor, minor = True)
         cbaxes = fig.add_axes([0.85, 0.6, 0.015, 0.3])
         cb = plt.colorbar(img, cax = cbaxes, orientation = 'vertical')
-        plt.ylabel('N$_{aer, sol, coarse}$ [cm$^{-3}$]', rotation = 270, labelpad = 25)
+        plt.ylabel('N$_{aer, sol, accum}$ [cm$^{-3}$]', rotation = 270, labelpad = 25)
 
         plt.subplot(212)
         ax = plt.gca()
