@@ -518,10 +518,10 @@ def aerosolACCUM(data):
         ###         field1634_5 = Dust division 6 mass mixing ratio
 
         data['monc']['ukca'] = {}
-        data['monc']['ukca']['naer_sol_accum'] = data['ukca']['field2207'][:] * (0.042e3 * 6.022e23) # no. of moles in air (O2+N2) * Avogadros
+        data['monc']['ukca']['naer_sol_accum'] = data['ukca']['field2207'][:] * (0.042e3 * 6.022e23) # no. of moles in air (O2+N2) * Avogadros (ESTIMATE)
         data['monc']['ukca']['maer_sol_accum'] = data['ukca']['field2208'][:] + data['ukca']['field2209'][:] + data['ukca']['field2210'][:] + data['ukca']['field2211'][:]
 
-        data['monc']['ukca']['naer_sol_coarse'] = data['ukca']['field2213'][:] * (0.042e3 * 6.022e23) # no. of moles in air (O2+N2) * Avogadros
+        data['monc']['ukca']['naer_sol_coarse'] = data['ukca']['field2213'][:] * (0.042e3 * 6.022e23) # no. of moles in air (O2+N2) * Avogadros (ESTIMATE)
 
         srl_nos = data['ukca'].variables['t'][:].data
         data['monc']['ukca']['doy'] = np.zeros(len(data['ukca']['t'][:].data))
@@ -552,7 +552,7 @@ def aerosolACCUM(data):
         plt.subplot(211)
         ax = plt.gca()
         img = plt.pcolormesh(data['monc']['ukca']['doy'],data['ukca'].variables['hybrid_ht'][:],
-            np.transpose(np.nanmedian(np.nanmedian(data['monc']['ukca']['naer_sol_accum'][:,:,-2:,:],3),2)),
+            np.transpose(np.nanmean(np.nanmean(data['monc']['ukca']['naer_sol_accum'][:,:,-2:,:],3),2))/1e6,
             # vmin = 0, vmax = 0.3
             )
         plt.ylim([0, 1e4])
@@ -573,7 +573,7 @@ def aerosolACCUM(data):
         plt.subplot(212)
         ax = plt.gca()
         img = plt.pcolormesh(data['monc']['ukca']['doy'],data['ukca'].variables['hybrid_ht'][:],
-            np.transpose(np.nanmedian(np.nanmedian(data['monc']['ukca']['naer_sol_coarse'][:,:,-2:,:],3),2)),
+            np.transpose(np.nanmean(np.nanmean(data['monc']['ukca']['naer_sol_coarse'][:,:,-2:,:],3),2))/1e6,
             # vmin = 0, vmax = 200
             )
         plt.ylim([0, 1e4])
