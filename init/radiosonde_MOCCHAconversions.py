@@ -518,7 +518,7 @@ def aerosolACCUM(data):
         ###         field1634_5 = Dust division 6 mass mixing ratio
 
         data['monc']['ukca'] = {}
-        data['monc']['ukca']['naer_sol_accum'] = data['ukca']['field2207'][:] * (0.042e3 * 6.022e23) # no. of moles in air (O2+N2) * Avogadros (ESTIMATE)
+        data['monc']['ukca']['naer_sol_accum'] = data['ukca']['field2207'][:]# * (0.042e3 * 6.022e23) # no. of moles in air (O2+N2) * Avogadros (ESTIMATE)
         data['monc']['ukca']['maer_sol_accum'] = data['ukca']['field2208'][:] + data['ukca']['field2209'][:] + data['ukca']['field2210'][:] + data['ukca']['field2211'][:]
 
         data['monc']['ukca']['naer_sol_coarse'] = data['ukca']['field2213'][:] * (0.042e3 * 6.022e23) # no. of moles in air (O2+N2) * Avogadros (ESTIMATE)
@@ -526,6 +526,14 @@ def aerosolACCUM(data):
         srl_nos = data['ukca'].variables['t'][:].data
         data['monc']['ukca']['doy'] = np.zeros(len(data['ukca']['t'][:].data))
         for i in range(0,len(srl_nos)): data['monc']['ukca']['doy'][i] = serial_date_to_doy(np.float(srl_nos[i]))
+
+        ## PV = nRT
+        P = nc.variables['p'][:]
+        T = nc.variables['temp'][:]
+        R = 8.3145
+
+        nairV = P / ( R * T_)
+        data['monc']['ukca']['naer_sol_accum'] = data['monc']['ukca']['naer_sol_accum'] * nairV
 
         # plt.figure()
         # plt.plot(np.nanmean(np.nanmean(np.squeeze(data['monc']['ukca']['naer_sol_accum'][0,:,:,-2:]),2),1),
