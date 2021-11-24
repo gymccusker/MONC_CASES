@@ -532,7 +532,7 @@ def aerosolACCUM(data):
         T = data['ukca'].variables['temp'][:]
         R = 8.3145
 
-        nairV = P / ( R * T_)
+        nairV = P / ( R * T )
         data['monc']['ukca']['naer_sol_accum'] = data['monc']['ukca']['naer_sol_accum'] * nairV
 
         # plt.figure()
