@@ -518,10 +518,10 @@ def aerosolACCUM(data):
         ###         field1634_5 = Dust division 6 mass mixing ratio
 
         data['monc']['ukca'] = {}
-        data['monc']['ukca']['naer_sol_accum'] = data['ukca']['field2207'][:]
+        data['monc']['ukca']['naer_sol_accum'] = data['ukca']['field2207'][:] * (0.042e3 * 6.022e23) # no. of moles in air (O2+N2) * Avogadros
         data['monc']['ukca']['maer_sol_accum'] = data['ukca']['field2208'][:] + data['ukca']['field2209'][:] + data['ukca']['field2210'][:] + data['ukca']['field2211'][:]
 
-        data['monc']['ukca']['naer_sol_coarse'] = data['ukca']['field2213'][:]
+        data['monc']['ukca']['naer_sol_coarse'] = data['ukca']['field2213'][:] * (0.042e3 * 6.022e23) # no. of moles in air (O2+N2) * Avogadros
 
         srl_nos = data['ukca'].variables['t'][:].data
         data['monc']['ukca']['doy'] = np.zeros(len(data['ukca']['t'][:].data))
@@ -1387,7 +1387,7 @@ def main():
     # data = windTendencies(data)
 
     ### design surface conditions
-    data = designSurface(data)
+    # data = designSurface(data)
 
     ## -------------------------------------------------------------
     ## Print out data in monc namelist format
