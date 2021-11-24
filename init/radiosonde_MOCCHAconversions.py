@@ -528,8 +528,8 @@ def aerosolACCUM(data):
         for i in range(0,len(srl_nos)): data['monc']['ukca']['doy'][i] = serial_date_to_doy(np.float(srl_nos[i]))
 
         ## PV = nRT
-        P = nc.variables['p'][:]
-        T = nc.variables['temp'][:]
+        P = data['ukca'].variables['p'][:]
+        T = data['ukca'].variables['temp'][:]
         R = 8.3145
 
         nairV = P / ( R * T_)
