@@ -430,6 +430,217 @@ def LEM_LoadQINIT2(data, sondenumber):
 
     return data
 
+
+def aerosolACCUM(data):
+
+    '''
+    Design accummulation mode aerosol inputs:
+        names_init_pl_q=accum_sol_mass, accum_sol_number
+    '''
+
+    print ('Designing soluble accummulation mode input:')
+
+    # data['qAccum_flag'] = 1
+
+    arrlen = np.size(data['monc']['z'])
+    print(arrlen)
+
+    case = 'CASIM-100'
+        ### 'CASIM-0' - initialising qfields only
+        ### 'CASIM-20' - 20/cc at all Z
+        ### 'CASIM-100' - as Young et al., 2021
+        ### 'CASIM-UKCA-AeroProf' - as Young et al., 2021
+        ### 'CASIM-UKCA' - using Alberto's UKCA inputs
+
+    if case == 'CASIM-0':
+
+        ### For UM_CASIM-100, the following were set:
+        ###         accum_sol_mass_var=70*1.50e-9
+        ###         accum_sol_num_var=70*1.00e8
+
+        data['monc']['q_accum_sol_mass'] = np.zeros(arrlen)
+        data['monc']['q_accum_sol_mass'][:] = 0.0
+        print (data['monc']['q_accum_sol_mass'])
+
+        data['monc']['q_accum_sol_number'] = np.zeros(arrlen)
+        data['monc']['q_accum_sol_number'][:] = 0.0
+        print (data['monc']['q_accum_sol_number'])
+
+    elif case == 'CASIM-20':
+
+        data['monc']['q_accum_sol_mass'] = np.zeros(arrlen)
+        data['monc']['q_accum_sol_mass'][:] = 3.0e-10
+        print (data['monc']['q_accum_sol_mass'])
+
+        data['monc']['q_accum_sol_number'] = np.zeros(arrlen)
+        data['monc']['q_accum_sol_number'][:] = 2.00e7
+        print (data['monc']['q_accum_sol_number'])
+
+    elif case == 'CASIM-100':
+
+        ### For UM_CASIM-100, the following were set:
+        ###         accum_sol_mass_var=70*1.50e-9
+        ###         accum_sol_num_var=70*1.00e8
+
+        data['monc']['q_accum_sol_mass'] = np.zeros(arrlen)
+        data['monc']['q_accum_sol_mass'][:] = 1.50e-9
+        print (data['monc']['q_accum_sol_mass'])
+
+        data['monc']['q_accum_sol_number'] = np.zeros(arrlen)
+        data['monc']['q_accum_sol_number'][:] = 1.00e8
+        print (data['monc']['q_accum_sol_number'])
+
+    elif case == 'CASIM-UKCA':
+
+        ### Load aerosol data from Alberto
+
+        data['ukca'] = Dataset('../../../UKCA/DATA/2018_aug_sep_aerosol__cg495.nc','r')
+
+        ### Fields are as follows:
+        ###         field2207 = ACCUMULATION MODE (SOLUBLE) NUMBER
+        ###         field2208 = ACCUMULATION MODE (SOL) H2SO4 MMR
+        ###         field2209 = ACCUMULATION MODE (SOL) BC MMR
+        ###         field2210 = ACCUMULATION MODE (SOL) OM MMR
+        ###         field2211 = ACCUMULATION MODE (SOL) SEA SALT MMR
+        ###         field2213 = COARSE MODE (SOLUBLE) NUMBER
+        ###         field2214 = COARSE MODE (SOLUBLE) H2SO4 MMR
+        ###         field2215 = COARSE MODE (SOLUBLE) BC MMR
+        ###         field2216 = COARSE MODE (SOLUBLE) OM MMR
+        ###         field2217 = COARSE MODE (SOLUBLE) SEA SALT MMR
+        ###         field1634 = Dust division 1 mass mixing ratio
+        ###         field1634_1 = Dust division 2 mass mixing ratio
+        ###         field1634_2 = Dust division 3 mass mixing ratio
+        ###         field1634_3 = Dust division 4 mass mixing ratio
+        ###         field1634_4 = Dust division 5 mass mixing ratio
+        ###         field1634_5 = Dust division 6 mass mixing ratio
+
+        data['monc']['ukca'] = {}
+        data['monc']['ukca']['naer_sol_accum'] = data['ukca']['field2207'][:]
+        data['monc']['ukca']['maer_sol_accum'] = data['ukca']['field2208'][:] + data['ukca']['field2209'][:] + data['ukca']['field2210'][:] + data['ukca']['field2211'][:]
+
+        data['monc']['ukca']['naer_sol_coarse'] = data['ukca']['field2213'][:]
+
+        srl_nos = data['ukca'].variables['t'][:].data
+        data['monc']['ukca']['doy'] = np.zeros(len(data['ukca']['t'][:].data))
+        for i in range(0,len(srl_nos)): data['monc']['ukca']['doy'][i] = serial_date_to_doy(np.float(srl_nos[i]))
+
+        # plt.figure()
+        # plt.plot(np.nanmean(np.nanmean(np.squeeze(data['monc']['ukca']['naer_sol_accum'][0,:,:,-2:]),2),1),
+        #     data['ukca'].variables['hybrid_ht'])
+        # plt.ylim([0,1e4])
+        # plt.show()
+
+        ####        FIGURE
+
+        SMALL_SIZE = 12
+        MED_SIZE = 14
+        LARGE_SIZE = 16
+
+        plt.rc('font',size=MED_SIZE)
+        plt.rc('axes',titlesize=LARGE_SIZE)
+        plt.rc('axes',labelsize=LARGE_SIZE)
+        plt.rc('xtick',labelsize=LARGE_SIZE)
+        plt.rc('ytick',labelsize=LARGE_SIZE)
+        plt.rc('legend',fontsize=LARGE_SIZE)
+        fig = plt.figure(figsize=(8,6))
+        plt.subplots_adjust(top = 0.93, bottom = 0.1, right = 0.82, left = 0.08,
+                hspace = 0.3, wspace = 0.1)
+
+        plt.subplot(211)
+        ax = plt.gca()
+        img = plt.pcolormesh(data['monc']['ukca']['doy'],data['ukca'].variables['hybrid_ht'][:],
+            np.transpose(np.nanmean(np.nanmean(data['monc']['ukca']['naer_sol_accum'][:,:,-2:,:],3),2)),
+            # vmin = 0, vmax = 0.3
+            )
+        plt.ylim([0, 1e4])
+        ax.set_xlim([226,258])
+        # plt.xticks([230,235,240,245,250,255])
+        # ax.set_xticklabels(['18 Aug','23 Aug','28 Aug','2 Sep','7 Sep','12 Sep'])
+        plt.ylabel('Z [km]')
+        plt.ylim([0,9000])
+        axmajor = np.arange(0,9.01e3,3.0e3)
+        axminor = np.arange(0,9.01e3,0.5e3)
+        plt.yticks(axmajor)
+        ax.set_yticklabels([0,3,6,9])
+        ax.set_yticks(axminor, minor = True)
+        cbaxes = fig.add_axes([0.85, 0.6, 0.015, 0.3])
+        cb = plt.colorbar(img, cax = cbaxes, orientation = 'vertical')
+        plt.ylabel('N$_{aer, sol, coarse}$ [cm$^{-3}$]', rotation = 270, labelpad = 25)
+
+        plt.subplot(212)
+        ax = plt.gca()
+        img = plt.pcolormesh(data['monc']['ukca']['doy'],data['ukca'].variables['hybrid_ht'][:],
+            np.transpose(np.nanmean(np.nanmean(data['monc']['ukca']['naer_sol_coarse'][:,:,-2:,:],3),2)),
+            # vmin = 0, vmax = 200
+            )
+        plt.ylim([0, 1e4])
+        ax.set_xlim([226,258])
+        # plt.xticks([230,235,240,245,250,255])
+        # ax.set_xticklabels(['18 Aug','23 Aug','28 Aug','2 Sep','7 Sep','12 Sep'])
+        plt.xlabel('Date')
+        plt.ylabel('Z [km]')
+        plt.ylim([0,9000])
+        plt.yticks(axmajor)
+        ax.set_yticklabels([0,3,6,9])
+        ax.set_yticks(axminor, minor = True)
+        cbaxes = fig.add_axes([0.85, 0.12, 0.015, 0.3])
+        cb = plt.colorbar(img, cax = cbaxes, orientation = 'vertical')
+        plt.ylabel('N$_{aer, sol, coarse}$ [cm$^{-3}$]', rotation = 270, labelpad = 25)
+
+        plt.show()
+
+
+        data['monc']['q_accum_sol_number'] = np.zeros(arrlen)
+
+
+    ####    --------------- FIGURE
+
+    SMALL_SIZE = 12
+    MED_SIZE = 14
+    LARGE_SIZE = 16
+
+    plt.rc('font',size=MED_SIZE)
+    plt.rc('axes',titlesize=MED_SIZE)
+    plt.rc('axes',labelsize=MED_SIZE)
+    plt.rc('xtick',labelsize=MED_SIZE)
+    plt.rc('ytick',labelsize=MED_SIZE)
+    plt.figure(figsize=(10,5))
+    plt.rc('legend',fontsize=MED_SIZE)
+    plt.subplots_adjust(top = 0.9, bottom = 0.12, right = 0.95, left = 0.1,
+            hspace = 0.22, wspace = 0.4)
+
+    yylim = 2.4e3
+
+    plt.subplot(121)
+    plt.plot(data['monc']['q_accum_sol_number'], data['monc']['z'],'k.', label = 'MONC input')
+    plt.ylabel('Z [m]')
+    plt.xlabel('N$_{sol, accum}$ [m$^{-3}$]')
+    plt.grid('on')
+    plt.ylim([0,yylim])
+    plt.title('CASE = ' + case)
+    # plt.xlim([0, 1.1e8])
+    plt.legend()
+
+    plt.subplot(122)
+    plt.plot(data['monc']['q_accum_sol_mass'], data['monc']['z'],'k.')
+    plt.ylabel('Z [m]')
+    plt.xlabel('M$_{sol, accum}$ [kg/kg]')
+    plt.grid('on')
+    plt.ylim([0,yylim])
+    plt.title('CASE = ' + case)
+    # plt.xlim([0, 1.1e8])
+
+    plt.savefig('../ASCOS/FIGS/NsolAccum_MsolAccum_' + case + '.png')
+    plt.show()
+
+
+    ### combine to existing q field input
+    data['monc']['q_accum_sol'] = np.append(data['monc']['q_accum_sol_mass'], data['monc']['q_accum_sol_number'])
+    data['monc']['qinit'] = np.append(data['monc']['qinit'], data['monc']['q_accum_sol'])
+
+
+    return data
+
 def moncInput(data, sondenumber):
 
         ### print out to terminal in format for monc namelists
@@ -498,6 +709,11 @@ def main():
     data = LEM_LoadTHREF(data, sondenumber)
     data = LEM_LoadTHINIT_QINIT1(data, sondenumber)
     data = LEM_LoadQINIT2(data, sondenumber)
+
+    ## -------------------------------------------------------------
+    ## Aerosol inputs
+    ## -------------------------------------------------------------
+    data = aerosolACCUM(data)
 
     ## -------------------------------------------------------------
     ## Print out data in monc namelist format
