@@ -533,6 +533,10 @@ def aerosolACCUM(data):
         R = 8.3145
 
         nairV = P / ( R * T )
+
+        print ('nairV.shape = ', str(nairV.shape))
+        print ('max(nairV) = ', str(np.nanmax(nairV))
+
         data['monc']['ukca']['naer_sol_accum'] = data['monc']['ukca']['naer_sol_accum'] * nairV
 
         # plt.figure()
