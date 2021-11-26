@@ -416,7 +416,7 @@ def sondeQINIT2(data):
 
     return data
 
-def aerosolACCUM(data):
+def aerosolACCUM(data, platform):
 
     '''
     Design accummulation mode aerosol inputs:
@@ -430,7 +430,7 @@ def aerosolACCUM(data):
     arrlen = np.size(data['monc']['z'])
     print(arrlen)
 
-    case = 'CASIM-UKCA-AeroProf'
+    case = 'CASIM-UKCA'
         ### 'CASIM-0' - initialising qfields only
         ### 'CASIM-20' - 20/cc at all Z
         ### 'CASIM-100' - as Young et al., 2021
@@ -497,7 +497,10 @@ def aerosolACCUM(data):
 
         ### Load aerosol data from Alberto
 
-        data['ukca'] = Dataset('../../../UKCA/DATA/2018_aug_sep_aerosol__cg495.nc','r')
+        if platform == 'JASMIN':
+            data['ukca'] = Dataset('../../../UKCA/DATA/2018_aug_sep_aerosol__cg495.nc','r')
+        if platform == 'LAPTOP':
+            data['ukca'] = Dataset('../MOCCHA/input/2018_aug_sep_aerosol__cg495.nc','r')
 
         ### Fields are as follows:
         ###         field2207 = ACCUMULATION MODE (SOLUBLE) NUMBER
@@ -1394,7 +1397,7 @@ def main():
 
     ### design qfield inputs
     data = sondeQINIT2(data)
-    data = aerosolACCUM(data)
+    data = aerosolACCUM(data, platform)
 
     ### design tendency profiles
     ###     monc input will not be printed unless active
