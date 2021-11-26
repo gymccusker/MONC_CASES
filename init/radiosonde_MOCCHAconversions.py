@@ -606,53 +606,53 @@ def aerosolACCUM(data):
         plt.show()
 
 
-        data['monc']['q_accum_sol_number'] = np.zeros(arrlen)
+        # data['monc']['q_accum_sol_number'] = np.zeros(arrlen)
 
 
     # ####    --------------- FIGURE
-    #
-    # SMALL_SIZE = 12
-    # MED_SIZE = 14
-    # LARGE_SIZE = 16
-    #
-    # plt.rc('font',size=MED_SIZE)
-    # plt.rc('axes',titlesize=MED_SIZE)
-    # plt.rc('axes',labelsize=MED_SIZE)
-    # plt.rc('xtick',labelsize=MED_SIZE)
-    # plt.rc('ytick',labelsize=MED_SIZE)
-    # plt.figure(figsize=(10,5))
-    # plt.rc('legend',fontsize=MED_SIZE)
-    # plt.subplots_adjust(top = 0.9, bottom = 0.12, right = 0.95, left = 0.1,
-    #         hspace = 0.22, wspace = 0.4)
-    #
-    # yylim = 2.4e3
-    #
-    # plt.subplot(121)
-    # plt.plot(data['monc']['q_accum_sol_number'], data['monc']['z'],'k.', label = 'MONC input')
-    # plt.ylabel('Z [m]')
-    # plt.xlabel('N$_{sol, accum}$ [m$^{-3}$]')
-    # plt.grid('on')
-    # plt.ylim([0,yylim])
-    # plt.title('CASE = ' + case)
-    # # plt.xlim([0, 1.1e8])
-    # plt.legend()
-    #
-    # plt.subplot(122)
-    # plt.plot(data['monc']['q_accum_sol_mass'], data['monc']['z'],'k.')
-    # plt.ylabel('Z [m]')
-    # plt.xlabel('M$_{sol, accum}$ [kg/kg]')
-    # plt.grid('on')
-    # plt.ylim([0,yylim])
-    # plt.title('CASE = ' + case)
-    # # plt.xlim([0, 1.1e8])
-    #
-    # plt.savefig('../MOCCHA/FIGS/20180913_NsolAccum_MsolAccum_' + case + '.png')
-    # plt.show()
-    #
-    #
-    # ### combine to existing q field input
-    # data['monc']['q_accum_sol'] = np.append(data['monc']['q_accum_sol_mass'], data['monc']['q_accum_sol_number'])
-    # data['monc']['qinit'] = np.append(data['monc']['qinit'], data['monc']['q_accum_sol'])
+
+    SMALL_SIZE = 12
+    MED_SIZE = 14
+    LARGE_SIZE = 16
+
+    plt.rc('font',size=MED_SIZE)
+    plt.rc('axes',titlesize=MED_SIZE)
+    plt.rc('axes',labelsize=MED_SIZE)
+    plt.rc('xtick',labelsize=MED_SIZE)
+    plt.rc('ytick',labelsize=MED_SIZE)
+    plt.figure(figsize=(10,5))
+    plt.rc('legend',fontsize=MED_SIZE)
+    plt.subplots_adjust(top = 0.9, bottom = 0.12, right = 0.95, left = 0.1,
+            hspace = 0.22, wspace = 0.4)
+
+    yylim = 2.4e3
+
+    plt.subplot(121)
+    plt.plot(data['monc']['q_accum_sol_number'], data['monc']['z'],'k.', label = 'MONC input')
+    plt.ylabel('Z [m]')
+    plt.xlabel('N$_{sol, accum}$ [m$^{-3}$]')
+    plt.grid('on')
+    plt.ylim([0,yylim])
+    plt.title('CASE = ' + case)
+    # plt.xlim([0, 1.1e8])
+    plt.legend()
+
+    plt.subplot(122)
+    plt.plot(data['monc']['q_accum_sol_mass'], data['monc']['z'],'k.')
+    plt.ylabel('Z [m]')
+    plt.xlabel('M$_{sol, accum}$ [kg/kg]')
+    plt.grid('on')
+    plt.ylim([0,yylim])
+    plt.title('CASE = ' + case)
+    # plt.xlim([0, 1.1e8])
+
+    plt.savefig('../MOCCHA/FIGS/20180913_NsolAccum_MsolAccum_' + case + '.png')
+    plt.show()
+
+
+    ### combine to existing q field input
+    data['monc']['q_accum_sol'] = np.append(data['monc']['q_accum_sol_mass'], data['monc']['q_accum_sol_number'])
+    data['monc']['qinit'] = np.append(data['monc']['qinit'], data['monc']['q_accum_sol'])
 
 
     return data
@@ -693,8 +693,11 @@ def estimateMass(N, rho_air, flag):
     #     (4.0*N*np.pi*rho) )**(1.0/3.0)
                 ### just copied from casim/lognormal_funcs.F90
 
-    mass = ( (4.0/3.0)*np.pi*Rm**3 ) * (N*rho) / (np.exp(-4.5*np.log(sigma)**2))
+    # mass = ( (4.0*N*rho*np.pi*Rm**3 ) / (3.0 * np.exp(-4.5*np.log(sigma)**2)))
             ### gives mass concentration in kg/m3
+
+
+    mass = np.pi / 6.0*rho*N*(Rm**3)
 
     #### need mass concentration in kg/kg for casim input
     M = mass / rho_air
@@ -1308,7 +1311,7 @@ def main():
     print ('Import MOCCHA radiosonde data:')
     print ('...')
 
-    platform = 'JASMIN'
+    platform = 'LAPTOP'
     ####            options:
     ####                LAPTOP, JASMIN
 
