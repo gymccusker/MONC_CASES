@@ -430,7 +430,7 @@ def aerosolACCUM(data):
     arrlen = np.size(data['monc']['z'])
     print(arrlen)
 
-    case = 'CASIM-UKCA'
+    case = 'CASIM-UKCA-AeroProf'
         ### 'CASIM-0' - initialising qfields only
         ### 'CASIM-20' - 20/cc at all Z
         ### 'CASIM-100' - as Young et al., 2021
@@ -536,6 +536,7 @@ def aerosolACCUM(data):
 
         print ('nairV.shape = ', str(nairV.shape))
         print ('max(nairV) = ', str(np.nanmax(nairV)))
+        print (str(0.042e3 * 6.022e23))
 
         data['monc']['ukca']['naer_sol_accum'] = data['monc']['ukca']['naer_sol_accum'] * nairV
 
