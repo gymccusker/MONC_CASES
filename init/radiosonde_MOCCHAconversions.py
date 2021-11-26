@@ -520,11 +520,13 @@ def aerosolACCUM(data, platform):
         ###         field1634_4 = Dust division 5 mass mixing ratio
         ###         field1634_5 = Dust division 6 mass mixing ratio
 
+        Avo = 6.022e23
+
         data['monc']['ukca'] = {}
-        data['monc']['ukca']['naer_sol_accum'] = data['ukca']['field2207'][:]# * (0.042e3 * 6.022e23) # no. of moles in air (O2+N2) * Avogadros (ESTIMATE)
+        data['monc']['ukca']['naer_sol_accum'] = data['ukca']['field2207'][:]# * (0.042e3 * Avo) # no. of moles in air (O2+N2) * Avogadros (ESTIMATE)
         data['monc']['ukca']['maer_sol_accum'] = data['ukca']['field2208'][:] + data['ukca']['field2209'][:] + data['ukca']['field2210'][:] + data['ukca']['field2211'][:]
 
-        data['monc']['ukca']['naer_sol_coarse'] = data['ukca']['field2213'][:] * (0.042e3 * 6.022e23) # no. of moles in air (O2+N2) * Avogadros (ESTIMATE)
+        data['monc']['ukca']['naer_sol_coarse'] = data['ukca']['field2213'][:]# * (0.042e3 * Avo) # no. of moles in air (O2+N2) * Avogadros (ESTIMATE)
 
         srl_nos = data['ukca'].variables['t'][:].data
         data['monc']['ukca']['doy'] = np.zeros(len(data['ukca']['t'][:].data))
@@ -535,13 +537,14 @@ def aerosolACCUM(data, platform):
         T = data['ukca'].variables['temp'][:]
         R = 8.3145
 
-        nairV = P / ( R * T )
+        nairV = P * Avo / ( R * T )     # number of air molecules per m3 of air
 
         print ('nairV.shape = ', str(nairV.shape))
         print ('max(nairV) = ', str(np.nanmax(nairV)))
-        print (str(0.042e3 * 6.022e23))
+        print (str(0.042e3 * Avo))
 
         data['monc']['ukca']['naer_sol_accum'] = data['monc']['ukca']['naer_sol_accum'] * nairV
+        data['monc']['ukca']['naer_sol_coarse'] = data['monc']['ukca']['naer_sol_coarse'] * nairV
 
         # plt.figure()
         # plt.plot(np.nanmean(np.nanmean(np.squeeze(data['monc']['ukca']['naer_sol_accum'][0,:,:,-2:]),2),1),
@@ -614,48 +617,48 @@ def aerosolACCUM(data, platform):
 
     # ####    --------------- FIGURE
 
-    SMALL_SIZE = 12
-    MED_SIZE = 14
-    LARGE_SIZE = 16
-
-    plt.rc('font',size=MED_SIZE)
-    plt.rc('axes',titlesize=MED_SIZE)
-    plt.rc('axes',labelsize=MED_SIZE)
-    plt.rc('xtick',labelsize=MED_SIZE)
-    plt.rc('ytick',labelsize=MED_SIZE)
-    plt.figure(figsize=(10,5))
-    plt.rc('legend',fontsize=MED_SIZE)
-    plt.subplots_adjust(top = 0.9, bottom = 0.12, right = 0.95, left = 0.1,
-            hspace = 0.22, wspace = 0.4)
-
-    yylim = 2.4e3
-
-    plt.subplot(121)
-    plt.plot(data['monc']['q_accum_sol_number'], data['monc']['z'],'k.', label = 'MONC input')
-    plt.ylabel('Z [m]')
-    plt.xlabel('N$_{sol, accum}$ [m$^{-3}$]')
-    plt.grid('on')
-    plt.ylim([0,yylim])
-    plt.title('CASE = ' + case)
-    # plt.xlim([0, 1.1e8])
-    plt.legend()
-
-    plt.subplot(122)
-    plt.plot(data['monc']['q_accum_sol_mass'], data['monc']['z'],'k.')
-    plt.ylabel('Z [m]')
-    plt.xlabel('M$_{sol, accum}$ [kg/kg]')
-    plt.grid('on')
-    plt.ylim([0,yylim])
-    plt.title('CASE = ' + case)
-    # plt.xlim([0, 1.1e8])
-
-    plt.savefig('../MOCCHA/FIGS/20180913_NsolAccum_MsolAccum_' + case + '.png')
-    plt.show()
-
-
-    ### combine to existing q field input
-    data['monc']['q_accum_sol'] = np.append(data['monc']['q_accum_sol_mass'], data['monc']['q_accum_sol_number'])
-    data['monc']['qinit'] = np.append(data['monc']['qinit'], data['monc']['q_accum_sol'])
+    # SMALL_SIZE = 12
+    # MED_SIZE = 14
+    # LARGE_SIZE = 16
+    #
+    # plt.rc('font',size=MED_SIZE)
+    # plt.rc('axes',titlesize=MED_SIZE)
+    # plt.rc('axes',labelsize=MED_SIZE)
+    # plt.rc('xtick',labelsize=MED_SIZE)
+    # plt.rc('ytick',labelsize=MED_SIZE)
+    # plt.figure(figsize=(10,5))
+    # plt.rc('legend',fontsize=MED_SIZE)
+    # plt.subplots_adjust(top = 0.9, bottom = 0.12, right = 0.95, left = 0.1,
+    #         hspace = 0.22, wspace = 0.4)
+    #
+    # yylim = 2.4e3
+    #
+    # plt.subplot(121)
+    # plt.plot(data['monc']['q_accum_sol_number'], data['monc']['z'],'k.', label = 'MONC input')
+    # plt.ylabel('Z [m]')
+    # plt.xlabel('N$_{sol, accum}$ [m$^{-3}$]')
+    # plt.grid('on')
+    # plt.ylim([0,yylim])
+    # plt.title('CASE = ' + case)
+    # # plt.xlim([0, 1.1e8])
+    # plt.legend()
+    #
+    # plt.subplot(122)
+    # plt.plot(data['monc']['q_accum_sol_mass'], data['monc']['z'],'k.')
+    # plt.ylabel('Z [m]')
+    # plt.xlabel('M$_{sol, accum}$ [kg/kg]')
+    # plt.grid('on')
+    # plt.ylim([0,yylim])
+    # plt.title('CASE = ' + case)
+    # # plt.xlim([0, 1.1e8])
+    #
+    # plt.savefig('../MOCCHA/FIGS/20180913_NsolAccum_MsolAccum_' + case + '.png')
+    # plt.show()
+    #
+    #
+    # ### combine to existing q field input
+    # data['monc']['q_accum_sol'] = np.append(data['monc']['q_accum_sol_mass'], data['monc']['q_accum_sol_number'])
+    # data['monc']['qinit'] = np.append(data['monc']['qinit'], data['monc']['q_accum_sol'])
 
 
     return data
@@ -1411,7 +1414,7 @@ def main():
     ## -------------------------------------------------------------
     ## Print out data in monc namelist format
     ## -------------------------------------------------------------
-    data = moncInput(data)
+    # data = moncInput(data)
 
     ## -------------------------------------------------------------
     ## save out working data for testing
