@@ -30,7 +30,7 @@ from pyFixes import py3_FixNPLoad
 def quicklooksSonde(data):
 
     '''
-    Quicklooks from Jutta's radiosonde file
+    Quicklooks from radiosonde file
     '''
 
     SMALL_SIZE = 12
@@ -1317,65 +1317,19 @@ def main():
     print ('Import MOCCHA radiosonde data:')
     print ('...')
 
-    platform = 'JASMIN'
+    platform = 'LAPTOP'
     ####            options:
     ####                LAPTOP, JASMIN
 
-    print ('Load radiosonde data from Jutta...')
+    print ('Load radiosonde data from Heather...')
     if platform == 'LAPTOP':
-        obs_root_dir = '/home/gillian/MOCCHA/MOCCHA_GIT/ODEN/DATA/'
+        obs_root_dir = '/home/gillian/MONC_CASES/ICECAPS-ACE/'
     elif platform == 'JASMIN':
         obs_root_dir = '/gws/nopw/j04/ncas_radar_vol1/gillian/Obs/'
 
-    sondes = readMatlabStruct(obs_root_dir + 'radiosondes/SondeData_h10int_V02.mat')
+    sonde = Dataset(obs_root_dir + 'smtsondewnpnX1.b1.20190715.231513.cdf')
 
     print ('')
-    print (sondes.keys())
-
-    ## -------------------------------------------------------------
-    ## Choose sonde for initialisation:
-    ## -------------------------------------------------------------
-    data = {}
-    data['sonde_option'] = '20180913T0000' # '20180912T1800' #'20180913T0000'#
-
-    if data['sonde_option'] == '20180912T1800':
-        numindex = 0
-    elif data['sonde_option'] == '20180913T0000':
-        numindex = 1
-    elif data['sonde_option'] == '20180913T0600':
-        numindex = 2
-    elif data['sonde_option'] == '20180913T1200':
-        numindex = 3
-
-    ## -------------------------------------------------------------
-    ## Load radiosonde (relative to 20180912 1200UTC
-    ## -------------------------------------------------------------
-    index256 = np.where(np.logical_or(np.round(sondes['doy'][:,:]) == 256., np.round(sondes['doy'][:,:]) == 257.))
-
-    print (sondes['doy'][:,index256[1][numindex]])
-    data['sonde'] = {}
-    for k in sondes.keys():
-        if k == 'Z': continue
-        data['sonde'][k] = sondes[k][:,index256[1][numindex]]
-    data['sonde']['Z'] = sondes['Z']
-    data['sonde']['u'][data['sonde']['u'] > 1e3] = np.nan
-    data['sonde']['v'][data['sonde']['v'] > 1e3] = np.nan
-
-    ### load subsequent sondes
-    for i in np.arange(0,3):
-        data['sonde+' + str(i+1)] = {}
-        print ('sonde+' + str(i+1))
-        print (sondes['doy'][:,index256[1][i+1+numindex]])
-        for k in sondes.keys():
-            if k == 'Z': continue
-            data['sonde+' + str(i+1)][k] = sondes[k][:,index256[1][i+1+numindex]]
-        data['sonde+' + str(i+1)]['Z'] = sondes['Z']
-        data['sonde+' + str(i+1)]['u'][data['sonde+' + str(i+1)]['u'] > 1e3] = np.nan
-        data['sonde+' + str(i+1)]['v'][data['sonde+' + str(i+1)]['v'] > 1e3] = np.nan
-
-
-    print (data['sonde'].keys())
-    print (data['sonde']['doy'][:])
 
     ## -------------------------------------------------------------
     ## Initialise conditional flags for output
@@ -1389,18 +1343,18 @@ def main():
     ## -------------------------------------------------------------
     ## Quicklook plots of chosen sonde
     ## -------------------------------------------------------------
-    # figure = quicklooksSonde(data)
+    figure = quicklooksSonde(data)
 
     ## -------------------------------------------------------------
     ## Read in data from LEM namelists
     ##-------------------------------------------------------------
     # data = sondeTHREF(data)
-    data = sondeTHINIT_QINIT1(data)
-    data = sondeWINDS(data)
+    # data = sondeTHINIT_QINIT1(data)
+    # data = sondeWINDS(data)
 
     ### design qfield inputs
-    data = sondeQINIT2(data)
-    data = aerosolACCUM(data, platform)
+    # data = sondeQINIT2(data)
+    # data = aerosolACCUM(data, platform)
 
     ### design tendency profiles
     ###     monc input will not be printed unless active
