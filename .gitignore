@@ -11,6 +11,7 @@ submonc.sge.[oe]*
 submonc_restart.sge.[oe]*
 .*.sw*
 *.nc
+*.cdf
 *.autogen
 __pycache__/
 .pytest_cache/
