@@ -86,12 +86,7 @@ def LEM_LoadTHREF(data, sondenumber):
     '''
     #### dz is 5m between 0 and 1157.5 m, then linearly interpolated to 10m between 1285m and 2395m
     data['accacia'] = {}
-    data['accacia']['z'] = np.zeros(105)
-    data['accacia']['z'][1:233] = np.arange(2.5,1157.6,5.0)
-    data['accacia']['z'][233:249] = np.array([1162.5002, 1167.5026, 1172.5162, 1177.5726, 1182.7501,
-                            1188.1971, 1194.1285, 1200.77, 1208.27, 1216.6285, 1225.6971, 1235.2501, 1245.0726,
-                            1255.0162, 1265.0026, 1275.0002])
-    data['accacia']['z'][249:] = np.arange(1285., 2396., 10.0)
+    data['accacia']['z'] = np.array([])
 
     data['accacia']['thref'] = np.array([269.2,269.2029,269.2059,269.209,269.2124,269.216,
                             269.22,269.2244,269.2293,269.2348,269.241,269.2479,269.2556,
