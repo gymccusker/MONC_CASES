@@ -35,8 +35,8 @@ termination_time=28810.
 dtm=1.0
 
 # IO server configuration
-ioserver_configuration_file="testcases/ascos/test_description.xml"
-diagnostic_file="diagnostic_files/ascos_casim_dg.nc"
+ioserver_configuration_file="testcases/accacia/test_description.xml"
+diagnostic_file="diagnostic_files/accacia_casim_dg.nc"
 moncs_per_io_server=4
 sampling_frequency=2
 3d_sampling_frequency=20
@@ -46,7 +46,7 @@ diag_write_freq=28800.0
 
 # Checkpoint configuration
 checkpoint_frequency=0
-checkpoint_file="checkpoint_files/ascos_casim_dump.nc"
+checkpoint_file="checkpoint_files/accacia_casim_dump.nc"
 check_walltime_frequency=10
 walltime_limit=00:30:00
 
@@ -191,7 +191,7 @@ mphys_nq_g=0 # graupel mass
 l_fix_re       = .true.
 fixed_cloud_re = 10. # effective radius for cloud droplets 10 microns
 fixed_ice_re   = 30. # effective radius for ice 30. microns
-fixed_cloud_number = 50.0 # cloud number /cm3
+fixed_cloud_number = 100.0 # cloud number /cm3
 # Radiation settings - variables and switches for exponential radiation (LWEXP)
 longwave_exp_decay = 130.0 # longwave rad exponential decay factor
 cltop_longwave_flux = 70.0 # cloud top longwave flux (Wm-2)
