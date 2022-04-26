@@ -721,6 +721,8 @@ def main():
     Python script to build initialisation data for MONC from radiosondes
     '''
 
+    plt.close() ### in case there are any trailing plot instances
+
     platform = 'JASMIN'
 
     # if platform == 'MAC':
