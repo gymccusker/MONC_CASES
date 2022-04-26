@@ -13,7 +13,7 @@ from netCDF4 import Dataset
 import numpy as np
 import cartopy.crs as ccrs
 import iris
-# import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 import matplotlib.cm as mpl_cm
 import os
 import seaborn as sns
