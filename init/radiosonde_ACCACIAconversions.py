@@ -127,11 +127,12 @@ def LEM_LoadTHREF(data, sondenumber):
 
     yylim = 2.4e3
 
-    plt.plot(data['accacia']['theta'], data['accacia']['z'], label = 'ACCACIA')
-    plt.plot(data['monc']['theta'], data['monc']['z'], 'k.', label = 'SONDE')
+    plt.plot(data['accacia']['theta'], data['accacia']['z'], label = 'Radiosonde')
+    plt.plot(data['monc']['theta'], data['monc']['z'], 'k.', label = 'MONC input')
     plt.ylabel('Z [m]')
     plt.xlabel('$\Theta$ [K]')
     plt.ylim([0,yylim])
+    plt.legend()
     # plt.xlim([265,295])
 
     plt.savefig('../../../SHARE/Quicklooks_ACCACIA_B762-sonde5-LEM_theta.png')
@@ -186,10 +187,10 @@ def LEM_LoadWINDS(data, sondenumber):
 
     yylim = 2.4e3
 
-    plt.plot(data['accacia']['u'], data['accacia']['z'], label = 'U')
-    plt.plot(data['accacia']['v'], data['accacia']['z'], label = 'V')
-    plt.plot(data['monc']['u'], data['monc']['z'], 'k.', label = 'SONDE')
-    plt.plot(data['monc']['v'], data['monc']['z'], 'k.', label = 'SONDE')
+    plt.plot(data['accacia']['u'], data['accacia']['z'], label = 'U-Radiosonde')
+    plt.plot(data['accacia']['v'], data['accacia']['z'], label = 'V-Radiosonde')
+    plt.plot(data['monc']['u'], data['monc']['z'], 'k.', label = 'U-MONC')
+    plt.plot(data['monc']['v'], data['monc']['z'], 'k.', label = 'V-MONC')
     plt.ylabel('Z [m]')
     plt.xlabel('Wind speed [m/s]')
     plt.ylim([0,yylim])
@@ -243,10 +244,10 @@ def LEM_LoadQ01(data,sondenumber):
 
     yylim = 2.4e3
 
-    plt.plot(data['accacia']['q01'], data['accacia']['z'], label = 'Q01')
-    plt.plot(data['monc']['q01'], data['monc']['z'], 'k.', label = 'Q01')
+    plt.plot(data['accacia']['q01'], data['accacia']['z'], label = 'Radiosonde')
+    plt.plot(data['monc']['q01'], data['monc']['z'], 'k.', label = 'MONC input')
     plt.ylabel('Z [m]')
-    plt.xlabel('Q01 [kg/kg]')
+    plt.xlabel('Q01 (WV) [kg/kg]')
     plt.ylim([0,yylim])
     plt.legend()
     # plt.xlim([265,295])
@@ -300,8 +301,8 @@ def LEM_LoadQ02(data,sondenumber):
 
     yylim = 2.4e3
 
-    plt.plot(data['accacia']['q02'], data['accacia']['z'], label = 'Q01')
-    plt.plot(data['monc']['q02'], data['monc']['z'], 'k.', label = 'Q02')
+    plt.plot(data['accacia']['q02'], data['accacia']['z'], label = 'Radiosonde')
+    plt.plot(data['monc']['q02'], data['monc']['z'], 'k.', label = 'MONC input')
     plt.ylabel('Z [m]')
     plt.xlabel('Q02 [kg/kg]')
     plt.ylim([0,yylim])
