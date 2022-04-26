@@ -222,6 +222,9 @@ def LEM_LoadQ01(data,sondenumber):
         6.832e-04,5.299e-04,4.755e-04,4.308e-04,4.338e-04,4.513e-04,4.846e-04,5.634e-04,
         5.923e-04,5.858e-04,5.952e-04,6.030e-04,6.070e-04])
 
+    q01_funct = interp1d(data['accacia']['z'], data['accacia']['q01'])
+    data['monc']['q01'] = q01_funct(data['monc']['z'])
+
     ####    --------------- FIGURE
 
     SMALL_SIZE = 12
@@ -241,6 +244,7 @@ def LEM_LoadQ01(data,sondenumber):
     yylim = 2.4e3
 
     plt.plot(data['accacia']['q01'], data['accacia']['z'], label = 'Q01')
+    plt.plot(data['monc']['q01'], data['monc']['z'], 'k.', label = 'Q01')
     plt.ylabel('Z [m]')
     plt.xlabel('Q01 [kg/kg]')
     plt.ylim([0,yylim])
@@ -273,6 +277,11 @@ def LEM_LoadQ02(data,sondenumber):
         0.000e+00,0.000e+00,0.000e+00,0.000e+00,0.000e+00,0.000e+00,0.000e+00])
 
 
+    q02_funct = interp1d(data['accacia']['z'], data['accacia']['q02'])
+    data['monc']['q02'] = q02_funct(data['monc']['z'])
+
+    data['monc']['qinit'] = np.append(data['monc']['q01'], data['monc']['q02'])
+
     ####    --------------- FIGURE
 
     SMALL_SIZE = 12
@@ -292,6 +301,7 @@ def LEM_LoadQ02(data,sondenumber):
     yylim = 2.4e3
 
     plt.plot(data['accacia']['q02'], data['accacia']['z'], label = 'Q01')
+    plt.plot(data['monc']['q02'], data['monc']['z'], 'k.', label = 'Q02')
     plt.ylabel('Z [m]')
     plt.xlabel('Q02 [kg/kg]')
     plt.ylim([0,yylim])
