@@ -162,8 +162,11 @@ def LEM_LoadWINDS(data, sondenumber):
         -0.52,-1.08,-1.77,-1.33,0.36,1.29,1.15,1.15,0.87,1.03,1.41,2.24,2.67,3.00,3.07,2.85,2.67,2.42,2.85,
         2.57,3.12,3.92,3.54,3.97,4.04,4.09,3.60,3.04,2.60])
 
-    data['monc']['u'] = data['accacia']['u']
-    data['monc']['v'] = data['accacia']['v']
+    u_funct = interp1d(data['accacia']['z'], data['accacia']['u'])
+    data['monc']['u'] = thinit_funct(data['monc']['z'])
+
+    v_funct = interp1d(data['accacia']['z'], data['accacia']['v'])
+    data['monc']['v'] = thinit_funct(data['monc']['z'])
 
     ####    --------------- FIGURE
 
@@ -185,7 +188,8 @@ def LEM_LoadWINDS(data, sondenumber):
 
     plt.plot(data['accacia']['u'], data['accacia']['z'], label = 'U')
     plt.plot(data['accacia']['v'], data['accacia']['z'], label = 'V')
-    # plt.plot(data['theta'], data['z'], label = 'SONDE')
+    plt.plot(data['monc']['u'], data['monc']['z'], 'k.', label = 'SONDE')
+    plt.plot(data['monc']['v'], data['monc']['z'], 'k.', label = 'SONDE')
     plt.ylabel('Z [m]')
     plt.xlabel('Wind speed [m/s]')
     plt.ylim([0,yylim])
