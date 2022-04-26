@@ -701,7 +701,11 @@ def main():
     ## Load radiosonde from 20130323 0939 UTC
     ## -------------------------------------------------------------
     data = {}
-    sondenumber = '/Users/eargy/KRAKENshare/faam-dropsonde_faam_20130323093914_r0_b762_proc.nc'
+    if platform == 'MAC':
+        sondenumber = '/Users/eargy/KRAKENshare/faam-dropsonde_faam_20130323093914_r0_b762_proc.nc'
+    elif platform == 'JASMIN':
+        sondenumber = '/gws/nopw/j04/ncas_weather/gyoung/ACCACIA/CORE_FAAM/B762/radiosondes/faam-dropsonde_faam_20130323093914_r0_b762_proc.nc'
+
     data['sonde'] = Dataset(sondenumber,'r')
 
     ## -------------------------------------------------------------
