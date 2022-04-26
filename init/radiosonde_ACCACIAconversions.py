@@ -643,7 +643,7 @@ def main():
     ## -------------------------------------------------------------
     ## Print out data in monc namelist format
     ## -------------------------------------------------------------
-    # data = moncInput(data, sondenumber)
+    data = moncInput(data, sondenumber)
 
     ## -------------------------------------------------------------
     ## save out working data for testing
