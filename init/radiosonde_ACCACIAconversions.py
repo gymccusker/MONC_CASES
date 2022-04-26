@@ -101,7 +101,7 @@ def LEM_LoadTHREF(data, sondenumber):
 
     data['monc'] = {}
     data['monc']['z'] = np.arange(0., 1500., 20)
-    data['monc']['z'] = np.append(data['monc']['z'], np.arange(1500., 3001., 50)
+    data['monc']['z'] = np.append(data['monc']['z'], np.arange(1500., 3001., 50))
 
     print (data['monc']['z'])
 
