@@ -129,6 +129,61 @@ def LEM_LoadTHREF(data, sondenumber):
 
     return data
 
+def LEM_LoadWINDS(data, sondenumber):
+
+    '''
+    Load initialisation reference potential temperature profile
+        -- Data copied from ncas_weather/gyoung/LEM/r143/nmlsetup
+    '''
+    data['accacia']['z'] = np.array([6.8,49.9,91.9,134.9,181.3,233.1,287.4,341.7,396.5,449.4,502.6,
+        565.8,625.3,682.2,728.4,777.8,828.7,880.5,932.4,984.7,1035.6,1084.6,1136.7,
+        1190.2,1243.0,1302.5,1355.5,1407.0,1459.3,1510.7,1561.4,1611.7,1662.4,1712.7,
+        1763.9,1814.6,1866.2,1917.7,1970.1,2022.5,2074.6,2127.6,2179.6,2231.6,2284.1,
+        2336.7,2389.4,2442.4,2496.1,2549.5,2603.2,2656.8,2710.6,2764.6,2818.9,2884.2,2939.0,3005.0])
+
+    data['accacia']['v'] = np.array([-8.66,-9.20,-10.22,-9.66,-9.66,-8.72,-8.25,-8.50,-9.19,-9.35,-9.29,
+        -9.57,-9.99,-10.64,-11.30,-11.05,-11.19,-10.79,-10.91,-10.59,-9.85,-10.33,-10.17,-10.81,-12.56,
+        -14.70,-15.78,-15.78,-16.23,-16.16,-15.68,-15.17,-14.90,-15.09,-15.27,-14.76,-14.32,-13.67,-13.41,
+        -13.18,-12.92,-12.92,-12.88,-13.57,-13.99,-13.75,-13.83,-14.94,-15.64,-16.24,-16.18,-16.27,-16.98,
+        -16.76,-16.28,-15.83,-16.09,-16.50])
+
+    data['accacia']['u'] = np.array([0.22,-0.41,-0.46,-1.62,-1.14,-0.67,-1.68,-1.23,-0.65,-0.89,-1.25,-0.84,
+    -1.20,-0.82,-1.60,-2.14,-1.74,-1.72,-2.31,-2.68,-2.53,-2.47,-2.77,-1.76,-0.99,-0.74,-0.42,-0.94,-1.12,
+    -0.52,-1.08,-1.77,-1.33,0.36,1.29,1.15,1.15,0.87,1.03,1.41,2.24,2.67,3.00,3.07,2.85,2.67,2.42,2.85,
+    2.57,3.12,3.92,3.54,3.97,4.04,4.09,3.60,3.04,2.60])
+
+    ####    --------------- FIGURE
+
+    SMALL_SIZE = 12
+    MED_SIZE = 14
+    LARGE_SIZE = 16
+
+    plt.rc('font',size=MED_SIZE)
+    plt.rc('axes',titlesize=MED_SIZE)
+    plt.rc('axes',labelsize=MED_SIZE)
+    plt.rc('xtick',labelsize=MED_SIZE)
+    plt.rc('ytick',labelsize=MED_SIZE)
+    plt.figure(figsize=(4,5))
+    plt.rc('legend',fontsize=MED_SIZE)
+    plt.subplots_adjust(top = 0.9, bottom = 0.12, right = 0.95, left = 0.25,
+            hspace = 0.22, wspace = 0.4)
+
+    yylim = 2.4e3
+
+    plt.plot(data['accacia']['u'], data['accacia']['z'], label = 'U')
+    plt.plot(data['accacia']['v'], data['accacia']['z'], label = 'V')
+    # plt.plot(data['theta'], data['z'], label = 'SONDE')
+    plt.ylabel('Z [m]')
+    plt.xlabel('Wind speed [m/s]')
+    plt.ylim([0,yylim])
+    plt.legend()
+    # plt.xlim([265,295])
+
+    plt.savefig('../../../SHARE/Quicklooks_ACCACIA_B762-sonde5-LEM_winds.png')
+    plt.show()
+
+    return data
+
 def LEM_LoadTHINIT_QINIT1(data,sondenumber):
 
 
@@ -670,6 +725,7 @@ def main():
     ## Read in data from LEM namelists
     ## -------------------------------------------------------------
     data = LEM_LoadTHREF(data, sondenumber)
+    data = LEM_LoadWINDS(data, sondenumber)
     # data = LEM_LoadTHINIT_QINIT1(data, sondenumber)
     # data = LEM_LoadQINIT2(data, sondenumber)
 
