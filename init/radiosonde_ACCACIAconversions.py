@@ -48,8 +48,11 @@ def quicklooksSonde(data, sondenumber):
     print (data['sonde'].variables['theta'])
     print (data['sonde'].variables['theta'][:])
 
+    theta = data['sonde'].variables['theta'][:]
+    theta[theta.mask == True] = np.nan
+
     plt.subplot(131)
-    plt.plot(data['sonde'].variables['theta'][:], data['sonde'].variables['alt'][:])
+    plt.plot(theta, data['sonde'].variables['alt'][:])
     plt.ylabel('Z [m]')
     plt.xlabel('Theta [K]')
     plt.ylim([0,yylim])
