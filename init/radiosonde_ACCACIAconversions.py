@@ -82,18 +82,18 @@ def LEM_LoadTHREF(data, sondenumber):
 
     '''
     Load initialisation reference potential temperature profile
-        -- Data copied from gillian/LEM/tom_arc1/morr2712/NAMELIST/nmlFORCE_ASCOS1
+        -- Data copied from ncas_weather/gyoung/LEM/r143/nmlsetup
     '''
     #### dz is 5m between 0 and 1157.5 m, then linearly interpolated to 10m between 1285m and 2395m
-    data['ascos1'] = {}
-    data['ascos1']['z'] = np.zeros(361)
-    data['ascos1']['z'][1:233] = np.arange(2.5,1157.6,5.0)
-    data['ascos1']['z'][233:249] = np.array([1162.5002, 1167.5026, 1172.5162, 1177.5726, 1182.7501,
+    data['accacia'] = {}
+    data['accacia']['z'] = np.zeros(105)
+    data['accacia']['z'][1:233] = np.arange(2.5,1157.6,5.0)
+    data['accacia']['z'][233:249] = np.array([1162.5002, 1167.5026, 1172.5162, 1177.5726, 1182.7501,
                             1188.1971, 1194.1285, 1200.77, 1208.27, 1216.6285, 1225.6971, 1235.2501, 1245.0726,
                             1255.0162, 1265.0026, 1275.0002])
-    data['ascos1']['z'][249:] = np.arange(1285., 2396., 10.0)
+    data['accacia']['z'][249:] = np.arange(1285., 2396., 10.0)
 
-    data['ascos1']['thref'] = np.array([269.2,269.2029,269.2059,269.209,269.2124,269.216,
+    data['accacia']['thref'] = np.array([269.2,269.2029,269.2059,269.209,269.2124,269.216,
                             269.22,269.2244,269.2293,269.2348,269.241,269.2479,269.2556,
                             269.2642,269.2736,269.2841,269.2956,269.3083,269.322,269.3369,
                             269.3531,269.3704,269.3889,269.4086,269.4295,269.4514,269.4745,
@@ -682,21 +682,21 @@ def main():
     Python script to build initialisation data for MONC from radiosondes
     '''
 
-    print ('Import ASCOS radiosonde data:')
+    print ('Import ACCACIA radiosonde data:')
     print ('...')
 
-    print ('Load radiosonde data from Jutta...')
-    sondes = readMatlabData('../DATA/radiosondes.mat')
+    # print ('Load radiosonde data...')
+    # sondes = readMatlabData('../DATA/radiosondes.mat')
 
     print ('')
     # print (sondes.keys())
 
     ## -------------------------------------------------------------
-    ## Load radiosonde from 20180827 1200UTC (as in Tom's work)
+    ## Load radiosonde from 20130323 0939 UTC
     ## -------------------------------------------------------------
     data = {}
-    sondenumber = 'X080827_12_EDT'
-    data['sonde'] = sondes[sondenumber]
+    sondenumber = 'faam-dropsonde_faam_20130323093914_r0_b762_proc.nc'
+    data['sonde'] = Dataset(sondenumber,'r')
 
     ## -------------------------------------------------------------
     ## Quicklook plots of chosen sonde
