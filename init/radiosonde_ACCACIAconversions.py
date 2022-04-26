@@ -60,18 +60,18 @@ def quicklooksSonde(data, sondenumber):
     plt.plot(theta, alt)
     plt.ylabel('Z [m]')
     plt.xlabel('Theta [K]')
-    plt.ylim([0,yylim])
+    # plt.ylim([0,yylim])
     # plt.xlim([265,276])
 
-    plt.subplot(132)
-    plt.plot(data['sonde'].variables['mr'][:], data['sonde'].variables['alt'][:])
-    plt.xlabel('Mixing Ratio [g/kg]')
-    plt.ylim([0,yylim])
-
-    plt.subplot(133)
-    plt.plot(data['sonde'].variables['rh'][:], data['sonde'].variables['alt'][:])
-    plt.xlabel('Rel. Hum. [%]')
-    plt.ylim([0,yylim])
+    # plt.subplot(132)
+    # plt.plot(data['sonde'].variables['mr'][:], data['sonde'].variables['alt'][:])
+    # plt.xlabel('Mixing Ratio [g/kg]')
+    # plt.ylim([0,yylim])
+    #
+    # plt.subplot(133)
+    # plt.plot(data['sonde'].variables['rh'][:], data['sonde'].variables['alt'][:])
+    # plt.xlabel('Rel. Hum. [%]')
+    # plt.ylim([0,yylim])
 
     plt.savefig('../../../SHARE/Quicklooks_ACCACIA_B762-sonde5.png')
     plt.close()
