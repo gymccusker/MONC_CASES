@@ -163,10 +163,10 @@ def LEM_LoadWINDS(data, sondenumber):
         2.57,3.12,3.92,3.54,3.97,4.04,4.09,3.60,3.04,2.60])
 
     u_funct = interp1d(data['accacia']['z'], data['accacia']['u'])
-    data['monc']['u'] = thinit_funct(data['monc']['z'])
+    data['monc']['u'] = u_funct(data['monc']['z'])
 
     v_funct = interp1d(data['accacia']['z'], data['accacia']['v'])
-    data['monc']['v'] = thinit_funct(data['monc']['z'])
+    data['monc']['v'] = v_funct(data['monc']['z'])
 
     ####    --------------- FIGURE
 
