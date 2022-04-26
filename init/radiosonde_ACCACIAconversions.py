@@ -69,7 +69,7 @@ def quicklooksSonde(data, sondenumber):
     plt.ylim([0,yylim])
 
     plt.savefig('../../../SHARE/Quicklooks_ACCACIA_B762-sonde5.png')
-    plt.show()
+    plt.close()
 
 def LEM_LoadTHREF(data, sondenumber):
 
