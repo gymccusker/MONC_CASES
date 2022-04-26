@@ -235,7 +235,7 @@ def LEM_LoadQ01(data,sondenumber):
 
     return data
 
-def LEM_LoadQ01(data,sondenumber):
+def LEM_LoadQ02(data,sondenumber):
 
     '''
     Load initialisation reference Q02 profile
