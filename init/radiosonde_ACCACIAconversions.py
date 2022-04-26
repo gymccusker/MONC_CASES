@@ -690,7 +690,7 @@ def main():
     ## Load radiosonde from 20130323 0939 UTC
     ## -------------------------------------------------------------
     data = {}
-    sondenumber = 'faam-dropsonde_faam_20130323093914_r0_b762_proc.nc'
+    sondenumber = '~/NCAS_WEATHER/ACCACIA/CORE_FAAM/B762/radiosondes/faam-dropsonde_faam_20130323093914_r0_b762_proc.nc'
     data['sonde'] = Dataset(sondenumber,'r')
 
     ## -------------------------------------------------------------
