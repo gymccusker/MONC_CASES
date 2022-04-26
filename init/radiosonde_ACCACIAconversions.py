@@ -105,7 +105,8 @@ def LEM_LoadTHREF(data, sondenumber):
 
     print (data['monc']['z'])
 
-    data['monc']['thref'] = data['accacia']['theta']
+    thinit_funct = interp1d(data['accacia']['z'], data['accacia']['theta'])
+    data['monc']['theta'] = thinit_funct(data['monc']['z'])
     # data['monc']['z'] = data['accacia']['z']
 
     ####    --------------- FIGURE
@@ -127,7 +128,7 @@ def LEM_LoadTHREF(data, sondenumber):
     yylim = 2.4e3
 
     plt.plot(data['accacia']['theta'], data['accacia']['z'], label = 'ACCACIA')
-    # plt.plot(data['theta'], data['z'], label = 'SONDE')
+    plt.plot(data['monc']['theta'], data['monc']['z'], 'k.', label = 'SONDE')
     plt.ylabel('Z [m]')
     plt.xlabel('$\Theta$ [K]')
     plt.ylim([0,yylim])
