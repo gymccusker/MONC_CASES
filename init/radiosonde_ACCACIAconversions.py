@@ -13,7 +13,7 @@ from netCDF4 import Dataset
 import numpy as np
 import cartopy.crs as ccrs
 import iris
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import matplotlib.cm as mpl_cm
 import os
 import seaborn as sns
@@ -59,23 +59,23 @@ def quicklooksSonde(data, sondenumber):
     yylim = 2.4e3
 
     plt.subplot(131)
-    plt.plot(data['sonde'][:,2], data['sonde'][:,6])
+    plt.plot(data['sonde'].variables['theta'][:], data['sonde'].variables['alt'][:])
     plt.ylabel('Z [m]')
-    plt.xlabel('Temperature [K]')
+    plt.xlabel('Theta [K]')
     plt.ylim([0,yylim])
-    plt.xlim([265,276])
+    # plt.xlim([265,276])
 
     plt.subplot(132)
-    plt.plot(data['sonde'][:,9], data['sonde'][:,6])
-    plt.xlabel('Spec. Hum. [g/kg]')
+    plt.plot(data['sonde'].variables['mr'][:], data['sonde'].variables['alt'][:])
+    plt.xlabel('Mixing Ratio [g/kg]')
     plt.ylim([0,yylim])
 
     plt.subplot(133)
-    plt.plot(data['sonde'][:,3], data['sonde'][:,6])
+    plt.plot(data['sonde'].variables['rh'][:], data['sonde'].variables['alt'][:])
     plt.xlabel('Rel. Hum. [%]')
     plt.ylim([0,yylim])
 
-    plt.savefig('../FIGS/Quicklooks_' + sondenumber + '.png')
+    plt.savefig('../../../SHARE/Quicklooks_ACCACIA_B762-sonde5.png')
     plt.show()
 
 def LEM_LoadTHREF(data, sondenumber):
@@ -677,6 +677,17 @@ def main():
     Python script to build initialisation data for MONC from radiosondes
     '''
 
+    platform = 'JASMIN'
+
+    if platform == 'MAC':
+        import matplotlib
+        import glob
+        matplotlib.use('TkAgg')
+
+    import matplotlib.pyplot as plt
+
+
+
     print ('Import ACCACIA radiosonde data:')
     print ('...')
 
@@ -690,13 +701,13 @@ def main():
     ## Load radiosonde from 20130323 0939 UTC
     ## -------------------------------------------------------------
     data = {}
-    sondenumber = '/gws/nopw/j04/ncas_weather/gyoung/ACCACIA/CORE_FAAM/B762/radiosondes/faam-dropsonde_faam_20130323093914_r0_b762_proc.nc'
+    sondenumber = '/Users/eargy/KRAKENshare/faam-dropsonde_faam_20130323093914_r0_b762_proc.nc'
     data['sonde'] = Dataset(sondenumber,'r')
 
     ## -------------------------------------------------------------
     ## Quicklook plots of chosen sonde
     ## -------------------------------------------------------------
-    # figure = quicklooksSonde(data, sondenumber)
+    figure = quicklooksSonde(data, sondenumber)
 
     ## -------------------------------------------------------------
     ## Read in data from LEM namelists
