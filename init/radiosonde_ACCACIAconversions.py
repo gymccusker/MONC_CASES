@@ -596,7 +596,7 @@ def loadAircraft(data):
     endocean = calcTime_Str2Sec('14:52:46')
 
     index_2DS = np.where(np.logical_and(data['2DS']['Time_mid'][:] > startocean, data['2DS']['Time_mid'][:] <= endocean))
-    index_CDP = np.where(np.logical_and(data['CDP']['Time'][:] > startocean, data['CDP']['Time'][:] <= endocean))
+    index_CDP = np.where(np.logical_and(data['CDP']['CDP_TSPM'][:] > startocean, data['CDP']['CDP_TSPM'][:] <= endocean))
     index_CORE = np.where(np.logical_and(data['CORE']['Time'][:] > startocean, data['CORE']['Time'][:] <= endocean))
 
 #     %     for i = 1:30
@@ -606,10 +606,17 @@ def loadAircraft(data):
 # %         eval(['DATA.CDP_',num2str(i),'{1,1}(find(DATA.CDP_FLAG{1,1}(:)~=0))=NaN;'])
 # %     end
 
+    ### Remove flagged data first
     cdp_nan_flag = np.where(data['CDP']['CDP_FLAG'][:] > 0)
     data['Aircraft']['cloud_droplet_concentration'] = data['CDP']['CDP_CONC'][:]
     data['Aircraft']['cloud_droplet_concentration'][cdp_nan_flag] = np.nan
 
+    print (data['Aircraft']['cloud_droplet_concentration'].shape())
+
+    ### Index for ocean only
+    data['Aircraft']['cloud_droplet_concentration'] = data['Aircraft']['cloud_droplet_concentration'][index_CORE]
+
+    print (data['Aircraft']['cloud_droplet_concentration'].shape())
 
     return data
 
