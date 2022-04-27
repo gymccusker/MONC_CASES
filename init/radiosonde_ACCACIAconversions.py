@@ -575,6 +575,21 @@ def moncInput(data, sondenumber):
 
         return data
 
+def loadAircraft(data):
+
+    '''
+    Interpolate relevant data onto a common time grid, and only include B762 data over the ocean.
+    '''
+
+    # starttimeocean = datenum('23-Mar-2013 14:14:32'); endtimeocean = datenum('23-Mar-2013 14:52:46');
+
+    print (data['2DS'])
+    print (data['CDP'])
+    print (data['CORE'])
+
+
+    return data
+
 def main():
 
     START_TIME = time.time()
@@ -598,8 +613,6 @@ def main():
     #
     # import matplotlib.pyplot as plt
 
-
-
     print ('Import ACCACIA radiosonde data:')
     print ('...')
 
@@ -617,6 +630,9 @@ def main():
         sondenumber = '/Users/eargy/KRAKENshare/faam-dropsonde_faam_20130323093914_r0_b762_proc.nc'
     elif platform == 'JASMIN':
         sondenumber = '/gws/nopw/j04/ncas_weather/gyoung/ACCACIA/CORE_FAAM/B762/radiosondes/faam-dropsonde_faam_20130323093914_r0_b762_proc.nc'
+        path_2ds = '/gws/nopw/j04/ncas_weather/gyoung/MONC/ACCACIA/init/2DS/UMAN_2DS_20130323_r0_B762.nc'
+        path_core = '/gws/nopw/j04/ncas_weather/gyoung/MONC/ACCACIA/init/CORE/core_faam_20130323_v004_r1_b762.nc'
+        path_cdp = '/gws/nopw/j04/ncas_weather/gyoung/MONC/ACCACIA/init/CDP/core-cloud-phy_faam_20130323_v500_r0_b762.nc'
 
     data['sonde'] = Dataset(sondenumber,'r')
 
@@ -644,7 +660,15 @@ def main():
     ## -------------------------------------------------------------
     ## Print out data in monc namelist format
     ## -------------------------------------------------------------
-    data = moncInput(data, sondenumber)
+    # data = moncInput(data, sondenumber)
+
+    ## -------------------------------------------------------------
+    ## save aircraft data to one file for model comparison
+    ## -------------------------------------------------------------
+    data['2DS'] = Dataset(path_2ds, 'r')
+    data['CORE'] = Dataset(path_core, 'r')
+    data['CDP'] = Datatset(path_cdp, 'r')
+    data = loadAircraft(data)
 
     ## -------------------------------------------------------------
     ## save out working data for testing
