@@ -617,6 +617,7 @@ def loadAircraft(data):
 
     data['Aircraft']['temp_cloud_droplet_concentration'] = np.zeros([np.size(data['Aircraft']['cloud_droplet_concentration']),30])
     data['Aircraft']['binned_cloud_droplet_concentration'] = np.zeros([np.size(index_CORE),30])
+    print(len(data['Aircraft']['binned_cloud_droplet_concentration']))
     for b in range(0,30):
         temp_data = data['CDP']['CDP_' + str(b+1).zfill(2)][:]
         temp_data[cdp_nan_flag] = np.nan
