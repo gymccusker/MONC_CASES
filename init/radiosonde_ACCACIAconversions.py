@@ -583,9 +583,13 @@ def loadAircraft(data):
 
     # starttimeocean = datenum('23-Mar-2013 14:14:32'); endtimeocean = datenum('23-Mar-2013 14:52:46');
 
-    print (data['2DS'])
-    print (data['CDP'])
-    print (data['CORE'])
+    # print (data['2DS'])
+    # print (data['CDP'])
+    # print (data['CORE'])
+
+    print (data['2DS']['Time_mid'][:])
+    print (data['CDP']['Time'][:])
+    print (data['CORE']['Time'][:])
 
 
     return data
