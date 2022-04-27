@@ -22,7 +22,7 @@ from scipy.interpolate import interp1d
 #### import python functions
 import sys
 sys.path.insert(1, '../py_functions/')
-from time_functions import calcTime_Mat2DOY, calcTime_Date2DOY
+from time_functions import calcTime_Mat2DOY, calcTime_Date2DOY, calcTime_Str2Sec
 from readMAT import readMatlabStruct, readMatlabData
 from physFuncts import calcThetaE, calcThetaVL, adiabatic_lwc, calcTemperature
 from pyFixes import py3_FixNPLoad
@@ -587,10 +587,15 @@ def loadAircraft(data):
     # print (data['CDP'])
     # print (data['CORE'])
 
-    print (data['2DS']['Time_mid'][:])
-    print (data['CDP']['Time'][:])
-    print (data['CORE']['Time'][:])
+    # print (data['2DS']['Time_mid'][:])
+    # print (data['CDP']['Time'][:])
+    # print (data['CORE']['Time'][:])
+    #### ---- Time is seconds since midnight
 
+    startocean = calcTime_Str2Sec('14:14:32')
+    endocean = calcTime_Str2Sec('14:52:46')
+
+    index_2DS = np.where(np.logical_and(data['2DS']['Time_mid'][:] > startocean, data['2DS']['Time_mid'][:] <= endocean))
 
     return data
 
