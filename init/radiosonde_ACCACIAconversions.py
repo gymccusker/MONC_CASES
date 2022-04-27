@@ -623,6 +623,9 @@ def loadAircraft(data):
         data['Aircraft']['temp_cloud_droplet_concentration'][:,b] = temp_data
         data['Aircraft']['binned_cloud_droplet_concentration'][:,b] = data['Aircraft']['temp_cloud_droplet_concentration'][index_CORE,b]
 
+        data['Aircraft']['LWC'] = np.nansum((data['Aircraft']['binned_cloud_droplet_concentration'][:,b] *
+            ((data['CDP']['CDP_D_U_NOM'][b]]+data['CDP']['CDP_D_L_NOM'][b])/2) ^3) /6 * np.pi, 1) * 1000 * 10^-9
+
     ### Index for ocean only
     data['Aircraft']['cloud_droplet_concentration'] = data['Aircraft']['cloud_droplet_concentration'][index_CORE]
 
