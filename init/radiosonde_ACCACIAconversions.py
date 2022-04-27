@@ -617,21 +617,21 @@ def loadAircraft(data):
 
     data['Aircraft']['temp_cloud_droplet_concentration'] = np.zeros([np.size(data['Aircraft']['cloud_droplet_concentration']),30])
     data['Aircraft']['binned_cloud_droplet_concentration'] = np.zeros([np.size(index_CORE),30])
-    print(np.size(data['Aircraft']['binned_cloud_droplet_concentration'],0))
-    print(np.size(data['Aircraft']['binned_cloud_droplet_concentration'],1))
+    # print(np.size(data['Aircraft']['binned_cloud_droplet_concentration'],0))
+    # print(np.size(data['Aircraft']['binned_cloud_droplet_concentration'],1))
     for b in range(0,30):
         temp_data = data['CDP']['CDP_' + str(b+1).zfill(2)][:]
         temp_data[cdp_nan_flag] = np.nan
         data['Aircraft']['temp_cloud_droplet_concentration'][:,b] = temp_data
         data['Aircraft']['binned_cloud_droplet_concentration'][:,b] = data['Aircraft']['temp_cloud_droplet_concentration'][index_CORE,b]
 
-    print(np.size(data['Aircraft']['binned_cloud_droplet_concentration'],0))
-    print(np.size(data['Aircraft']['binned_cloud_droplet_concentration'],1))
+    # print(np.size(data['Aircraft']['binned_cloud_droplet_concentration'],0))
+    # print(np.size(data['Aircraft']['binned_cloud_droplet_concentration'],1))
 
     data['Aircraft']['LWC'] = np.zeros(np.size(index_CORE))
     for i in range(0,np.size(index_CDP)):
-        data['Aircraft']['LWC'][i] = np.nansum(data['Aircraft']['binned_cloud_droplet_concentration'][i,:] *
-            (data['CDP']['CDP_D_U_NOM'][:] + data['CDP']['CDP_D_L_NOM'][:])/2.)#)^3. )/6. #* np.pi * 1000 * 10^-9
+        data['Aircraft']['LWC'][i] = np.nansum((data['Aircraft']['binned_cloud_droplet_concentration'][i,:] *
+            (data['CDP']['CDP_D_U_NOM'][:] + data['CDP']['CDP_D_L_NOM'][:])/2.)^3. )/6. * np.pi * 1000 * 10^-9
 
     ### Index for ocean only
     data['Aircraft']['cloud_droplet_concentration'] = data['Aircraft']['cloud_droplet_concentration'][index_CORE]
