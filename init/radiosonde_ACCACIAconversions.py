@@ -623,7 +623,7 @@ def loadAircraft(data):
         data['Aircraft']['temp_cloud_droplet_concentration'][:,b] = temp_data
         data['Aircraft']['binned_cloud_droplet_concentration'][:,b] = data['Aircraft']['temp_cloud_droplet_concentration'][index_CORE,b]
 
-    print(data['Aircraft']['binned_cloud_droplet_concentration'].shape())
+    print(len(data['Aircraft']['binned_cloud_droplet_concentration']))
 
     data['Aircraft']['LWC'] = np.zeros(np.size(index_CORE))
     for i in range(0,np.size(index_CDP)):
