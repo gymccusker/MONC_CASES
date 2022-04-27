@@ -667,7 +667,7 @@ def main():
     ## -------------------------------------------------------------
     data['2DS'] = Dataset(path_2ds, 'r')
     data['CORE'] = Dataset(path_core, 'r')
-    data['CDP'] = Datatset(path_cdp, 'r')
+    data['CDP'] = Dataset(path_cdp, 'r')
     data = loadAircraft(data)
 
     ## -------------------------------------------------------------
