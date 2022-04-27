@@ -67,3 +67,17 @@ def serial_date_to_doy(srl_no):
     doy = doy_temp.days + 1
 
     return doy
+
+def calcTime_Str2Sec(date):
+
+    '''
+    Date needs to be in format HH:mm:SS
+    '''
+
+    hour = int(date[:2])
+    min = int(date[3:5])
+    sec = int(date[6:8])
+
+    time = sec + (min*60) + (hour*60*60)
+
+    return time
