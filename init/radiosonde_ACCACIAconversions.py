@@ -607,7 +607,7 @@ def loadAircraft(data):
 # %     end
 
     cdp_nan_flag = np.where(data['CDP']['CDP_FLAG'][:] > 0)
-    data['Aircraft']['cloud_droplet_concentration'] = data['CDP']['CDP_CONC']
+    data['Aircraft']['cloud_droplet_concentration'] = data['CDP']['CDP_CONC'][:]
     data['Aircraft']['cloud_droplet_concentration'][cdp_nan_flag] = np.nan
 
 
