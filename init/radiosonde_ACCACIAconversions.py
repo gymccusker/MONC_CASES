@@ -584,7 +584,7 @@ def loadAircraft(data):
     # starttimeocean = datenum('23-Mar-2013 14:14:32'); endtimeocean = datenum('23-Mar-2013 14:52:46');
 
     # print (data['2DS'])
-    # print (data['CDP'])
+    print (data['CDP'])
     # print (data['CORE'])
 
     # print (data['2DS']['Time_mid'][:])
@@ -598,6 +598,19 @@ def loadAircraft(data):
     index_2DS = np.where(np.logical_and(data['2DS']['Time_mid'][:] > startocean, data['2DS']['Time_mid'][:] <= endocean))
     index_CDP = np.where(np.logical_and(data['CDP']['Time'][:] > startocean, data['CDP']['Time'][:] <= endocean))
     index_CORE = np.where(np.logical_and(data['CORE']['Time'][:] > startocean, data['CORE']['Time'][:] <= endocean))
+
+#     %     for i = 1:30
+# %         eval(['DATA.CDP_',num2str(i,'%02d'),'{1,1}(find(DATA.CDP_FLAG{1,1}(:)~=0))=NaN;'])
+# %     end
+# %     for i = 10:30
+# %         eval(['DATA.CDP_',num2str(i),'{1,1}(find(DATA.CDP_FLAG{1,1}(:)~=0))=NaN;'])
+# %     end
+
+    cdp_nan_flag = np.where(data['CDP']['CDP_FLAG'] ~= 0)
+    for b in range(1,31):
+        data['CDP']['data']['CDP_' + str(b).zfill(2)][cdp_nan_flag] = np.nan
+        # data['CDP']['data']['CDP_' + str(b).zfill(2)] = np.where(~np.isnan(cdp_nan_flag))
+
 
     return data
 
