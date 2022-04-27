@@ -611,12 +611,12 @@ def loadAircraft(data):
     data['Aircraft']['cloud_droplet_concentration'] = data['CDP']['CDP_CONC'][:]
     data['Aircraft']['cloud_droplet_concentration'][cdp_nan_flag] = np.nan
 
-    print (data['Aircraft']['cloud_droplet_concentration'].shape())
+    print (np.size(data['Aircraft']['cloud_droplet_concentration']))
 
     ### Index for ocean only
     data['Aircraft']['cloud_droplet_concentration'] = data['Aircraft']['cloud_droplet_concentration'][index_CORE]
 
-    print (data['Aircraft']['cloud_droplet_concentration'].shape())
+    print (np.size(data['Aircraft']['cloud_droplet_concentration']))
 
     return data
 
