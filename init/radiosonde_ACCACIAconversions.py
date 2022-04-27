@@ -606,17 +606,26 @@ def loadAircraft(data):
 # %         eval(['DATA.CDP_',num2str(i),'{1,1}(find(DATA.CDP_FLAG{1,1}(:)~=0))=NaN;'])
 # %     end
 
+# % for i = 1:length(CLOUD.Time{1,1})
+# %     CLOUD.CDPLWC(i) = nansum((CLOUD.CDPCON2(i,:).*((CLOUD.CDP_D_U_NOM{1,1}'+CLOUD.CDP_D_L_NOM{1,1}')./2).^3)./6.*pi,2).*1000.*10^-9;
+# % end
+
     ### Remove flagged data first
     cdp_nan_flag = np.where(data['CDP']['CDP_FLAG'][:] > 0)
     data['Aircraft']['cloud_droplet_concentration'] = data['CDP']['CDP_CONC'][:]
     data['Aircraft']['cloud_droplet_concentration'][cdp_nan_flag] = np.nan
 
-    print (np.size(data['Aircraft']['cloud_droplet_concentration']))
+    data['Aircraft']['temp_cloud_droplet_concentration'] = np.zeros([np.size(data['Aircraft']['cloud_droplet_concentration']),30])
+    data['Aircraft']['binned_cloud_droplet_concentration'] = np.zeros([np.size(index_CORE),30])
+    for b in range(1,31):
+        temp_data = data['CDP']['CDP_' + str(b).zfill(2)]
+        temp_data[cdp_nan_flag] = np.nan
+        data['Aircraft']['temp_cloud_droplet_concentration'][:,b] = temp_data
+        data['Aircraft']['binned_cloud_droplet_concentration'][:,b] = data['Aircraft']['temp_cloud_droplet_concentration'][index_CORE,b]
 
     ### Index for ocean only
     data['Aircraft']['cloud_droplet_concentration'] = data['Aircraft']['cloud_droplet_concentration'][index_CORE]
 
-    print (np.size(data['Aircraft']['cloud_droplet_concentration']))
 
     return data
 
