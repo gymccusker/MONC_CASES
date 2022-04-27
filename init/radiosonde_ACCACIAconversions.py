@@ -606,10 +606,9 @@ def loadAircraft(data):
 # %         eval(['DATA.CDP_',num2str(i),'{1,1}(find(DATA.CDP_FLAG{1,1}(:)~=0))=NaN;'])
 # %     end
 
-    cdp_nan_flag = np.where(data['CDP']['CDP_FLAG'] > 0)
-    for b in range(1,31):
-        data['CDP']['data']['CDP_' + str(b).zfill(2)][cdp_nan_flag] = np.nan
-        # data['CDP']['data']['CDP_' + str(b).zfill(2)] = np.where(~np.isnan(cdp_nan_flag))
+    cdp_nan_flag = np.where(data['CDP']['CDP_FLAG'][:] > 0)
+    data['Aircraft']['cloud_droplet_concentration'] = data['CDP']['CDP_CONC']
+    data['Aircraft']['cloud_droplet_concentration'][cdp_nan_flag] = np.nan
 
 
     return data
@@ -692,6 +691,7 @@ def main():
     data['2DS'] = Dataset(path_2ds, 'r')
     data['CORE'] = Dataset(path_core, 'r')
     data['CDP'] = Dataset(path_cdp, 'r')
+    data['Aircraft'] = {}
     data = loadAircraft(data)
 
     ## -------------------------------------------------------------
