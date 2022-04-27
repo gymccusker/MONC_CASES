@@ -31,7 +31,7 @@ socrates_couple_enabled=.true.
 
 # Control configuration
 display_synopsis_frequency=100
-termination_time=28810.
+termination_time=43210.
 dtm=1.0
 
 # IO server configuration
@@ -42,7 +42,7 @@ sampling_frequency=2
 3d_sampling_frequency=20
 mm=600.0
 mm1=60.0
-diag_write_freq=28800.0
+diag_write_freq=43200.0
 
 # Checkpoint configuration
 checkpoint_frequency=0
@@ -69,7 +69,7 @@ surface_pressure=101300.
 surface_reference_pressure=101300.
 x_size=32
 y_size=2
-z_size=361
+z_size=105
 dxx=120
 dyy=120
 zztop=3000.0
