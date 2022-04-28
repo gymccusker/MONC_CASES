@@ -24,7 +24,7 @@ import sys
 sys.path.insert(1, '../py_functions/')
 from time_functions import calcTime_Mat2DOY, calcTime_Date2DOY, calcTime_Str2Sec
 from readMAT import readMatlabStruct, readMatlabData
-from physFuncts import calcThetaE, calcThetaVL, adiabatic_lwc, calcTemperature
+from physFuncts import calcThetaE, calcThetaVL, adiabatic_lwc, calcTemperature, calcAirDensity
 from pyFixes import py3_FixNPLoad
 
 def quicklooksSonde(data, sondenumber):
@@ -649,7 +649,9 @@ def loadAircraft(data):
     air_pressure[pres_flag>0] = np.nan
     data['Aircraft']['air_pressure'] = air_pressure[index_CORE]
 
-    plt.plot(data['Aircraft']['air_pressure']); plt.savefig('../../../SHARE/temp.png'); plt.close()
+    data['Aircraft']['air_density'] = calcAirDensity(data['Aircraft']['air_temperature'], data['Aircraft']['air_pressure'])
+
+    plt.plot(data['Aircraft']['air_density']); plt.savefig('../../../SHARE/temp.png'); plt.close()
 
     #### ------ CORE UNITS
     ####            time - seconds since midnight
