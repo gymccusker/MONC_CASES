@@ -678,7 +678,7 @@ def loadAircraft(data):
     data['Aircraft']['LWC'][outofcloud_index] = np.nan
     data['Aircraft']['Ndrop'][outofcloud_index] = np.nan
 
-    ndrop_interp = interp1d(data['Aircraft']['Ndrop'],data['CDP']['CDP_TSPM'][index_CDP])
+    ndrop_interp = interp1d(data['CDP']['CDP_TSPM'][index_CDP],data['Aircraft']['Ndrop'])
     data['Aircraft']['cloud_droplet_concentration'] = ndrop_interp(data['Aircraft']['time'])
 
     print (data['Aircraft']['cloud_droplet_concentration'][:20])
