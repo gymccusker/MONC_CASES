@@ -687,11 +687,10 @@ def loadAircraft(data):
     data['Aircraft']['liquid_water_content'][outofcloud_index] = np.nan
     data['Aircraft']['cloud_droplet_concentration'][outofcloud_index] = np.nan
 
-
     # print (data['Aircraft']['cloud_droplet_concentration'][:20])
 
     ### quick plot to check units
-    plt.plot(data['CDP']['CDP_TSPM'][index_CDP],data['Aircraft']['Ndrop'])
+    # plt.plot(data['CDP']['CDP_TSPM'][index_CDP],data['Aircraft']['Ndrop'])
     plt.plot(data['Aircraft']['time'],data['Aircraft']['cloud_droplet_concentration']);
     plt.savefig('../../../SHARE/temp.png'); plt.close()
 
