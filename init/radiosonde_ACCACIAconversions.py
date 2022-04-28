@@ -611,8 +611,8 @@ def loadAircraft(data):
     # print (data['CORE']['TAT_DI_R_FLAG'][:10,:])
     # print (data['CORE']['TAT_DI_R'])
 
-    time = data['CORE']['Time'][:]
-    print (data['CORE']['Time'])
+    time = float(data['CORE']['Time'][:])
+    # print (data['CORE']['Time'])
     time[time.mask==True] = np.nan
     data['Aircraft']['time'] = time[index_CORE]
 
