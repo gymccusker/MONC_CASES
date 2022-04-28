@@ -606,7 +606,7 @@ def loadAircraft(data):
     ####    CORE
     #### ------------------------------------------------------------------------
 
-    # for var in data['CORE'].variables: print (var)
+    for var in data['CORE'].variables: print (var)
     tat_flag = np.nanmean(data['CORE']['TAT_DI_R_FLAG'][:],1)
     alt_flag = np.nanmean(data['CORE']['ALT_GIN_FLAG'][:],1)
     lat_flag = np.nanmean(data['CORE']['LAT_GPS_FLAG'][:],1)
@@ -635,6 +635,10 @@ def loadAircraft(data):
     air_temperature = np.nanmean(data['CORE']['TAT_DI_R'][:],1)
     air_temperature[tat_flag>0] = np.nan
     data['Aircraft']['air_temperature'] = air_temperature[index_CORE]
+
+    air_pressure = np.nanmean(data['CORE']['TAT_DI_R'][:],1)
+    air_pressure[pres_flag>0] = np.nan
+    data['Aircraft']['air_pressure'] = air_pressure[index_CORE]
 
     # plt.plot(data['Aircraft']['longitude']); plt.savefig('../../../SHARE/temp.png'); plt.close()
 
@@ -673,7 +677,7 @@ def loadAircraft(data):
     data['Aircraft']['Ndrop'] = data['Aircraft']['Ndrop'][index_CDP]
 
     ndrop_interp = interp1d(data['CDP']['CDP_TSPM'][index_CDP],data['Aircraft']['Ndrop'])
-    data['Aircraft']['cloud_droplet_concentration'] = ndrop_interp(data['Aircraft']['time'])
+    data['Aircraft']['cloud_droplet_number_concentration'] = ndrop_interp(data['Aircraft']['time'])
 
     lwc_interp = interp1d(data['CDP']['CDP_TSPM'][index_CDP],data['Aircraft']['LWC'])
     data['Aircraft']['liquid_water_content'] = lwc_interp(data['Aircraft']['time'])
@@ -681,7 +685,7 @@ def loadAircraft(data):
     #### Only include in-cloud data (LWC >= 0.01 g/m3)
     outofcloud_index = np.where(data['Aircraft']['liquid_water_content'] < 0.01)
     data['Aircraft']['liquid_water_content'][outofcloud_index] = np.nan
-    data['Aircraft']['cloud_droplet_concentration'][outofcloud_index] = np.nan
+    data['Aircraft']['cloud_droplet_number_concentration'][outofcloud_index] = np.nan
 
     # print (data['Aircraft']['cloud_droplet_concentration'][:20])
 
@@ -699,7 +703,7 @@ def loadAircraft(data):
     ####    2DS
     #### ------------------------------------------------------------------------
 
-    for var in data['2DS'].variables: print (var)
+    # for var in data['2DS'].variables: print (var)
 
     print (data['2DS'].variables['PSD_Mass_HI'])
     # print (data['2DS'].variables['NC_MI'])
@@ -793,8 +797,8 @@ def writeAircraft(data):
     ###################################
     ## Create variables
     ###################################
-    var_list = ['latitude','longitude','altitude','air_temperature','liquid_water_content','cloud_droplet_concentration','ice_number_concentration']
-    unit_list = ['degN','degE','m','K','g/m3','/cm3','/L']
+    var_list = ['latitude','longitude','altitude','air_temperature','air_pressure','liquid_water_content','cloud_droplet_number_concentration','ice_number_concentration']
+    unit_list = ['degN','degE','m','K','hPa','g/m3','/cm3','/L']
 
     for d in range(0,len(var_list)):
         print ('Writing ' + var_list[d])
@@ -804,6 +808,14 @@ def writeAircraft(data):
         dat.add_offset = float(0)
         dat.units = unit_list[d]
         dat.standard_name = var_list[d]
+        if var_list[d] == np.logical_or('liquid_water_content','cloud_droplet_number_concentration'):
+            dat.comment = 'Data from the Cloud Droplet Probe (CDP). '
+        if var_list[d] == np.logical_or('latitude','longitude'):
+            dat.comment = 'Data from the aircraft GPS system. '
+        elif var_list[d] == 'ice_number_concentration':
+            dat.comment = 'Data from the 2-Dimensional Stereo (2DS) probe. '
+        elif var_list[d] == 'air_temperature':
+            dat.comment = 'Data from the Rosemount de-iced temperature sensor. '            
         dat[:] = data['Aircraft'][var_list[d]]
 
     ###################################
@@ -898,7 +910,7 @@ def main():
     data['Aircraft'] = {}
     data = loadAircraft(data)
 
-    data = writeAircraft(data)
+    # data = writeAircraft(data)
 
     ## -------------------------------------------------------------
     ## save out working data for testing
