@@ -617,8 +617,9 @@ def loadAircraft(data):
 
     tat_flag = np.nanmean(data['CORE']['TAT_DI_R_FLAG'][:],1)
     alt_flag = np.nanmean(data['CORE']['ALT_GIN_FLAG'][:],1)
-    lat_flag = np.nanmean(data['CORE']['LAT_GPS_FLAG'][:],1)
-    lon_flag = np.nanmean(data['CORE']['LON_GPS_FLAG'][:],1)
+    lat_flag = np.nanmean(data['CORE']['LAT_GIN_FLAG'][:],1)
+    lon_flag = np.nanmean(data['CORE']['LON_GIN_FLAG'][:],1)
+    pres_flag = np.nanmean(data['CORE']['PS_RVSM_FLAG'][:],1)
     # print (data['CORE']['TAT_DI_R_FLAG'][:10,:])
     # print (data['CORE']['TAT_DI_R'])
 
@@ -628,11 +629,11 @@ def loadAircraft(data):
     # time[time.mask==True] = np.nan
     data['Aircraft']['time'] = time[index_CORE].data
 
-    latitude = np.nanmean(data['CORE']['LAT_GPS'][:],1)
+    latitude = np.nanmean(data['CORE']['LAT_GIN'][:],1)
     latitude[lat_flag>0] = np.nan
     data['Aircraft']['latitude'] = latitude[index_CORE]
 
-    longitude = np.nanmean(data['CORE']['LON_GPS'][:],1)
+    longitude = np.nanmean(data['CORE']['LON_GIN'][:],1)
     longitude[lon_flag>0] = np.nan
     data['Aircraft']['longitude'] = longitude[index_CORE]
 
@@ -644,11 +645,11 @@ def loadAircraft(data):
     air_temperature[tat_flag>0] = np.nan
     data['Aircraft']['air_temperature'] = air_temperature[index_CORE]
 
-    air_pressure = np.nanmean(data['CORE']['TAT_DI_R'][:],1)
+    air_pressure = np.nanmean(data['CORE']['PS_RVSM'][:],1)
     air_pressure[pres_flag>0] = np.nan
     data['Aircraft']['air_pressure'] = air_pressure[index_CORE]
 
-    # plt.plot(data['Aircraft']['longitude']); plt.savefig('../../../SHARE/temp.png'); plt.close()
+    plt.plot(data['Aircraft']['air_pressure']); plt.savefig('../../../SHARE/temp.png'); plt.close()
 
     #### ------ CORE UNITS
     ####            time - seconds since midnight
@@ -799,7 +800,7 @@ def writeAircraft(data):
     time.add_offset = float(0)
     time.comment = 'seconds since 0000 UTC on 23-Mar-2013.'
     time.units = 'seconds'
-    time.long_name = 'seconds'
+    time.standard_name = 'time'
     time[:] = data['Aircraft']['time']      ### forecast time (ignore first 12h)
 
     ###################################
@@ -817,13 +818,15 @@ def writeAircraft(data):
         dat.units = unit_list[d]
         dat.standard_name = var_list[d]
         if var_list[d] == np.logical_or('liquid_water_content','cloud_droplet_number_concentration'):
-            dat.comment = 'Data from the Cloud Droplet Probe (CDP). '
-        if var_list[d] == np.logical_or('latitude','longitude'):
-            dat.comment = 'Data from the aircraft GPS system. '
+            dat.comment = 'Data from the Cloud Droplet Probe (CDP). Liquid water content calculated using measured particle number concentrations and size bin edges. '
+        if var_list[d] == np.logical_or(np.logical_or('latitude','longitude'),'altitude'):
+            dat.comment = 'Data from the POS AV 510 GPS-aided Inertial Navigation unit. '
         elif var_list[d] == 'ice_number_concentration':
-            dat.comment = 'Data from the 2-Dimensional Stereo (2DS) probe. '
+            dat.comment = 'Data from the 2-Dimensional Stereo (2DS) probe. Data are the sum of the medium and high irregularity images, with edge particles greater than 100 um also included. '
         elif var_list[d] == 'air_temperature':
-            dat.comment = 'Data from the Rosemount de-iced temperature sensor. '
+            dat.comment = 'True air temperature measuring with the Rosemount de-iced temperature sensor. '
+        elif var_list[d] == 'air_pressure':
+            dat.comment = 'Static pressure from the aircraft RVSM (air data) system. '
         dat[:] = data['Aircraft'][var_list[d]]
 
     ###################################
