@@ -712,15 +712,15 @@ def loadAircraft(data):
     mi_number = data['2DS'].variables['NC_MI'][:]
     psd_number = data['2DS'].variables['PSD_Num_E'][:]
 
-    # hi_number = hi_number.astype(np.float)
-    # mi_number = mi_number.astype(np.float)
+    hi_number = hi_number.astype(np.float)  ## not sure why it needs this conversion...
+    mi_number = mi_number.astype(np.float)
 
     hi_number[hi_number==-9999] = np.nan
     mi_number[mi_number==-9999] = np.nan
 
     data['Aircraft']['Nice'] = hi_number + mi_number + np.nansum(psd_number[:,9:],1)
 
-    data['Aircraft']['Nice'][data['Aircraft']['Nice']<0.] = 0.0
+    data['Aircraft']['Nice'][data['Aircraft']['Nice'] < 0.] = 0.0
 
     plt.plot(data['Aircraft']['Nice']);
     plt.savefig('../../../SHARE/temp.png'); plt.close()
