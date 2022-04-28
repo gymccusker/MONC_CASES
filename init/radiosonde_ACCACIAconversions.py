@@ -676,13 +676,17 @@ def loadAircraft(data):
     ### Index for ocean only
     data['Aircraft']['Ndrop'] = data['Aircraft']['Ndrop'][index_CDP]
 
-    #### Only include in-cloud data (LWC >= 0.01 g/m3)
-    outofcloud_index = np.where(data['Aircraft']['LWC'] < 0.01)
-    data['Aircraft']['LWC'][outofcloud_index] = np.nan
-    data['Aircraft']['Ndrop'][outofcloud_index] = np.nan
-
     ndrop_interp = interp1d(data['CDP']['CDP_TSPM'][index_CDP],data['Aircraft']['Ndrop'])
     data['Aircraft']['cloud_droplet_concentration'] = ndrop_interp(data['Aircraft']['time'])
+
+    lwc_interp = interp1d(data['CDP']['CDP_TSPM'][index_CDP],data['Aircraft']['LWC'])
+    data['Aircraft']['liquid_water_content'] = ndrop_interp(data['Aircraft']['time'])
+
+    #### Only include in-cloud data (LWC >= 0.01 g/m3)
+    outofcloud_index = np.where(data['Aircraft']['liquid_water_content'] < 0.01)
+    data['Aircraft']['liquid_water_content'][outofcloud_index] = np.nan
+    data['Aircraft']['cloud_droplet_concentration'][outofcloud_index] = np.nan
+
 
     # print (data['Aircraft']['cloud_droplet_concentration'][:20])
 
