@@ -600,6 +600,12 @@ def loadAircraft(data):
     index_CORE = np.where(np.logical_and(data['CORE']['Time'][:] > startocean, data['CORE']['Time'][:] <= endocean))
 
     #### ------------------------------------------------------------------------
+    ####    CORE
+    #### ------------------------------------------------------------------------
+
+    for var in data['CORE'].variables: print (var)
+
+    #### ------------------------------------------------------------------------
     ####    CDP
     #### ------------------------------------------------------------------------
 
@@ -632,17 +638,11 @@ def loadAircraft(data):
     # print (data['Aircraft']['cloud_droplet_concentration'])
 
     ### quick plot to check units
-    plt.plot(data['Aircraft']['LWC']); plt.xlim([1.2e3,1.6e3]); plt.savefig('../../../SHARE/temp.png'); plt.close()
+    # plt.plot(data['Aircraft']['LWC']); plt.xlim([1.2e3,1.6e3]); plt.savefig('../../../SHARE/temp.png'); plt.close()
 
-    #### ------ UNITS
+    #### ------ CDP UNITS
     ####            Ndrop - /cm3
     ####            LWC - g/m3
-
-    #### ------------------------------------------------------------------------
-    ####    CORE
-    #### ------------------------------------------------------------------------
-
-
 
     #### ------------------------------------------------------------------------
     ####    2DS
