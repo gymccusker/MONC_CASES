@@ -682,7 +682,9 @@ def loadAircraft(data):
     data['Aircraft']['cloud_droplet_concentration'] = ndrop_interp(data['Aircraft']['time'])
 
     ### quick plot to check units
-    # plt.plot(data['Aircraft']['LWC']); plt.xlim([1.2e3,1.6e3]); plt.savefig('../../../SHARE/temp.png'); plt.close()
+    plt.plot(data['Aircraft']['Ndrop'])
+    plt.plot(data['Aircraft']['cloud_droplet_concentration'],'k.'); 
+    plt.savefig('../../../SHARE/temp.png'); plt.close()
 
     #### ------ CDP UNITS
     ####            Ndrop - /cm3
