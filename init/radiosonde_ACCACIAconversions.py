@@ -630,11 +630,15 @@ def loadAircraft(data):
     air_temperature[tat_flag>0] = np.nan
     data['Aircraft']['air_temperature'] = air_temperature[index_CORE]
 
-    plt.plot(data['Aircraft']['longitude']); plt.savefig('../../../SHARE/temp.png'); plt.close()
+    # plt.plot(data['Aircraft']['longitude']); plt.savefig('../../../SHARE/temp.png'); plt.close()
 
     #### ------ CORE UNITS
+    ####            time - seconds since midnight
     ####            temperature - K
-    ####
+    ####            altitude - m
+    ####            latitude - degN
+    ####            longitude - degE
+
 
     #### ------------------------------------------------------------------------
     ####    CDP
@@ -664,12 +668,15 @@ def loadAircraft(data):
             (data['CDP']['CDP_D_U_NOM'][:] + data['CDP']['CDP_D_L_NOM'][:])/2.)**3. )/6. * np.pi * 10**-9
 
     ### Index for ocean only
-    data['Aircraft']['cloud_droplet_concentration'] = data['Aircraft']['cloud_droplet_concentration'][index_CORE]
+    data['Aircraft']['Ndrop'] = data['Aircraft']['cloud_droplet_concentration'][index_CORE]
 
     #### Only include in-cloud data (LWC >= 0.01 g/m3)
     outofcloud_index = np.where(data['Aircraft']['LWC'] < 0.01)
     data['Aircraft']['LWC'][outofcloud_index] = np.nan
-    data['Aircraft']['cloud_droplet_concentration'][outofcloud_index] = np.nan
+    data['Aircraft']['Ndrop'][outofcloud_index] = np.nan
+
+    ndrop_interp = interp1d(data['Aircraft']['Ndrop'],data['CDP']['CDP_TSPM'][index_CDP])
+    data['Aircraft']['cloud_droplet_concentration'] = ndrop_interp(data['Aircraft']['Time'])
 
     ### quick plot to check units
     # plt.plot(data['Aircraft']['LWC']); plt.xlim([1.2e3,1.6e3]); plt.savefig('../../../SHARE/temp.png'); plt.close()
