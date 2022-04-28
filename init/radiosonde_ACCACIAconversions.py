@@ -583,8 +583,8 @@ def loadAircraft(data):
 
     # starttimeocean = datenum('23-Mar-2013 14:14:32'); endtimeocean = datenum('23-Mar-2013 14:52:46');
 
-    # print (data['2DS'])
-    print (data['CDP'])
+    print (data['2DS'])
+    # print (data['CDP'])
     # print (data['CORE'])
 
     # print (data['2DS']['Time_mid'][:])
@@ -705,8 +705,8 @@ def loadAircraft(data):
 
     for var in data['2DS'].variables: print (var)
 
-    print (data['2DS'].variables['NC_HI'][:])
-    print (data['2DS'].variables['NC_MI'][:])
+    print (data['2DS'].variables['NC_HI'])
+    print (data['2DS'].variables['NC_MI'])
 
     hi_number = data['2DS'].variables['NC_HI'][:]
     mi_number = data['2DS'].variables['NC_MI'][:]
