@@ -699,10 +699,6 @@ def loadAircraft(data):
     ####    2DS
     #### ------------------------------------------------------------------------
 
-    ### B7622DS.NC_icea=B7622DS.NC_HIa+B7622DS.NC_MIa+nansum(B7622DS.PSD_Num_Ea(:,10:end),2);             % sizes greater than 100um
-    ### B7622DS.NC_icea(B7622DS.NC_icea<=0)=0
-
-
     for var in data['2DS'].variables: print (var)
 
     print (data['2DS'].variables['NC_HI'])
@@ -720,10 +716,22 @@ def loadAircraft(data):
 
     data['Aircraft']['Nice'] = hi_number + mi_number + np.nansum(psd_number[:,9:],1)
 
-    data['Aircraft']['Nice'][data['Aircraft']['Nice'] < 0.] = 0.0
+    data['Aircraft']['Nice'][data['Aircraft']['Nice'] < 0.05] = 0.0     ### 2DS detection limit
 
-    plt.plot(data['Aircraft']['Nice']);
+    data['Aircraft']['Nice'] = data['Aircraft']['Nice'][index_2DS]
+
+    nice_interp = interp1d(data['2DS']['Time_mid'][index_2DS],data['Aircraft']['Nice'])
+    data['Aircraft']['ice_number_concentration'] = nice_interp(data['Aircraft']['time'])
+
+    ### quick plot to check units
+    plt.plot(data['2DS']['Time_mid'][index_2DS],data['Aircraft']['Nice']);
+    plt.plot(data['Aircraft']['time'],data['Aircraft']['ice_number_concentration']);
     plt.savefig('../../../SHARE/temp.png'); plt.close()
+
+
+    #### ------ 2DS UNITS
+    ####            Nice - /L
+    ####            LWC - g/m3
 
     return data
 
