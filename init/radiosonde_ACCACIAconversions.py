@@ -607,6 +607,14 @@ def loadAircraft(data):
     #### ------------------------------------------------------------------------
 
     for var in data['CORE'].variables: print (var)
+
+    print (data['CORE']['ALT_GIN'])
+    print (data['CORE']['LAT_GIN'])
+    print (data['CORE']['LON_GIN'])
+    print (data['CORE']['TAT_DI_R'])
+    print (data['CORE']['PS_RVSM'])
+
+
     tat_flag = np.nanmean(data['CORE']['TAT_DI_R_FLAG'][:],1)
     alt_flag = np.nanmean(data['CORE']['ALT_GIN_FLAG'][:],1)
     lat_flag = np.nanmean(data['CORE']['LAT_GPS_FLAG'][:],1)
@@ -815,7 +823,7 @@ def writeAircraft(data):
         elif var_list[d] == 'ice_number_concentration':
             dat.comment = 'Data from the 2-Dimensional Stereo (2DS) probe. '
         elif var_list[d] == 'air_temperature':
-            dat.comment = 'Data from the Rosemount de-iced temperature sensor. '            
+            dat.comment = 'Data from the Rosemount de-iced temperature sensor. '
         dat[:] = data['Aircraft'][var_list[d]]
 
     ###################################
