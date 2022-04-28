@@ -646,10 +646,10 @@ def loadAircraft(data):
 
     ### Remove flagged data first
     cdp_nan_flag = np.where(data['CDP']['CDP_FLAG'][:] > 0)
-    data['Aircraft']['cloud_droplet_concentration'] = data['CDP']['CDP_CONC'][:]
-    data['Aircraft']['cloud_droplet_concentration'][cdp_nan_flag] = np.nan
+    data['Aircraft']['Ndrop'] = data['CDP']['CDP_CONC'][:]
+    data['Aircraft']['Ndrop'][cdp_nan_flag] = np.nan
 
-    data['Aircraft']['temp_cloud_droplet_concentration'] = np.zeros([np.size(data['Aircraft']['cloud_droplet_concentration']),30])
+    data['Aircraft']['temp_cloud_droplet_concentration'] = np.zeros([np.size(data['Aircraft']['Ndrop']),30])
     data['Aircraft']['binned_cloud_droplet_concentration'] = np.zeros([np.size(index_CORE),30])
     # print(np.size(data['Aircraft']['binned_cloud_droplet_concentration'],0))
     # print(np.size(data['Aircraft']['binned_cloud_droplet_concentration'],1))
@@ -668,7 +668,7 @@ def loadAircraft(data):
             (data['CDP']['CDP_D_U_NOM'][:] + data['CDP']['CDP_D_L_NOM'][:])/2.)**3. )/6. * np.pi * 10**-9
 
     ### Index for ocean only
-    data['Aircraft']['Ndrop'] = data['Aircraft']['cloud_droplet_concentration'][index_CORE]
+    data['Aircraft']['Ndrop'] = data['Aircraft']['Ndrop'][index_CORE]
 
     #### Only include in-cloud data (LWC >= 0.01 g/m3)
     outofcloud_index = np.where(data['Aircraft']['LWC'] < 0.01)
