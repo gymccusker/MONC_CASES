@@ -705,12 +705,15 @@ def loadAircraft(data):
 
     for var in data['2DS'].variables: print (var)
 
-    print (data['2DS'].variables['Size_mid'][:])
-    print (data['2DS'].variables['Size_edge'][:])
+    print (data['2DS'].variables['NC_HI'][:])
+    print (data['2DS'].variables['NC_MI'][:])
 
     hi_number = data['2DS'].variables['NC_HI'][:]
     mi_number = data['2DS'].variables['NC_MI'][:]
     psd_number = data['2DS'].variables['PSD_Num_E'][:]
+
+    hi_number = hi_number.astype(np.float)
+    mi_number = mi_number.astype(np.float)
 
     hi_number[hi_number==-9999.] = np.nan
     mi_number[mi_number==-9999.] = np.nan
