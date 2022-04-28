@@ -618,6 +618,10 @@ def loadAircraft(data):
     latitude[lat_flag>0] = np.nan
     data['Aircraft']['latitude'] = latitude[index_CORE]
 
+    longitude = np.nanmean(data['CORE']['LON_GPS'][:],1)
+    longitude[lon_flag>0] = np.nan
+    data['Aircraft']['longitude'] = longitude[index_CORE]
+
     altitude = np.nanmean(data['CORE']['ALT_GIN'][:],1)
     altitude[alt_flag>0] = np.nan
     data['Aircraft']['altitude'] = altitude[index_CORE]
@@ -626,7 +630,7 @@ def loadAircraft(data):
     air_temperature[tat_flag>0] = np.nan
     data['Aircraft']['air_temperature'] = air_temperature[index_CORE]
 
-    plt.plot(data['Aircraft']['latitude']); plt.savefig('../../../SHARE/temp.png'); plt.close()
+    plt.plot(data['Aircraft']['longitude']); plt.savefig('../../../SHARE/temp.png'); plt.close()
 
     #### ------ CORE UNITS
     ####            temperature - K
