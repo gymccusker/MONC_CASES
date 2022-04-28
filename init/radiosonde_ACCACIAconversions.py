@@ -722,7 +722,7 @@ def loadAircraft(data):
     data['Aircraft']['Mice'] = hi_mass + mi_mass + psde_mass
 
     data['Aircraft']['Nice'][data['Aircraft']['Nice'] < 0.05] = 0.0     ### 2DS detection limit
-    data['Aircraft']['Mice'][data['Aircraft']['Nice'] < 0.05] = 0.0     ### 2DS detection limit
+    # data['Aircraft']['Mice'][data['Aircraft']['Nice'] < 0.05] = 0.0     ### 2DS detection limit
 
     data['Aircraft']['Nice'] = data['Aircraft']['Nice'][index_2DS]
     data['Aircraft']['Mice'] = data['Aircraft']['Mice'][index_2DS]
