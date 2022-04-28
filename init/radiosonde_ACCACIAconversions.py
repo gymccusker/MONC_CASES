@@ -614,8 +614,8 @@ def loadAircraft(data):
     time = data['CORE']['Time'][:]
     time = time.astype(np.float)
     # print (data['CORE']['Time'])
-    time[time.mask==True] = np.nan
-    data['Aircraft']['time'] = time[index_CORE]
+    # time[time.mask==True] = np.nan
+    data['Aircraft']['time'] = time[index_CORE].data
 
     latitude = np.nanmean(data['CORE']['LAT_GPS'][:],1)
     latitude[lat_flag>0] = np.nan
