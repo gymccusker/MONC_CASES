@@ -719,23 +719,29 @@ def loadAircraft(data):
     mi_number[mi_number==-9999] = np.nan
 
     data['Aircraft']['Nice'] = hi_number + mi_number + np.nansum(psde_number[:,9:],1)
+    data['Aircraft']['Mice'] = hi_mass + mi_mass + psde_mass
 
     data['Aircraft']['Nice'][data['Aircraft']['Nice'] < 0.05] = 0.0     ### 2DS detection limit
+    data['Aircraft']['Mice'][data['Aircraft']['Nice'] < 0.05] = 0.0     ### 2DS detection limit
 
     data['Aircraft']['Nice'] = data['Aircraft']['Nice'][index_2DS]
+    data['Aircraft']['Mice'] = data['Aircraft']['Mice'][index_2DS]
 
     nice_interp = interp1d(data['2DS']['Time_mid'][index_2DS],data['Aircraft']['Nice'])
     data['Aircraft']['ice_number_concentration'] = nice_interp(data['Aircraft']['time'])
 
+    mice_interp = interp1d(data['2DS']['Time_mid'][index_2DS],data['Aircraft']['Mice'])
+    data['Aircraft']['ice_mass_concentration'] = mice_interp(data['Aircraft']['time'])
+
     ### quick plot to check units
-    plt.plot(data['2DS']['Time_mid'][index_2DS],data['Aircraft']['Nice']);
-    plt.plot(data['Aircraft']['time'],data['Aircraft']['ice_number_concentration']);
+    plt.plot(data['2DS']['Time_mid'][index_2DS],data['Aircraft']['Mice']);
+    plt.plot(data['Aircraft']['time'],data['Aircraft']['ice_mass_concentration']);
     plt.savefig('../../../SHARE/temp.png'); plt.close()
 
 
     #### ------ 2DS UNITS
     ####            Nice - /L
-    ####            LWC - g/m3
+    ####            IWC - g/m3
 
     return data
 
