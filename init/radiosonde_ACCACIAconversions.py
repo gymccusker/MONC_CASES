@@ -125,7 +125,7 @@ def LEM_LoadTHREF(data, sondenumber):
     plt.subplots_adjust(top = 0.9, bottom = 0.12, right = 0.95, left = 0.25,
             hspace = 0.22, wspace = 0.4)
 
-    yylim = 2.4e3
+    yylim = 3.0e3
 
     plt.plot(data['accacia']['theta'], data['accacia']['z'], label = 'Radiosonde')
     plt.plot(data['monc']['theta'], data['monc']['z'], 'k.', label = 'MONC input')
@@ -135,7 +135,7 @@ def LEM_LoadTHREF(data, sondenumber):
     plt.legend()
     # plt.xlim([265,295])
 
-    plt.savefig('../../../SHARE/Quicklooks_ACCACIA_B762-sonde5-LEM_theta.png')
+    plt.savefig('../../../SHARE/Quicklooks_ACCACIA_B762-sonde5-LEM_theta.png', dpi=300)
     plt.show()
 
     return data
@@ -185,7 +185,7 @@ def LEM_LoadWINDS(data, sondenumber):
     plt.subplots_adjust(top = 0.9, bottom = 0.12, right = 0.95, left = 0.25,
             hspace = 0.22, wspace = 0.4)
 
-    yylim = 2.4e3
+    yylim = 3.0e3
 
     plt.plot(data['accacia']['u'], data['accacia']['z'], label = 'U-Radiosonde')
     plt.plot(data['accacia']['v'], data['accacia']['z'], label = 'V-Radiosonde')
@@ -197,7 +197,7 @@ def LEM_LoadWINDS(data, sondenumber):
     plt.legend()
     # plt.xlim([265,295])
 
-    plt.savefig('../../../SHARE/Quicklooks_ACCACIA_B762-sonde5-LEM_winds.png')
+    plt.savefig('../../../SHARE/Quicklooks_ACCACIA_B762-sonde5-LEM_winds.png', dpi=300)
     plt.show()
 
     return data
@@ -242,7 +242,7 @@ def LEM_LoadQ01(data,sondenumber):
     plt.subplots_adjust(top = 0.9, bottom = 0.12, right = 0.95, left = 0.25,
             hspace = 0.22, wspace = 0.4)
 
-    yylim = 2.4e3
+    yylim = 3.0e3
 
     plt.plot(data['accacia']['q01'], data['accacia']['z'], label = 'Radiosonde')
     plt.plot(data['monc']['q01'], data['monc']['z'], 'k.', label = 'MONC input')
@@ -252,7 +252,7 @@ def LEM_LoadQ01(data,sondenumber):
     plt.legend()
     # plt.xlim([265,295])
 
-    plt.savefig('../../../SHARE/Quicklooks_ACCACIA_B762-sonde5-LEM_q01.png')
+    plt.savefig('../../../SHARE/Quicklooks_ACCACIA_B762-sonde5-LEM_q01.png', dpi=300)
     plt.show()
 
     return data
@@ -299,9 +299,9 @@ def LEM_LoadQ02(data,sondenumber):
     plt.subplots_adjust(top = 0.9, bottom = 0.12, right = 0.95, left = 0.25,
             hspace = 0.22, wspace = 0.4)
 
-    yylim = 2.4e3
+    yylim = 3.0e3
 
-    plt.plot(data['accacia']['q02'], data['accacia']['z'], label = 'Radiosonde')
+    plt.plot(data['accacia']['q02'], data['accacia']['z'], label = 'Adiabatic assumption')
     plt.plot(data['monc']['q02'], data['monc']['z'], 'k.', label = 'MONC input')
     plt.ylabel('Z [m]')
     plt.xlabel('Q02 [kg/kg]')
@@ -309,7 +309,7 @@ def LEM_LoadQ02(data,sondenumber):
     plt.legend()
     # plt.xlim([265,295])
 
-    plt.savefig('../../../SHARE/Quicklooks_ACCACIA_B762-sonde5-LEM_q02.png')
+    plt.savefig('../../../SHARE/Quicklooks_ACCACIA_B762-sonde5-LEM_q02.png', dpi=300)
     plt.show()
 
     return data
@@ -599,16 +599,9 @@ def loadAircraft(data):
     index_CDP = np.where(np.logical_and(data['CDP']['CDP_TSPM'][:] > startocean, data['CDP']['CDP_TSPM'][:] <= endocean))
     index_CORE = np.where(np.logical_and(data['CORE']['Time'][:] > startocean, data['CORE']['Time'][:] <= endocean))
 
-#     %     for i = 1:30
-# %         eval(['DATA.CDP_',num2str(i,'%02d'),'{1,1}(find(DATA.CDP_FLAG{1,1}(:)~=0))=NaN;'])
-# %     end
-# %     for i = 10:30
-# %         eval(['DATA.CDP_',num2str(i),'{1,1}(find(DATA.CDP_FLAG{1,1}(:)~=0))=NaN;'])
-# %     end
-
-# % for i = 1:length(CLOUD.Time{1,1})
-# %     CLOUD.CDPLWC(i) = nansum((CLOUD.CDPCON2(i,:).*((CLOUD.CDP_D_U_NOM{1,1}'+CLOUD.CDP_D_L_NOM{1,1}')./2).^3)./6.*pi,2).*1000.*10^-9;
-# % end
+    #### ------------------------------------------------------------------------
+    ####    CDP
+    #### ------------------------------------------------------------------------
 
     ### Remove flagged data first
     cdp_nan_flag = np.where(data['CDP']['CDP_FLAG'][:] > 0)
@@ -635,6 +628,18 @@ def loadAircraft(data):
 
     ### Index for ocean only
     data['Aircraft']['cloud_droplet_concentration'] = data['Aircraft']['cloud_droplet_concentration'][index_CORE]
+
+    #### ------------------------------------------------------------------------
+    ####    CORE
+    #### ------------------------------------------------------------------------
+
+
+
+    #### ------------------------------------------------------------------------
+    ####    2DS
+    #### ------------------------------------------------------------------------
+
+
 
     print (np.size(data['Aircraft']['cloud_droplet_concentration']))
     print (np.size(data['Aircraft']['LWC']))
