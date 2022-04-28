@@ -691,7 +691,8 @@ def loadAircraft(data):
 
     ### quick plot to check units
     # plt.plot(data['CDP']['CDP_TSPM'][index_CDP],data['Aircraft']['Ndrop'])
-    plt.plot(data['Aircraft']['time'],data['Aircraft']['cloud_droplet_concentration']);
+    # plt.plot(data['Aircraft']['time'],data['Aircraft']['cloud_droplet_concentration']);
+    plt.plot(data['Aircraft']['time'],data['Aircraft']['liquid_water_content']);
     plt.savefig('../../../SHARE/temp.png'); plt.close()
 
     #### ------ CDP UNITS
