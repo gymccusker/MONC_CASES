@@ -605,14 +605,23 @@ def loadAircraft(data):
 
     # for var in data['CORE'].variables: print (var)
     tat_flag = np.nanmean(data['CORE']['TAT_DI_R_FLAG'][:],1)
-    print (data['CORE']['TAT_DI_R_FLAG'][:10,:])
+    alt_flag = data['CORE']['ALT_GIN_FLAG'][:]
+    # print (data['CORE']['TAT_DI_R_FLAG'][:10,:])
     # print (data['CORE']['TAT_DI_R'])
 
+    altitude = data['CORE']['ALT_GIN'][:]
+    altitude[alt_flag>0] = np.nan
+    data['Aircraft']['altitude'] = altitude[index_CORE]
 
     air_temperature = np.nanmean(data['CORE']['TAT_DI_R'][:],1)
     air_temperature[tat_flag>0] = np.nan
-    # TAT_DI_R
-    plt.plot(air_temperature); plt.savefig('../../../SHARE/temp.png'); plt.close()
+    data['Aircraft']['air_temperature'] = air_temperature[index_CORE]
+
+    plt.plot(data['Aircraft']['altitude']); plt.savefig('../../../SHARE/temp.png'); plt.close()
+
+    #### ------ CORE UNITS
+    ####            temperature - K
+    ####
 
     #### ------------------------------------------------------------------------
     ####    CDP
