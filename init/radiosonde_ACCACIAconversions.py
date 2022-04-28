@@ -680,7 +680,7 @@ def loadAircraft(data):
     data['Aircraft']['cloud_droplet_concentration'] = ndrop_interp(data['Aircraft']['time'])
 
     lwc_interp = interp1d(data['CDP']['CDP_TSPM'][index_CDP],data['Aircraft']['LWC'])
-    data['Aircraft']['liquid_water_content'] = ndrop_interp(data['Aircraft']['time'])
+    data['Aircraft']['liquid_water_content'] = lwc_interp(data['Aircraft']['time'])
 
     #### Only include in-cloud data (LWC >= 0.01 g/m3)
     outofcloud_index = np.where(data['Aircraft']['liquid_water_content'] < 0.01)
