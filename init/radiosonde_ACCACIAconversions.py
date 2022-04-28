@@ -803,8 +803,8 @@ def writeAircraft(data):
         dat.scale_factor = float(1)
         dat.add_offset = float(0)
         dat.units = unit_list[d]
-        dat.standard_name = var_list[b]
-        dat[:] = data['Aircraft'][var_list[b]]
+        dat.standard_name = var_list[d]
+        dat[:] = data['Aircraft'][var_list[d]]
 
     ###################################
     ## Write out file
