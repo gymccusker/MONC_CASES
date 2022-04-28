@@ -674,7 +674,7 @@ def loadAircraft(data):
             (data['CDP']['CDP_D_U_NOM'][:] + data['CDP']['CDP_D_L_NOM'][:])/2.)**3. )/6. * np.pi * 10**-9
 
     ### Index for ocean only
-    data['Aircraft']['Ndrop'] = data['Aircraft']['Ndrop'][index_CORE]
+    data['Aircraft']['Ndrop'] = data['Aircraft']['Ndrop'][index_CDP]
 
     #### Only include in-cloud data (LWC >= 0.01 g/m3)
     outofcloud_index = np.where(data['Aircraft']['LWC'] < 0.01)
