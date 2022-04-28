@@ -629,6 +629,9 @@ def loadAircraft(data):
     ### Index for ocean only
     data['Aircraft']['cloud_droplet_concentration'] = data['Aircraft']['cloud_droplet_concentration'][index_CORE]
 
+    ### quick plot to check units
+    plt.plot(np.nanmean(data['Aircraft']['cloud_droplet_concentration'])); plt.savefig('../../../SHARE/temp.png'); plt.close()
+
     #### ------------------------------------------------------------------------
     ####    CORE
     #### ------------------------------------------------------------------------
