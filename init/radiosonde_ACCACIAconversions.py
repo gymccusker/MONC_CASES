@@ -626,7 +626,7 @@ def loadAircraft(data):
     air_temperature[tat_flag>0] = np.nan
     data['Aircraft']['air_temperature'] = air_temperature[index_CORE]
 
-    plt.plot(data['Aircraft']['time']); plt.savefig('../../../SHARE/temp.png'); plt.close()
+    plt.plot(data['Aircraft']['latitude']); plt.savefig('../../../SHARE/temp.png'); plt.close()
 
     #### ------ CORE UNITS
     ####            temperature - K
