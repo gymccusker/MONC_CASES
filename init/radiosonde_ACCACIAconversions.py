@@ -606,7 +606,7 @@ def loadAircraft(data):
     ####    CORE
     #### ------------------------------------------------------------------------
 
-    for var in data['CORE'].variables: print (var)
+    # for var in data['CORE'].variables: print (var)
     tat_flag = np.nanmean(data['CORE']['TAT_DI_R_FLAG'][:],1)
     alt_flag = np.nanmean(data['CORE']['ALT_GIN_FLAG'][:],1)
     lat_flag = np.nanmean(data['CORE']['LAT_GPS_FLAG'][:],1)
@@ -702,8 +702,12 @@ def loadAircraft(data):
     ### B7622DS.NC_icea=B7622DS.NC_HIa+B7622DS.NC_MIa+nansum(B7622DS.PSD_Num_Ea(:,10:end),2);             % sizes greater than 100um
     ### B7622DS.NC_icea(B7622DS.NC_icea<=0)=0
 
-    # print (np.size(data['Aircraft']['cloud_droplet_concentration']))
-    # print (np.size(data['Aircraft']['LWC']))
+
+    for var in data['2DS'].variables: print (var)
+
+    hi_number = data['2DS'].variables['NC_HIa'][:]
+    mi_number = data['2DS'].variables['NC_MIa'][:]
+    psd_number = data['2DS'].variables['PSD_Num_Ea'][:]
 
     return data
 
