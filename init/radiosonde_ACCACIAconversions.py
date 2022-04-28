@@ -676,7 +676,7 @@ def loadAircraft(data):
     data['Aircraft']['Ndrop'][outofcloud_index] = np.nan
 
     ndrop_interp = interp1d(data['Aircraft']['Ndrop'],data['CDP']['CDP_TSPM'][index_CDP])
-    data['Aircraft']['cloud_droplet_concentration'] = ndrop_interp(data['Aircraft']['Time'])
+    data['Aircraft']['cloud_droplet_concentration'] = ndrop_interp(data['Aircraft']['time'])
 
     ### quick plot to check units
     # plt.plot(data['Aircraft']['LWC']); plt.xlim([1.2e3,1.6e3]); plt.savefig('../../../SHARE/temp.png'); plt.close()
