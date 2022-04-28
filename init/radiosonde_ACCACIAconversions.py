@@ -603,7 +603,12 @@ def loadAircraft(data):
     ####    CORE
     #### ------------------------------------------------------------------------
 
-    for var in data['CORE'].variables: print (var)
+    # for var in data['CORE'].variables: print (var)
+    tat_flag = data['CORE']['TAT_DI_R_FLAG'][:]
+    print (data['CORE']['TAT_DI_R_FLAG'])
+    print (data['CORE']['TAT_DI_R'])
+    # TAT_DI_R
+
 
     #### ------------------------------------------------------------------------
     ####    CDP
