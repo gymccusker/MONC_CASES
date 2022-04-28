@@ -604,11 +604,13 @@ def loadAircraft(data):
     #### ------------------------------------------------------------------------
 
     # for var in data['CORE'].variables: print (var)
-    tat_flag = data['CORE']['TAT_DI_R_FLAG'][:]
+    tat_flag = np.nanmean(data['CORE']['TAT_DI_R_FLAG'][:],1)
     print (data['CORE']['TAT_DI_R_FLAG'][:10,:])
     # print (data['CORE']['TAT_DI_R'])
 
+
     air_temperature = np.nanmean(data['CORE']['TAT_DI_R'][:],1)
+    air_temperature[tat_flag>0] = np.nan
     # TAT_DI_R
     plt.plot(air_temperature); plt.savefig('../../../SHARE/temp.png'); plt.close()
 
