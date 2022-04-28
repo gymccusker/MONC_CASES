@@ -310,7 +310,7 @@ def LEM_LoadQ02(data,sondenumber):
     # plt.xlim([265,295])
 
     plt.savefig('../../../SHARE/Quicklooks_ACCACIA_B762-sonde5-LEM_q02.png', dpi=300)
-    plt.show()
+    plt.close()
 
     return data
 
