@@ -605,11 +605,11 @@ def loadAircraft(data):
 
     # for var in data['CORE'].variables: print (var)
     tat_flag = np.nanmean(data['CORE']['TAT_DI_R_FLAG'][:],1)
-    alt_flag = data['CORE']['ALT_GIN_FLAG'][:]
+    alt_flag = np.nanmean(data['CORE']['ALT_GIN_FLAG'][:],1)
     # print (data['CORE']['TAT_DI_R_FLAG'][:10,:])
     # print (data['CORE']['TAT_DI_R'])
 
-    altitude = data['CORE']['ALT_GIN'][:]
+    altitude = np.nanmean(data['CORE']['ALT_GIN'][:],1)
     altitude[alt_flag>0] = np.nan
     data['Aircraft']['altitude'] = altitude[index_CORE]
 
