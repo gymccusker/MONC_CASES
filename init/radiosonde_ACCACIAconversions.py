@@ -712,6 +712,11 @@ def loadAircraft(data):
     mi_number = data['2DS'].variables['NC_MI'][:]
     psd_number = data['2DS'].variables['PSD_Num_E'][:]
 
+    data['Aircraft']['Nice'] = hi_number + mi_number + np.nansum(psd_number[:,9:],1)
+
+    plt.plot(data['Aircraft']['Nice']);
+    plt.savefig('../../../SHARE/temp.png'); plt.close()
+
     return data
 
 def main():
