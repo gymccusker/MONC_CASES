@@ -657,16 +657,12 @@ def loadAircraft(data):
 
     data['Aircraft']['temp_cloud_droplet_concentration'] = np.zeros([np.size(data['Aircraft']['Ndrop']),30])
     data['Aircraft']['binned_cloud_droplet_concentration'] = np.zeros([np.size(index_CDP),30])
-    # print(np.size(data['Aircraft']['binned_cloud_droplet_concentration'],0))
-    # print(np.size(data['Aircraft']['binned_cloud_droplet_concentration'],1))
+
     for b in range(0,30):
         temp_data = data['CDP']['CDP_' + str(b+1).zfill(2)][:]
         temp_data[cdp_nan_flag] = np.nan
         data['Aircraft']['temp_cloud_droplet_concentration'][:,b] = temp_data
         data['Aircraft']['binned_cloud_droplet_concentration'][:,b] = data['Aircraft']['temp_cloud_droplet_concentration'][index_CDP,b]
-
-    # print(np.size(data['Aircraft']['binned_cloud_droplet_concentration'],0))
-    # print(np.size(data['Aircraft']['binned_cloud_droplet_concentration'],1))
 
     data['Aircraft']['LWC'] = np.zeros(np.size(index_CDP))
     for i in range(0,np.size(index_CDP)):
@@ -690,10 +686,10 @@ def loadAircraft(data):
     # print (data['Aircraft']['cloud_droplet_concentration'][:20])
 
     ### quick plot to check units
-    plt.plot(data['CDP']['CDP_TSPM'][index_CDP],data['Aircraft']['Ndrop'])
-    plt.plot(data['Aircraft']['time'],data['Aircraft']['cloud_droplet_concentration']);
-    # plt.plot(data['Aircraft']['time'],data['Aircraft']['liquid_water_content']);
-    plt.savefig('../../../SHARE/temp.png'); plt.close()
+    # plt.plot(data['CDP']['CDP_TSPM'][index_CDP],data['Aircraft']['Ndrop'])
+    # plt.plot(data['Aircraft']['time'],data['Aircraft']['cloud_droplet_concentration']);
+    # # plt.plot(data['Aircraft']['time'],data['Aircraft']['liquid_water_content']);
+    # plt.savefig('../../../SHARE/temp.png'); plt.close()
 
     #### ------ CDP UNITS
     ####            Ndrop - /cm3
