@@ -603,11 +603,14 @@ def loadAircraft(data):
     ####    CORE
     #### ------------------------------------------------------------------------
 
-    # for var in data['CORE'].variables: print (var)
+    for var in data['CORE'].variables: print (var)
     tat_flag = np.nanmean(data['CORE']['TAT_DI_R_FLAG'][:],1)
     alt_flag = np.nanmean(data['CORE']['ALT_GIN_FLAG'][:],1)
     # print (data['CORE']['TAT_DI_R_FLAG'][:10,:])
     # print (data['CORE']['TAT_DI_R'])
+
+    time = data['CORE']['Time'][:]
+    data['Aircraft']['time'] = time[index_CORE]
 
     altitude = np.nanmean(data['CORE']['ALT_GIN'][:],1)
     altitude[alt_flag>0] = np.nan
@@ -617,7 +620,7 @@ def loadAircraft(data):
     air_temperature[tat_flag>0] = np.nan
     data['Aircraft']['air_temperature'] = air_temperature[index_CORE]
 
-    plt.plot(data['Aircraft']['altitude']); plt.savefig('../../../SHARE/temp.png'); plt.close()
+    plt.plot(data['Aircraft']['time']); plt.savefig('../../../SHARE/temp.png'); plt.close()
 
     #### ------ CORE UNITS
     ####            temperature - K
@@ -653,7 +656,10 @@ def loadAircraft(data):
     ### Index for ocean only
     data['Aircraft']['cloud_droplet_concentration'] = data['Aircraft']['cloud_droplet_concentration'][index_CORE]
 
-    # print (data['Aircraft']['cloud_droplet_concentration'])
+    #### Only include in-cloud data (LWC >= 0.01 g/m3)
+    outofcloud_index = np.where(data['Aircraft']['LWC'] < 0.01)
+    data['Aircraft']['LWC'][outofcloud_index] = np.nan
+    data['Aircraft']['cloud_droplet_concentration'][outofcloud_index] = np.nan
 
     ### quick plot to check units
     # plt.plot(data['Aircraft']['LWC']); plt.xlim([1.2e3,1.6e3]); plt.savefig('../../../SHARE/temp.png'); plt.close()
@@ -666,10 +672,11 @@ def loadAircraft(data):
     ####    2DS
     #### ------------------------------------------------------------------------
 
+    ### B7622DS.NC_icea=B7622DS.NC_HIa+B7622DS.NC_MIa+nansum(B7622DS.PSD_Num_Ea(:,10:end),2);             % sizes greater than 100um
+    ### B7622DS.NC_icea(B7622DS.NC_icea<=0)=0
 
-
-    print (np.size(data['Aircraft']['cloud_droplet_concentration']))
-    print (np.size(data['Aircraft']['LWC']))
+    # print (np.size(data['Aircraft']['cloud_droplet_concentration']))
+    # print (np.size(data['Aircraft']['LWC']))
 
     return data
 
