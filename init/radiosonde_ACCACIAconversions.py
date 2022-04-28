@@ -808,8 +808,8 @@ def writeAircraft(data):
     ###################################
     ## Create variables
     ###################################
-    var_list = ['latitude','longitude','altitude','air_temperature','air_pressure','liquid_water_content','cloud_droplet_number_concentration','ice_number_concentration']
-    unit_list = ['degN','degE','m','K','hPa','g/m3','/cm3','/L']
+    var_list = ['latitude','longitude','altitude','air_temperature','air_pressure','air_density','liquid_water_content','cloud_droplet_number_concentration','ice_number_concentration']
+    unit_list = ['degN','degE','m','K','hPa','kg/m3','g/m3','/cm3','/L']
 
     for d in range(0,len(var_list)):
         print ('Writing ' + var_list[d])
@@ -829,6 +829,8 @@ def writeAircraft(data):
             dat.comment = 'True air temperature measuring with the Rosemount de-iced temperature sensor. '
         elif var_list[d] == 'air_pressure':
             dat.comment = 'Static pressure from the aircraft RVSM (air data) system. '
+        elif var_list[d] == 'air_density':
+            dat.comment = 'Air density calculated using ideal gas law (using air_temperature and air_pressure). '
         dat[:] = data['Aircraft'][var_list[d]]
 
     ###################################
@@ -923,7 +925,7 @@ def main():
     data['Aircraft'] = {}
     data = loadAircraft(data)
 
-    # data = writeAircraft(data)
+    data = writeAircraft(data)
 
     ## -------------------------------------------------------------
     ## save out working data for testing
