@@ -592,12 +592,15 @@ def loadAircraft(data):
     # print (data['CORE']['Time'][:])
     #### ---- Time is seconds since midnight
 
-    startocean = calcTime_Str2Sec('14:14:32')
-    endocean = calcTime_Str2Sec('14:52:46')
+    startocean = calcTime_Str2Sec('14:14:28')
+    endocean = calcTime_Str2Sec('14:52:50')
+
+    startocean2 = calcTime_Str2Sec('14:14:32')
+    endocean2 = calcTime_Str2Sec('14:52:46')
 
     index_2DS = np.where(np.logical_and(data['2DS']['Time_mid'][:] > startocean, data['2DS']['Time_mid'][:] <= endocean))
     index_CDP = np.where(np.logical_and(data['CDP']['CDP_TSPM'][:] > startocean, data['CDP']['CDP_TSPM'][:] <= endocean))
-    index_CORE = np.where(np.logical_and(data['CORE']['Time'][:] > startocean, data['CORE']['Time'][:] <= endocean))
+    index_CORE = np.where(np.logical_and(data['CORE']['Time'][:] > startocean2, data['CORE']['Time'][:] <= endocean2))
 
     #### ------------------------------------------------------------------------
     ####    CORE
