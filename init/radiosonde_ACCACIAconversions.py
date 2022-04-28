@@ -738,12 +738,84 @@ def loadAircraft(data):
     plt.plot(data['Aircraft']['time'],data['Aircraft']['ice_mass_concentration']);
     plt.savefig('../../../SHARE/temp.png'); plt.close()
 
-
     #### ------ 2DS UNITS
     ####            Nice - /L
-    ####            IWC - g/m3
 
     return data
+
+def writeAircraft(data):
+
+    '''
+    Write out aircraft data into netCDF4 file
+    '''
+
+    from netCDF4 import num2date, date2num
+    import time
+    from datetime import datetime, timedelta
+
+    print ('******')
+    print ('')
+    # print 'Appending 1D data to ' + outfile
+    print ('Writing data... ')
+    print ('')
+
+    ###################################
+    ## Open File
+    ###################################
+    outfile = 'accacia_aircraft_data.nc'
+
+    dataset = Dataset(outfile, 'w', format ='NETCDF4_CLASSIC')
+    print ('')
+    print (dataset.file_format)
+    print ('')
+
+    ###################################
+    ## Switch off automatic filling
+    ###################################
+    dataset.set_fill_off()
+
+    ###################################
+    ## Data dimensions
+    # ###################################
+    time = dataset.createDimension('time', np.size(data['Aircraft']['time']))
+
+    ###################################
+    ## Dimensions variables
+    ###################################
+    time = dataset.createVariable('time', np.float64, ('time',), fill_value='-9999')
+    time.scale_factor = float(1)
+    time.add_offset = float(0)
+    time.comment = 'seconds since 0000 UTC on 23-Mar-2013.'
+    time.units = 'seconds'
+    time.long_name = 'seconds'
+    time[:] = data['Aircraft']['time']      ### forecast time (ignore first 12h)
+
+    ###################################
+    ## Create variables
+    ###################################
+    var_list = ['latitude','longitude','altitude','air_temperature','liquid_water_content','cloud_droplet_concentration','ice_number_concentration']
+    unit_list = ['degN','degE','m','K','g/m3','/cm3','/L']
+
+    for d in range(0,len(var_list)):
+        print ('Writing ' + var_list[d])
+        print ('')
+        dat = dataset.createVariable(var_list[d], np.float64, ('time',), fill_value='-9999')
+        dat.scale_factor = float(1)
+        dat.add_offset = float(0)
+        dat.units = unit_list[d]
+        dat.standard_name = var_list[b]
+        dat[:] = data['Aircraft'][var_list[b]]
+
+    ###################################
+    ## Write out file
+    ###################################
+    dataset.close()
+
+    return dataset
+
+
+    return data
+
 
 def main():
 
@@ -825,6 +897,8 @@ def main():
     data['CDP'] = Dataset(path_cdp, 'r')
     data['Aircraft'] = {}
     data = loadAircraft(data)
+
+    data = writeAircraft(data)
 
     ## -------------------------------------------------------------
     ## save out working data for testing
