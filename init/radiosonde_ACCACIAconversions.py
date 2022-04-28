@@ -632,7 +632,7 @@ def loadAircraft(data):
     # print (data['Aircraft']['cloud_droplet_concentration'])
 
     ### quick plot to check units
-    plt.plot(data['Aircraft']['LWC']); plt.xlim([1e3,2e3]); plt.savefig('../../../SHARE/temp.png'); plt.close()
+    plt.plot(data['Aircraft']['LWC']); plt.xlim([1.2e3,1.6e3]); plt.savefig('../../../SHARE/temp.png'); plt.close()
 
     #### ------ UNITS
     ####            Ndrop - /cm3
