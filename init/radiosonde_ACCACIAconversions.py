@@ -777,7 +777,7 @@ def writeAircraft(data):
     ###################################
     ## Open File
     ###################################
-    outfile = 'accacia_aircraft_data.nc'
+    outfile = '../ACCACIA/accacia_aircraft_data.nc'
 
     dataset = Dataset(outfile, 'w', format ='NETCDF4_CLASSIC')
     print ('')
