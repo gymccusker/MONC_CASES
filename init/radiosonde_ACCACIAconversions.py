@@ -821,7 +821,9 @@ def writeAircraft(data):
         dat.standard_name = var_list[d]
         if var_list[d] == np.logical_or('liquid_water_content','cloud_droplet_number_concentration'):
             dat.comment = 'Data from the Cloud Droplet Probe (CDP). Liquid water content calculated using measured particle number concentrations and size bin edges. '
-        if var_list[d] == np.logical_or(np.logical_or('latitude','longitude'),'altitude'):
+        elif var_list[d] == np.logical_or('latitude','longitude'):
+            dat.comment = 'Data from the POS AV 510 GPS-aided Inertial Navigation unit. '
+        elif var_list[d] == 'altitude':
             dat.comment = 'Data from the POS AV 510 GPS-aided Inertial Navigation unit. '
         elif var_list[d] == 'ice_number_concentration':
             dat.comment = 'Data from the 2-Dimensional Stereo (2DS) probe. Data are the sum of the medium and high irregularity images, with edge particles greater than 100 um also included. '
