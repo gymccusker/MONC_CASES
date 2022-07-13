@@ -714,6 +714,11 @@ def loadAircraft(data):
     ####    2DS
     #### ------------------------------------------------------------------------
 
+    ### by default, since scale_factor and add_offset are integers
+    ### 2DS data being read in as integer
+    ### the following switches off this auto-scaling
+    data['2DS'].variables['NC_HI'].set_auto_scale(False)
+
     # for var in data['2DS'].variables: print (var)
 
     # print (data['2DS'].variables['PSD_Mass_HI'])
@@ -730,8 +735,8 @@ def loadAircraft(data):
     # hi_number = hi_number.astype(np.float)  ## not sure why it needs this conversion...
     # mi_number = mi_number.astype(np.float)
 
-    hi_number[hi_number==-9999] = np.nan
-    mi_number[mi_number==-9999] = np.nan
+    hi_number[hi_number < 0] = np.nan
+    mi_number[mi_number < 0] = np.nan
 
     data['Aircraft']['Nice'] = hi_number + mi_number + np.nansum(psde_number[:,9:],1)
     # data['Aircraft']['Mice'] = hi_mass + mi_mass + psde_mass
