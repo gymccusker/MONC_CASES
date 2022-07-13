@@ -749,9 +749,9 @@ def loadAircraft(data):
     # data['Aircraft']['ice_mass_concentration'] = mice_interp(data['Aircraft']['time'])
 
     ### quick plot to check units
-    # plt.plot(data['2DS']['Time_mid'][index_2DS],data['Aircraft']['Mice']);
-    # plt.plot(data['Aircraft']['time'],data['Aircraft']['ice_mass_concentration']);
-    # plt.savefig('../../../SHARE/temp.png'); plt.close()
+    plt.plot(data['2DS']['Time_mid'][index_2DS],data['Aircraft']['Mice']);
+    plt.plot(data['Aircraft']['time'],data['Aircraft']['ice_mass_concentration'],'o');
+    plt.savefig('../../../SHARE/temp.png'); plt.close()
 
     #### ------ 2DS UNITS
     ####            Nice - /L
