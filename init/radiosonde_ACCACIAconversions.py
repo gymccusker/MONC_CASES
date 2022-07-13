@@ -751,6 +751,7 @@ def loadAircraft(data):
     ### quick plot to check units
     plt.plot(data['2DS']['Time_mid'][index_2DS],data['Aircraft']['Mice']);
     plt.plot(data['Aircraft']['time'],data['Aircraft']['ice_mass_concentration'],'o');
+    plt.show()
     plt.savefig('../../../SHARE/temp.png'); plt.close()
 
     #### ------ 2DS UNITS
@@ -777,7 +778,7 @@ def writeAircraft(data):
     ###################################
     ## Open File
     ###################################
-    outfile = '../ACCACIA/accacia_aircraft_data.nc'
+    outfile = '../ACCACIA/accacia_aircraft_data_v2.nc'
 
     dataset = Dataset(outfile, 'w', format ='NETCDF4_CLASSIC')
     print ('')
