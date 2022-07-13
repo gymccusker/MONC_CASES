@@ -727,8 +727,8 @@ def loadAircraft(data):
     # mi_mass = np.nansum(data['2DS'].variables['PSD_Mass_MI'][:],1)
     # psde_mass = np.nansum(data['2DS'].variables['PSD_Num_E'][:,9:],1)
 
-    hi_number = hi_number.astype(np.float)  ## not sure why it needs this conversion...
-    mi_number = mi_number.astype(np.float)
+    # hi_number = hi_number.astype(np.float)  ## not sure why it needs this conversion...
+    # mi_number = mi_number.astype(np.float)
 
     hi_number[hi_number==-9999] = np.nan
     mi_number[mi_number==-9999] = np.nan
