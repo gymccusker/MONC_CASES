@@ -718,6 +718,9 @@ def loadAircraft(data):
     ### 2DS data being read in as integer
     ### the following switches off this auto-scaling
     data['2DS'].variables['NC_HI'].set_auto_scale(False)
+    data['2DS'].variables['NC_MI'].set_auto_scale(False)
+    data['2DS'].variables['PSD_Num_E'].set_auto_scale(False)
+    data['2DS'].variables['Time_mid'].set_auto_scale(False)
 
     # for var in data['2DS'].variables: print (var)
 
